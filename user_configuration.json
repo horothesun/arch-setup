@@ -93,8 +93,8 @@
                                 "unit": "B",
                                 "value": 512
                             },
-                            "unit": "B",
-                            "value": 1999324053504
+                            "unit": "MiB",
+                            "value": 1906700
                         },
                         "start": {
                             "sector_size": {
@@ -108,18 +108,10 @@
                         "type": "primary"
                     }
                 ],
-                "wipe": false
+                "wipe": true
             }
         ]
     },
-    "disk_encryption": {
-        "encryption_type": "luks",
-        "lvm_volumes": [],
-        "partitions": [
-            "703afc89-d7bb-4f6c-bbad-f88c592dece6"
-        ]
-    },
-    "hostname": "beast",
     "kernels": [
         "linux"
     ],
@@ -174,7 +166,7 @@
         "plocate",
         "firefox"
     ],
-    "parallel_downloads": 0,
+    "parallel_downloads": 10,
     "profile_config": {
         "gfx_driver": "All open-source",
         "greeter": "sddm",
