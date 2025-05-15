@@ -179,6 +179,8 @@ lspci -vnn | less
 # search for "Wi-Fi"
 lspci -vnn -d 17cb:
 
+nmcli
+
 sudo dmesg | grep ath12k
 
 # TODO: ...
