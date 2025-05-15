@@ -74,8 +74,7 @@ root@<LIVE_USB_IP_ADDRESS>'s password: 123
 If you already have `archinstall` config files available via public repo, you can load them with
 
 ```bash
-curl --output "/root/user_configuration.json" "https://raw.githubusercontent.com/horothesun/archinstall-config/refs/heads/master/user_configuration.json"
-archinstall --config="/root/user_configuration.json"
+archinstall --config-url="https://raw.githubusercontent.com/horothesun/archinstall-config/refs/heads/master/user_configuration.json"
 ```
 
 then continue from [here](#chroot-post-install), otherwise
@@ -98,7 +97,7 @@ Disable Copy-on-Write for `virtlib` images folder with
 
 ```bash
 lsattr -d /var/lib/libvirt/images/
-chsattr -VR +C /var/lib/libvirt/images/
+chattr -VR +C /var/lib/libvirt/images/
 ```
 
 Move `grub` from the `/efi` partition to `/boot` (part of the `/` partition) with
