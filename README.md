@@ -71,6 +71,28 @@ root@<LIVE_USB_IP_ADDRESS>'s password: 123
 
 ## archinstall
 
+NOTE: `archinstall` code fix
+
+```diff
+diff --git a/archinstall/lib/models/device_model.py b/archinstall/lib/models/device_model.py
+index 13f12b3f..077d4bc5 100644
+--- a/archinstall/lib/models/device_model.py
++++ b/archinstall/lib/models/device_model.py
+@@ -938,9 +938,7 @@ class PartitionModification:
+                return PartitionFlag.ESP in self.flags
+
+        def is_boot(self) -> bool:
+-               if self.mountpoint is not None:
+-                       return self.mountpoint == Path("/boot")
+-               return False
++               return PartitionFlag.BOOT in self.flags
+
+        def is_root(self) -> bool:
+                if self.mountpoint is not None:
+```
+
+---
+
 If you already have `archinstall` config files available via public repo, you can load them with
 
 ```bash
