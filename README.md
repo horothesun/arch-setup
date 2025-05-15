@@ -37,7 +37,7 @@ New password: 123
 Retype new password: 123
 
 # get IP address
-ip addr show
+ip a
 ```
 
 - (from another PC) SSH into live USB install
@@ -145,7 +145,7 @@ ls -lah /efi/EFI
 # check the grubx64.efi boot-loader's been created
 ls -lah /efi/EFI/arch
 
-# check the grub folder is now present in /boot
+# check the grub/ folder is now present in /boot
 ls -lah /boot
 
 # check /boot/grub contains fonts/, grub.cfg, grubenv, locale/, themes/, x86_64-efi/
