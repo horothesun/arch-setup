@@ -73,6 +73,8 @@ root@<LIVE_USB_IP_ADDRESS>'s password: 123
 
 NOTE: `archinstall` code fix
 
+> IMPORTANT: use tabs, not spaces!
+
 ```diff
 diff --git a/archinstall/lib/models/device_model.py b/archinstall/lib/models/device_model.py
 index 13f12b3f..077d4bc5 100644
@@ -173,7 +175,7 @@ reboot
 lsblk
 
 # list BTRFS subvolumes
-sudo btrfs subvolumes list /
+sudo btrfs subvolume list /
 
 sudo btrfs filesystem show /
 
