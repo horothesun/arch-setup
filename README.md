@@ -52,8 +52,8 @@ root@<LIVE_USB_IP_ADDRESS>'s password: 123
 
 - Get disk name (check `TYPE` being `disk`) by running `lsblk`
 - Partition the disk
-  1. EFI system partition: `1GB`, `fat32`, mount point `/efi`
-  2. Linux system partition: remaining space, `btrfs`, **mark as compressed**, mount point `/`
+  1. EFI system partition: `1GiB`, `fat32`, mount point `/efi`, **mark as bootable**
+  2. Linux system partition: remaining space, `btrfs`, mount point `/`, **mark as compressed**
 
 ### Subvolumes
 
@@ -87,7 +87,8 @@ then continue from [here](#chroot-post-install), otherwise
 - From the other PC, push config files to public repo
 
 ```bash
-scp "root@<LIVE_USB_IP_ADDRESS>:${HOME}/root/<ARCHINSTALL_CONFIG_FILE>" "/src/archlinux-config"
+cd "${HOME}/src/archlinux-config"
+scp "root@<LIVE_USB_IP_ADDRESS>:/root/user_configuration.json" .
 ```
 
 ### `chroot` post-install

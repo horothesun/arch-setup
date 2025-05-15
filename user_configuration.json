@@ -1,0 +1,197 @@
+{
+    "archinstall-language": "English",
+    "audio_config": {
+        "audio": "pipewire"
+    },
+    "bootloader": "Grub",
+    "custom_commands": [],
+    "disk_config": {
+        "config_type": "manual_partitioning",
+        "device_modifications": [
+            {
+                "device": "/dev/nvme0n1",
+                "partitions": [
+                    {
+                        "btrfs": [],
+                        "dev_path": null,
+                        "flags": [
+                            "boot",
+                            "esp"
+                        ],
+                        "fs_type": "fat32",
+                        "mount_options": [],
+                        "mountpoint": "/efi",
+                        "obj_id": "f3e27bec-c88d-452f-91b6-f3b399af66e5",
+                        "size": {
+                            "sector_size": {
+                                "unit": "B",
+                                "value": 512
+                            },
+                            "unit": "GiB",
+                            "value": 1
+                        },
+                        "start": {
+                            "sector_size": {
+                                "unit": "B",
+                                "value": 512
+                            },
+                            "unit": "MiB",
+                            "value": 1
+                        },
+                        "status": "create",
+                        "type": "primary"
+                    },
+                    {
+                        "btrfs": [
+                            {
+                                "mountpoint": "/",
+                                "name": "@"
+                            },
+                            {
+                                "mountpoint": "/home",
+                                "name": "@home"
+                            },
+                            {
+                                "mountpoint": "/opt",
+                                "name": "@opt"
+                            },
+                            {
+                                "mountpoint": "/srv",
+                                "name": "@srv"
+                            },
+                            {
+                                "mountpoint": "/var/cache",
+                                "name": "@cache"
+                            },
+                            {
+                                "mountpoint": "/var/lib/libvirt/images",
+                                "name": "@images"
+                            },
+                            {
+                                "mountpoint": "/var/log",
+                                "name": "@log"
+                            },
+                            {
+                                "mountpoint": "/var/spool",
+                                "name": "@spool"
+                            },
+                            {
+                                "mountpoint": "/var/tmp",
+                                "name": "@tmp"
+                            }
+                        ],
+                        "dev_path": null,
+                        "flags": [],
+                        "fs_type": "btrfs",
+                        "mount_options": [
+                            "compress=zstd"
+                        ],
+                        "mountpoint": null,
+                        "obj_id": "703afc89-d7bb-4f6c-bbad-f88c592dece6",
+                        "size": {
+                            "sector_size": {
+                                "unit": "B",
+                                "value": 512
+                            },
+                            "unit": "B",
+                            "value": 1999324053504
+                        },
+                        "start": {
+                            "sector_size": {
+                                "unit": "B",
+                                "value": 512
+                            },
+                            "unit": "B",
+                            "value": 1074790400
+                        },
+                        "status": "create",
+                        "type": "primary"
+                    }
+                ],
+                "wipe": false
+            }
+        ]
+    },
+    "disk_encryption": {
+        "encryption_type": "luks",
+        "lvm_volumes": [],
+        "partitions": [
+            "703afc89-d7bb-4f6c-bbad-f88c592dece6"
+        ]
+    },
+    "hostname": "beast",
+    "kernels": [
+        "linux"
+    ],
+    "locale_config": {
+        "kb_layout": "uk",
+        "sys_enc": "UTF-8",
+        "sys_lang": "en_GB"
+    },
+    "mirror_config": {
+        "custom_repositories": [],
+        "custom_servers": [],
+        "mirror_regions": {
+            "United Kingdom": [
+                "http://www.mirrorservice.org/sites/ftp.archlinux.org/$repo/os/$arch",
+                "https://www.mirrorservice.org/sites/ftp.archlinux.org/$repo/os/$arch",
+                "http://lon.mirror.rackspace.com/archlinux/$repo/os/$arch",
+                "https://lon.mirror.rackspace.com/archlinux/$repo/os/$arch",
+                "http://gb.mirrors.cicku.me/archlinux/$repo/os/$arch",
+                "https://gb.mirrors.cicku.me/archlinux/$repo/os/$arch",
+                "http://mirrors.ukfast.co.uk/sites/archlinux.org/$repo/os/$arch",
+                "https://mirrors.ukfast.co.uk/sites/archlinux.org/$repo/os/$arch",
+                "http://archlinux.uk.mirror.allworldit.com/archlinux/$repo/os/$arch",
+                "https://archlinux.uk.mirror.allworldit.com/archlinux/$repo/os/$arch",
+                "http://mirror.netweaver.uk/archlinux/$repo/os/$arch",
+                "https://mirror.netweaver.uk/archlinux/$repo/os/$arch",
+                "http://mirrors.melbourne.co.uk/archlinux/$repo/os/$arch",
+                "https://mirrors.melbourne.co.uk/archlinux/$repo/os/$arch",
+                "https://london.mirror.pkgbuild.com/$repo/os/$arch",
+                "https://repo.slithery.uk/$repo/os/$arch",
+                "https://mirror.st2projects.com/archlinux/$repo/os/$arch",
+                "http://mirror.server.net/archlinux/$repo/os/$arch",
+                "https://mirror.server.net/archlinux/$repo/os/$arch",
+                "https://repo.c48.uk/arch/$repo/os/$arch"
+            ]
+        },
+        "optional_repositories": [
+            "multilib"
+        ]
+    },
+    "network_config": {
+        "type": "nm"
+    },
+    "ntp": true,
+    "packages": [
+        "alacritty",
+        "amd-ucode",
+        "bash-completion",
+        "git",
+        "man-db",
+        "man-pages",
+        "neovim",
+        "plocate",
+        "firefox"
+    ],
+    "parallel_downloads": 0,
+    "profile_config": {
+        "gfx_driver": "All open-source",
+        "greeter": "sddm",
+        "profile": {
+            "custom_settings": {
+                "Hyprland": {
+                    "seat_access": "polkit"
+                }
+            },
+            "details": [
+                "Hyprland"
+            ],
+            "main": "Desktop"
+        }
+    },
+    "services": [],
+    "swap": true,
+    "timezone": "Europe/London",
+    "version": null
+}
