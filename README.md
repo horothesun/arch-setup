@@ -166,6 +166,22 @@ exit
 
 # check the installation completed without any errors and reboot
 reboot
+
+# add your user to the sudoers
+su
+export EDITOR=vim
+visudo
+# add the following line (after the one for the root user)
+# <USER_NAME> ALL=(ALL:ALL) ALL
+
+# Wi-Fi setup
+lspci -vnn | less
+# search for "Wi-Fi"
+lspci -vnn -d 17cb:
+
+sudo dmesg | grep ath12k
+
+# TODO: ...
 ```
 
 ## Snapper setup
