@@ -74,7 +74,8 @@ root@<LIVE_USB_IP_ADDRESS>'s password: 123
 If you already have `archinstall` config files available via public repo, you can load them with
 
 ```bash
-archinstall --config="https://raw.githubusercontent.com/horothesun/archinstall-config/refs/heads/master/user_configuration.json"
+curl --output "/root/user_configuration.json" "https://raw.githubusercontent.com/horothesun/archinstall-config/refs/heads/master/user_configuration.json"
+archinstall --config="/root/user_configuration.json"
 ```
 
 then continue from [here](#chroot-post-install), otherwise
