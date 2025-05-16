@@ -186,6 +186,8 @@
         "tldr",
         "translate-shell",
         "tree",
+        "ttf-jetbrains-mono-nerd",
+        "ttf-firacode-nerd",
         "yq"
     ],
     "parallel_downloads": 10,
