@@ -243,7 +243,7 @@ ls -d /.snapshots/
 
 # APPEND '.snapshots' to /etc/updatedb.conf in the 'PRUNENAMES' space-separated list,
 # to avoid slowing down the system when there're lots of snapshots
-sudo vi /etc/updatedb.conf
+sudo vim /etc/updatedb.conf
 
 # disable automatic timeline snapshots (temporarily, to avoid snapshots to be created while setting up snapper)
 sudo systemctl status snapper-timeline.timer snapper-cleanup.timer
@@ -251,11 +251,11 @@ sudo systemctl disable --now snapper-timeline.timer snapper-cleanup.timer
 sudo systemctl status snapper-timeline.timer snapper-cleanup.timer
 
 # we shouldn't have any snapshots yet
-snapper ls
+snapper list
 
 # enable OverlayFS to enable booting from grub into a read-only snapshot, as a live USB in a non-persistent state
 # (APPEND 'grub-btrfs-overlayfs' to the 'HOOKS' space-separated list)
-sudo vi /etc/mkinitcpio.conf
+sudo vim /etc/mkinitcpio.conf
 
 # regenerate initramfs
 sudo mkinitcpio -P
@@ -266,10 +266,10 @@ sudo systemctl status grub-btrfsd.service
 
 # test snapper on a pacman package install
 #
-snapper ls
+snapper list
 sudo pacman -S banner
 banner Hello
-snapper ls
+snapper list
 snapper status 1..2
 sudo snapper undochange 1..2
 # banner should not be present now
@@ -277,16 +277,16 @@ banner Hello
 sudo snapper undochange 2..1
 # banner should work again now
 banner Hello
-pacman -Rs banner
-snapper ls
+sudo pacman -Rs banner
+snapper list
 
 # manually create a 'pre' snapshot (e.g. before experimenting with AUR packages)
 snapper -c root create -t pre -c number -d "pre AUR package"
 # ... install pacman and AUR packages, test the programs ...
 # manually create a 'post' snapshot
-snapper ls
+snapper list
 snapper -c root create -t post --pre-number <PRE_SNAPSHOT_NUMBER> -c number -d "post AUR package"
-snapper ls
+snapper list
 ```
 
 ### DISASTER RECOVERY: rollback from `grub`
@@ -328,7 +328,7 @@ sudo grub-mkconfig -o /boot/grub/grub.cfg
 ### Final setup
 
 ```bash
-snapper ls
+snapper list
 
 # if snapshots for /home are enabled, do the following first
 # sudo snapper -c home set-config TIMELINE_CREATE=no
@@ -336,7 +336,12 @@ snapper ls
 # enable automatic timeline snapshots (JUST FOR root CONFIG)
 sudo systemctl enable --now snapper-timeline.timer
 sudo systemctl enable --now snapper-cleanup.timer
+# check timeline and cleanup services status
+sudo systemctl status snapper-timeline.timer snapper-cleanup.timer
+
+# create our first root snapshot
+snapper -c root create --description "*** BEGINNING OF TIME ***"
 
 # wait some time and check for the new timeline snapshot to be created
-snapper ls
+snapper list
 ```
