@@ -160,6 +160,7 @@
         "amd-ucode",
         "bash-completion",
         "git",
+        "jq",
         "man-db",
         "man-pages",
         "neovim",

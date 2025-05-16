@@ -344,3 +344,28 @@ snapper -c root create --description "*** BEGINNING OF TIME ***"
 # wait some time and check for the new timeline snapshot to be created
 snapper list
 ```
+
+## Bluetooth
+
+```bash
+snapper -c root create -t pre -c number -d "pre Bluetooth setup"
+
+sudo pacman -Syu
+sudo pacman -S bluez bluez-utils bluez-deprecated-tools
+sudo reboot
+
+# check if the btusb kernel module is loaded
+lsmod | grep btusb
+
+systemctl enable bluetooth
+systemctl start bluetooth
+systemctl status bluetooth
+
+# TODO: test pairing with a device with bluetoothctl
+# ...
+
+# TODO: get the "pre Bluetooth setup" snapshot number
+snapper --jsonout -c root list | jq '.'
+snapper -c root create -t post --pre-number <PRE_SNAPSHOT_NUMBER> -c number -d "post Bluetooth setup"
+snapper list
+```
