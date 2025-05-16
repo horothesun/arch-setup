@@ -369,3 +369,13 @@ snapper --jsonout -c root list | jq '.'
 snapper -c root create -t post --pre-number <PRE_SNAPSHOT_NUMBER> -c number -d "post Bluetooth setup"
 snapper list
 ```
+
+## Apps
+
+```bash
+yay -S brave-bin
+yay -S scala-cli
+sudo pacman -S sbt
+yay -S intellij-idea-community-edition-bin
+# yay -S aws-cli-v2
+```
