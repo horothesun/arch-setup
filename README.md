@@ -13,13 +13,12 @@ Video refs:
 
 ```bash
 iwctl
-device list
-station <DEVICE_NAME> get-networks
-station list
-station <DEVICE_NAME> connect <NETWORK_NAME>
+iwctl device list
+iwctl station <DEVICE_NAME> get-networks
+iwctl station list
+iwctl station <DEVICE_NAME> connect <NETWORK_NAME>
 <NETWORK_PASSWORD>
-station list
-exit
+iwctl station list
 
 # test connection
 ping -c 5 archlinux.org
@@ -174,7 +173,7 @@ visudo
 # add the following line (after the one for the root user)
 # <USER_NAME> ALL=(ALL:ALL) ALL
 
-# Wi-Fi setup
+# [WIP] Wi-Fi setup
 lspci -vnn | less
 # search for "Wi-Fi"
 lspci -vnn -d 17cb:
