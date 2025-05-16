@@ -377,5 +377,7 @@ yay -S brave-bin
 yay -S scala-cli
 sudo pacman -S sbt
 yay -S intellij-idea-community-edition-bin
-# yay -S aws-cli-v2
+yay -S terraform-ls
+yay -S figlet-fonts
+# yay -S aws-cli-v2 # FAILED setup
 ```
