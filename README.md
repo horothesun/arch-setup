@@ -348,7 +348,7 @@ snapper -c root create --description "*** BEGINNING OF TIME ***"
 snapper list
 ```
 
-## Bluetooth
+## [WIP] Bluetooth
 
 ```bash
 snapper -c root create -t pre -c number -d "pre Bluetooth setup"
