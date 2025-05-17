@@ -172,6 +172,7 @@
         "git",
         "github-cli",
         "git-filter-repo",
+	"hyprpolkitagent",
         "jq",
         "lolcat",
         "man-db",
