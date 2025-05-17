@@ -348,6 +348,43 @@ snapper -c root create --description "*** BEGINNING OF TIME ***"
 snapper list
 ```
 
+## git
+
+```bash
+eval "$(ssh-agent)"
+ssh-add ~/.ssh/horothesun
+```
+
+Add `eval "$(ssh-agent)" > /dev/null` to `~/.bashrc`.
+
+### Passphrase from script
+
+```bash
+touch "$HOME/.ssh/askpass.sh"
+chmod u+x "$HOME/.ssh/askpass.sh"
+```
+
+Paste the following content in the newly created `$HOME/.ssh/askpass.sh`
+
+```bash
+#!/bin/sh
+
+# pass "beast SSH key"
+echo "<PUT_YOUR_SSH_KEY_HERE>"
+```
+
+Add the SSH key by running (encoded in `bash` config)
+
+```bash
+SSH_ASKPASS_REQUIRE="force" SSH_ASKPASS="${HOME}/.ssh/askpass.sh" ssh-add "${HOME}/.ssh/horothesun" &> /dev/null
+```
+
+### Set default editor
+
+```bash
+git config --global core.editor "nvim"
+```
+
 ## [WIP] Bluetooth
 
 ```bash
