@@ -391,7 +391,7 @@ Install with
 yay -S brave-bin
 ```
 
-then go to `brave://flags/#ozone-platform-hint` and set it to "Wayland" (to fix fractional scaling font issues).
+launch it, set `brave://flags/#ozone-platform-hint` to "Wayland" (to fix fractional scaling font issues) and restart.
 
 ### IntelliJ Idea IDE
 
@@ -401,7 +401,7 @@ Install with
 yay -S intellij-idea-community-edition-bin
 ```
 
-launch it, then enable Wayland ([blog](https://blog.jetbrains.com/platform/2024/07/wayland-support-preview-in-2024-2/))
+launch it (create its dot-files), close it, then enable Wayland ([blog](https://blog.jetbrains.com/platform/2024/07/wayland-support-preview-in-2024-2/))
 with
 
 ```bash
