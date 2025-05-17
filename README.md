@@ -376,7 +376,6 @@ snapper list
 ## Apps
 
 ```bash
-yay -S brave-bin
 yay -S scala-cli
 sudo pacman -S sbt
 yay -S intellij-idea-community-edition-bin
@@ -384,3 +383,13 @@ yay -S terraform-ls
 yay -S figlet-fonts
 # yay -S aws-cli-v2 # FAILED setup
 ```
+
+### Brave
+
+Install with
+
+```bash
+yay -S brave-bin
+```
+
+then go to `brave://flags/#ozone-platform-hint` and set it to "Wayland" (to fix fractional scaling font issues).
