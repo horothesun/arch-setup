@@ -378,7 +378,6 @@ snapper list
 ```bash
 yay -S scala-cli
 sudo pacman -S sbt
-yay -S intellij-idea-community-edition-bin
 yay -S terraform-ls
 yay -S figlet-fonts
 # yay -S aws-cli-v2 # FAILED setup
@@ -393,3 +392,18 @@ yay -S brave-bin
 ```
 
 then go to `brave://flags/#ozone-platform-hint` and set it to "Wayland" (to fix fractional scaling font issues).
+
+### IntelliJ Idea IDE
+
+Install with
+
+```bash
+yay -S intellij-idea-community-edition-bin
+```
+
+launch it, then enable Wayland ([blog](https://blog.jetbrains.com/platform/2024/07/wayland-support-preview-in-2024-2/))
+with
+
+```bash
+echo "-Dawt.toolkit.name=WLToolkit" >> "${HOME}/.config/JetBrains/IdeaIC2025.1/idea64.vmoptions"
+```
