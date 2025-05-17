@@ -304,9 +304,12 @@ sudo reboot
 
 # check /boot for kernel and initramfs presence
 ls -lah /boot
+
+# launch btrfs-assistant
+QT_QPA_PLATFORM=wayland btrfs-assistant-launcher
 ```
 
-Open `btrfs-assistant` GUI -> `Snapper` -> `Browse/Restore` -> select latest snapshot and `Restore` -> `Yes` -> `OK`,
+In `btrfs-assistant` GUI go to `Snapper` -> `Browse/Restore` -> select latest snapshot and `Restore` -> `Yes` -> `OK`,
 then `reboot`.
 
 If `grub`'s "Arch Linux snapshots" entry is not visible (due to the rollback), we'll fix it later.
