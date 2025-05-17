@@ -189,7 +189,8 @@
         "tree",
         "ttf-jetbrains-mono-nerd",
         "ttf-firacode-nerd",
-        "yq"
+        "yq",
+        "waybar"
     ],
     "parallel_downloads": 10,
     "profile_config": {
