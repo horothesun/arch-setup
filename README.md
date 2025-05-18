@@ -430,6 +430,8 @@ yay -S brave-bin
 
 launch it, set `brave://flags/#ozone-platform-hint` to "Wayland" (to fix fractional scaling font issues) and restart.
 
+Set `brave://flags/#scrollable-tabstrip` to "Enabled" to actually disable the feature.
+
 ### IntelliJ Idea IDE
 
 Install with
