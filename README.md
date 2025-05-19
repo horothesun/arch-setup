@@ -1,6 +1,26 @@
 # `archinstall`-based setup
 
-Video refs:
+## TODOs
+
+### Secure boot
+
+- [Unified Extensible Firmware Interface/Secure Boot](https://wiki.archlinux.org/title/Unified_Extensible_Firmware_Interface/Secure_Boot)
+- [Firmware known quirk](https://github.com/Foxboron/sbctl/wiki/FQ0001)
+- [dev.to - Enabling Secure Boot with Linux and Windows Dual-Boot Setup](https://dev.to/berk/complete-guide-enabling-secure-boot-with-linux-and-windows-dual-boot-setup-24o8)
+- [Arch Install with Secure Boot, btrfs, TPM2 LUKS encryption, Unified Kernel Images](https://walian.co.uk/arch-install-with-secure-boot-btrfs-tpm2-luks-encryption-unified-kernel-images.html)
+
+### Arch Linux manual install
+
+- [2025 Arch Linux Install with COSMIC | Full Step-by-Step Guide - BTRFS, Encrypt, Zram, Timeshift](https://www.youtube.com/watch?v=fFxWuYui2LI)
+- [journalctl Basics: How to Easily Check Your Linux Logs](https://www.youtube.com/watch?v=0dG3vUYt7Uk)
+- [`zsh` install](https://wiki.archlinux.org/title/Zsh)
+- Hyprland
+  - recognise `~/bin` folder
+  - shutdown on keyboard shortcut
+  - swap Windows key with `Alt`
+- Brave browser + KWallet: fix cookies wiping on restart
+
+## Video references
 
 - [Arch Linux with Snapshots: Install Arch Linux (2025) - Part 1/3](https://www.youtube.com/watch?v=FiK1cGbyaxs)
 - [Arch Linux Installation Guide (including BTRFS, QTile, ZRAM, disk encryption, timeshift)](https://www.youtube.com/watch?v=Qgg5oNDylG8)
