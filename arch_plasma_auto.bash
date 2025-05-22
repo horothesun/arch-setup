@@ -95,10 +95,11 @@ echo "Mounting File Systems..."
 mount /dev/mapper/root "$rootmnt"
 mkdir "$rootmnt"/efi -p
 mount -t vfat /dev/disk/by-partlabel/EFISYSTEM "$rootmnt"/efi
-
+echo
 lsblk
+echo
 blkid
-
+echo
 
 
 
