@@ -2,32 +2,31 @@
 # uncomment to view debugging information 
 set -xeuo pipefail
 
-#check if we're root
+# check if we're root
 if [[ "$UID" -ne 0 ]]; then
     echo "This script needs to be run as root!" >&2
     exit 3
 fi
 
-### Config options
-target="/dev/vda"
-rootmnt="/mnt"
-locale="en_GB.UTF-8"
-keymap="uk"
-timezone="Europe/London"
-hostname="archlinux01"
-username="user"
-# SHA512 hash of password. To generate, run 'mkpasswd -m sha-512' (install `whois` package), don't forget to prefix any $ symbols with \ .
-# The entry below is the hash of 'password'
-user_password="\$6\$/VBa6GuBiFiBmi6Q\$yNALrCViVtDDNjyGBsDG7IbnNR0Y/Tda5Uz8ToyxXXpw86XuCVAlhXlIvzy1M8O.DWFB6TRCia0hMuAJiXOZy/"
+# config options
+TARGET="/dev/sda"
+LOCALE="en_GB.UTF-8"
+KEYMAP="uk"
+TIMEZONE="Europe/London"
+HOSTNAME="archlinux01"
+USERNAME="user"
 
-#To fully automate the setup, change badidea=no to yes, and enter a cleartext password for the disk encryption 
+# SHA512 hash of password. To generate, run 'mkpasswd -m sha-512' (install `whois` package), don't forget to prefix any $ symbols with \
+# the entry below is the hash of 'password'
+USER_PASSWORD="\$6\$/VBa6GuBiFiBmi6Q\$yNALrCViVtDDNjyGBsDG7IbnNR0Y/Tda5Uz8ToyxXXpw86XuCVAlhXlIvzy1M8O.DWFB6TRCia0hMuAJiXOZy/"
+ROOT_MNT="/mnt"
 
-badidea="no"
-crypt_password="changeme"
+# to fully automate the setup, change BAD_IDEA=no to yes, and enter a cleartext password for the disk encryption 
+BAD_IDEA="no"
+CRYPT_PASSWORD="changeme"
 
-
-### Packages to pacstrap ##
-pacstrappacs=(
+# packages to pacstrap
+PACSTRAP_PACKAGES=(
         base
         linux
         linux-firmware
@@ -41,7 +40,7 @@ pacstrappacs=(
         networkmanager
         )    
 ### Desktop packages #####
-guipacs=(
+GUI_PACKAGES=(
         xfce4
         xfce4-terminal
         xfce4-goodies
@@ -52,7 +51,7 @@ guipacs=(
         mousepad
         sbctl
         )
-#guipacs=(
+#GUI_PACKAGES=(
 #         plasma 
 #         sddm 
 #         kitty
@@ -63,122 +62,135 @@ guipacs=(
 #         sbctl
 #        )
 
-
-
-
-# Partition
+# partition
 echo "Creating partitions..."
-sgdisk -Z "$target"
+sgdisk -Z "${TARGET}"
 sgdisk \
-    -n1:0:+512M  -t1:ef00 -c1:EFISYSTEM \
-    -N2          -t2:8304 -c2:linux \
-    "$target"
-# Reload partition table
+    -n1:0:+1G -t1:ef00 -c1:EFISYSTEM \
+    -N2       -t2:8304 -c2:linux \
+    "${TARGET}"
 sleep 2
-partprobe -s "$target"
+echo
+
+# reload partition table
+partprobe -s "${TARGET}"
 sleep 2
+echo
+
 echo "Encrypting root partition..."
-#Encrypt the root partition. If badidea=yes, then pipe cryptpass and carry on, if not, prompt for it
-if [[ "$badidea" == "yes" ]]; then
-echo -n "$crypt_password" | cryptsetup luksFormat --type luks2 /dev/disk/by-partlabel/linux -
-echo -n "$crypt_password" | cryptsetup luksOpen /dev/disk/by-partlabel/linux root -
+# if BAD_IDEA=yes, then pipe cryptpass and carry on, if not, prompt for it
+if [[ "${BAD_IDEA}" == "yes" ]]; then
+    echo -n "${CRYPT_PASSWORD}" | cryptsetup luksFormat --type luks2 "/dev/disk/by-partlabel/linux" -
+    echo -n "${CRYPT_PASSWORD}" | cryptsetup luksOpen "/dev/disk/by-partlabel/linux" root -
 else
-cryptsetup luksFormat --type luks2 /dev/disk/by-partlabel/linux
-cryptsetup luksOpen /dev/disk/by-partlabel/linux root
+    cryptsetup luksFormat --type luks2 "/dev/disk/by-partlabel/linux"
+    cryptsetup luksOpen "/dev/disk/by-partlabel/linux" root
 fi
+echo
+
 echo "Making File Systems..."
-# Create file systems
-mkfs.vfat -F32 -n EFISYSTEM /dev/disk/by-partlabel/EFISYSTEM
-mkfs.ext4 -L linux /dev/mapper/root
+# create file systems
+mkfs.vfat -F32 -n EFISYSTEM "/dev/disk/by-partlabel/EFISYSTEM"
+mkfs.ext4 -L linux "/dev/mapper/root"
 # mount the root, and create + mount the EFI directory
 echo "Mounting File Systems..."
-mount /dev/mapper/root "$rootmnt"
-mkdir "$rootmnt"/efi -p
-mount -t vfat /dev/disk/by-partlabel/EFISYSTEM "$rootmnt"/efi
+mount "/dev/mapper/root" "${ROOT_MNT}"
+mkdir "${ROOT_MNT}/efi" -p
+mount -t vfat "/dev/disk/by-partlabel/EFISYSTEM" "${ROOT_MNT}/efi"
 echo
+
+# inspect filesystem changes
 lsblk
 echo
 blkid
 echo
 
-
-
-#Update pacman mirrors and then pacstrap base install
+# update pacman mirrors and then pacstrap base install
 echo "Pacstrapping..."
-reflector --country GB --age 24 --protocol http,https --sort rate --save /etc/pacman.d/mirrorlist
-pacstrap -K $rootmnt "${pacstrappacs[@]}" 
+reflector --country GB --age 24 --protocol http,https --sort rate --save "/etc/pacman.d/mirrorlist"
+pacstrap -K "${ROOT_MNT}" "${PACSTRAP_PACKAGES[@]}" 
+echo
 
 echo "Setting up environment..."
-#set up locale/env
-#add our locale to locale.gen
-sed -i -e "/^#"$locale"/s/^#//" "$rootmnt"/etc/locale.gen
-#remove any existing config files that may have been pacstrapped, systemd-firstboot will then regenerate them
-rm "$rootmnt"/etc/{machine-id,localtime,hostname,shadow,locale.conf} ||
-systemd-firstboot --root "$rootmnt" \
-	--keymap="$keymap" --locale="$locale" \
-	--locale-messages="$locale" --timezone="$timezone" \
-	--hostname="$hostname" --setup-machine-id \
-	--welcome=false
-arch-chroot "$rootmnt" locale-gen
+# set up locale/env: add our locale to locale.gen
+sed -i -e "/^#"${LOCALE}"/s/^#//" "${ROOT_MNT}/etc/locale.gen"
+# remove any existing config files that may have been pacstrapped, systemd-firstboot will then regenerate them
+rm "${ROOT_MNT}"/etc/{machine-id,localtime,hostname,shadow,locale.conf} ||
+systemd-firstboot --root "${ROOT_MNT}" \
+    --keymap="${KEYMAP}" --locale="${LOCALE}" \
+    --locale-messages="${LOCALE}" --timezone="${TIMEZONE}" \
+    --hostname="${HOSTNAME}" --setup-machine-id \
+    --welcome=false
+arch-chroot "${ROOT_MNT}" "locale-gen"
+echo
+
 echo "Configuring for first boot..."
-#add the local user
-arch-chroot "$rootmnt" useradd -G wheel -m -p "$user_password" "$username" 
-#uncomment the wheel group in the sudoers file
-sed -i -e '/^# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/s/^# //' "$rootmnt"/etc/sudoers
-#create a basic kernel cmdline, we're using DPS so we don't need to have anything here really, but if the file doesn't exist, mkinitcpio will complain
-echo "quiet rw" > "$rootmnt"/etc/kernel/cmdline
-#change the HOOKS in mkinitcpio.conf to use systemd hooks
+# add the local user
+arch-chroot "${ROOT_MNT}" useradd -G wheel -m -p "${USER_PASSWORD}" "${USERNAME}" 
+# uncomment the wheel group in the sudoers file
+sed -i -e '/^# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/s/^# //' "${ROOT_MNT}/etc/sudoers"
+# create a basic kernel cmdline, we're using DPS so we don't need to have anything here really,
+# but if the file doesn't exist, mkinitcpio will complain
+echo "quiet rw" > "${ROOT_MNT}/etc/kernel/cmdline"
+# change the HOOKS in mkinitcpio.conf to use systemd hooks
 sed -i \
     -e 's/base udev/base systemd/g' \
     -e 's/keymap consolefont/sd-vconsole sd-encrypt/g' \
-    "$rootmnt"/etc/mkinitcpio.conf
-#change the preset file to generate a Unified Kernel Image instead of an initram disk + kernel
+    "${ROOT_MNT}/etc/mkinitcpio.conf"
+# change the preset file to generate a Unified Kernel Image instead of an initram disk + kernel
 sed -i \
     -e '/^#ALL_config/s/^#//' \
     -e '/^#default_uki/s/^#//' \
     -e '/^#default_options/s/^#//' \
     -e 's/default_image=/#default_image=/g' \
     -e "s/PRESETS=('default' 'fallback')/PRESETS=('default')/g" \
-    "$rootmnt"/etc/mkinitcpio.d/linux.preset
+    "${ROOT_MNT}/etc/mkinitcpio.d/linux.preset"
+echo
 
-#read the UKI setting and create the folder structure otherwise mkinitcpio will crash
-declare $(grep default_uki "$rootmnt"/etc/mkinitcpio.d/linux.preset)
-arch-chroot "$rootmnt" mkdir -p "$(dirname "${default_uki//\"}")"
+# read the UKI setting and create the folder structure otherwise mkinitcpio will crash
+declare $(grep default_uki "${ROOT_MNT}/etc/mkinitcpio.d/linux.preset")
+arch-chroot "${ROOT_MNT}" mkdir -p "$(dirname "${default_uki//\"}")"
+echo
 
-#install the gui packages
+# install the GUI packages
 echo "Installing GUI..."
-arch-chroot "$rootmnt" pacman -Sy "${guipacs[@]}" --noconfirm --quiet
+arch-chroot "${ROOT_MNT}" pacman -Sy "${GUI_PACKAGES[@]}" --noconfirm --quiet
+echo
 
-
-#enable the services we will need on start up
+# enable the services we will need on start up
 echo "Enabling services..."
-systemctl --root "$rootmnt" enable systemd-resolved systemd-timesyncd NetworkManager sddm
-#mask systemd-networkd as we will use NetworkManager instead
-systemctl --root "$rootmnt" mask systemd-networkd
-#regenerate the ramdisk, this will create our UKI
+systemctl --root "${ROOT_MNT}" enable systemd-resolved systemd-timesyncd NetworkManager sddm
+# mask systemd-networkd as we will use NetworkManager instead
+systemctl --root "${ROOT_MNT}" mask systemd-networkd
+echo
+
+# regenerate the ramdisk, this will create our UKI
 echo "Generating UKI and installing Boot Loader..."
-arch-chroot "$rootmnt" mkinitcpio -p linux
+arch-chroot "${ROOT_MNT}" mkinitcpio -p linux
+echo
+
 echo "Setting up Secure Boot..."
 if [[ "$(efivar -d --name 8be4df61-93ca-11d2-aa0d-00e098032b8c-SetupMode)" -eq 1 ]]; then
-arch-chroot "$rootmnt" sbctl create-keys
-arch-chroot "$rootmnt" sbctl enroll-keys --microsoft
-arch-chroot "$rootmnt" sbctl sign -s -o /usr/lib/systemd/boot/efi/systemd-bootx64.efi.signed /usr/lib/systemd/boot/efi/systemd-bootx64.efi
-arch-chroot "$rootmnt" sbctl sign -s "${default_uki//\"}"
+    arch-chroot "${ROOT_MNT}" sbctl create-keys
+    arch-chroot "${ROOT_MNT}" sbctl enroll-keys --microsoft
+    arch-chroot "${ROOT_MNT}" sbctl sign -s -o "/usr/lib/systemd/boot/efi/systemd-bootx64.efi.signed /usr/lib/systemd/boot/efi/systemd-bootx64.efi"
+    arch-chroot "${ROOT_MNT}" sbctl sign -s "${default_uki//\"}"
 else
-echo "Not in Secure Boot setup mode. Skipping..."
+    echo "Not in Secure Boot setup mode. Skipping..."
 fi
-#install the systemd-boot bootloader
-arch-chroot "$rootmnt" bootctl install --esp-path=/efi
-#lock the root account
-arch-chroot "$rootmnt" usermod -L root
-#and we're done
+echo
 
+# install the systemd-boot bootloader
+arch-chroot "${ROOT_MNT}" bootctl install --esp-path=/efi
+# lock the root account
+arch-chroot "${ROOT_MNT}" usermod -L root
+# and we're done
+echo
 
 echo "-----------------------------------"
 echo "- Install complete. Please reboot -"
 echo "-----------------------------------"
 sleep 10
 sync
-#reboot
-
-
+echo
+# reboot
