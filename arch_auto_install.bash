@@ -27,19 +27,71 @@ CRYPT_PASSWORD="changeme"
 
 # packages to pacstrap
 PACSTRAP_PACKAGES=(
+        amd-ucode
         base
+	brtfs-progs
+        cryptsetup
+        dosfstools
         linux
         linux-firmware
-        amd-ucode
-        neovim
-        cryptsetup
-        util-linux
-        e2fsprogs
-        dosfstools
-        sudo
         networkmanager
+        sudo
+        util-linux
+)
+PACMAN_PACKAGES=(
+        alacritty
+        alsa-utils
+        asciiquarium
+        bash-completion
+        bash-language-server
+        bat
+        btop
+        cmatrix
+        dive
+        fastfetch
+        figlet
+        firefox
+	firewalld
+        fzf
+        git
+        github-cli
+        git-filter-repo
+	grub
+	grub-btrfs
+	ipset
+	iptables-nft
+        jq
+        lolcat
+        man-db
+        man-pages
+	mtools
+        ncdu
+        neovim
+        noto-fonts-emoji
+	openssh
+        plocate
+        pipewire
+        pipewire-jack
+        pipewire-pulse
+        python-cookiecutter
+        sbctl
+        speedtest-cli
+        starship
+        stow
+        tldr
+        translate-shell
+        tree
+        ttf-jetbrains-mono-nerd
+        ttf-firacode-nerd
+        yq
         )    
 ### Desktop packages #####
+HYPRLAND_PACKAGES=(
+        hyprpolkitagent
+        kwalletmanager
+        kwallet-pam
+        waybar
+        )
 GUI_PACKAGES=(
         xfce4
         xfce4-terminal
@@ -104,7 +156,17 @@ mkdir "${ROOT_MNT}/efi" -p
 mount -t vfat "/dev/disk/by-partlabel/EFI" "${ROOT_MNT}/efi"
 echo
 echo "Create BTRFS subvolumes..."
-btrfs subvolume create "${ROOT_MNT}/home"
+cd "${ROOT_MNT}"
+btrfs subvolume create @
+btrfs subvolume create @home
+btrfs subvolume create /opt
+btrfs subvolume create /srv
+btrfs subvolume create /var/cache
+btrfs subvolume create /var/lib/libvirt/images
+btrfs subvolume create /var/log
+btrfs subvolume create /var/spool
+btrfs subvolume create /var/tmp
+cd -
 echo
 
 # inspect filesystem changes
@@ -119,17 +181,26 @@ reflector --country GB --age 24 --protocol http,https --sort rate --save "/etc/p
 pacstrap -K "${ROOT_MNT}" "${PACSTRAP_PACKAGES[@]}" 
 echo
 
+# generate filesystem table
+#genfstab -U -p "${ROOT_MNT}" >> /mnt/etc/fstab
+cat /mnt/etc/fstab
+echo
+
 echo "Setting up environment..."
 # set up locale/env: add our locale to locale.gen
 sed -i -e "/^#"${LOCALE}"/s/^#//" "${ROOT_MNT}/etc/locale.gen"
 # remove any existing config files that may have been pacstrapped, systemd-firstboot will then regenerate them
 rm "${ROOT_MNT}"/etc/{machine-id,localtime,hostname,shadow,locale.conf} ||
-systemd-firstboot --root "${ROOT_MNT}" \
-    --keymap="${KEYMAP}" --locale="${LOCALE}" \
-    --locale-messages="${LOCALE}" --timezone="${TIMEZONE}" \
-    --hostname="${HOSTNAME}" --setup-machine-id \
+systemd-firstboot \
+    --root "${ROOT_MNT}" \
+    --keymap="${KEYMAP}" \
+    --locale="${LOCALE}" \
+    --locale-messages="${LOCALE}" \
+    --timezone="${TIMEZONE}" \
+    --hostname="${HOSTNAME}" \
+    --setup-machine-id \
     --welcome=false
-arch-chroot "${ROOT_MNT}" "locale-gen"
+arch-chroot "${ROOT_MNT}" locale-gen
 echo
 
 echo "Configuring for first boot..."
@@ -160,9 +231,20 @@ declare $(grep default_uki "${ROOT_MNT}/etc/mkinitcpio.d/linux.preset")
 arch-chroot "${ROOT_MNT}" mkdir -p "$(dirname "${default_uki//\"}")"
 echo
 
-# install the GUI packages
+echo "Enable pacman multilib repository..."
+sed -i -e '/#\[multilib\]/,+1s/^#//' "${ROOT_MNT}/etc/pacman.conf"
+echo
+
+echo "Installing base packages..."
+arch-chroot "${ROOT_MNT}" pacman -Sy "${PACMAN_PACKAGES[@]}" --noconfirm --quiet
+echo
+
 echo "Installing GUI..."
 arch-chroot "${ROOT_MNT}" pacman -Sy "${GUI_PACKAGES[@]}" --noconfirm --quiet
+echo
+
+echo "GRUB configuration..."
+# ...
 echo
 
 # enable the services we will need on start up
