@@ -32,9 +32,13 @@ PACSTRAP_PACKAGES=(
 	brtfs-progs
         cryptsetup
         dosfstools
+        efibootmgr
+	grub
+	grub-btrfs
         linux
         linux-firmware
         networkmanager
+        sbctl
         sudo
         util-linux
 )
@@ -56,8 +60,6 @@ PACMAN_PACKAGES=(
         git
         github-cli
         git-filter-repo
-	grub
-	grub-btrfs
 	ipset
 	iptables-nft
         jq
@@ -74,7 +76,6 @@ PACMAN_PACKAGES=(
         pipewire-jack
         pipewire-pulse
         python-cookiecutter
-        sbctl
         speedtest-cli
         starship
         stow
@@ -86,32 +87,26 @@ PACMAN_PACKAGES=(
         yq
         )    
 ### Desktop packages #####
-HYPRLAND_PACKAGES=(
-        hyprpolkitagent
-        kwalletmanager
-        kwallet-pam
-        waybar
-        )
+#HYPRLAND_PACKAGES=(
+#        hyprpolkitagent
+#        kwalletmanager
+#        kwallet-pam
+#        waybar
+#        )
 GUI_PACKAGES=(
         xfce4
         xfce4-terminal
         xfce4-goodies
         sddm
-        firefox
         nm-connection-editor
-        fastfetch
         mousepad
-        sbctl
         )
 #GUI_PACKAGES=(
 #         plasma 
 #         sddm 
 #         kitty
-#         firefox 
 #         nm-connection-editor
-#         fastfetch
 #         mousepad
-#         sbctl
 #        )
 
 # set locale, timezone, NTP
@@ -243,10 +238,6 @@ echo "Installing GUI..."
 arch-chroot "${ROOT_MNT}" pacman -Sy "${GUI_PACKAGES[@]}" --noconfirm --quiet
 echo
 
-echo "GRUB configuration..."
-# ...
-echo
-
 # enable the services we will need on start up
 echo "Enabling services..."
 systemctl --root "${ROOT_MNT}" enable systemd-resolved systemd-timesyncd NetworkManager sddm
@@ -270,11 +261,36 @@ else
 fi
 echo
 
+echo "GRUB setup..."
+echo "Move grub/ from /efi"
+arch-chroot "${ROOT_MNT}" ls -lah /efi
+arch-chroot "${ROOT_MNT}" ls -lah /efi/grub
+# remove grub from /efi
+arch-chroot "${ROOT_MNT}" rm -rf /efi/grub
+# check the arch boot-loader folder is missing from /efi/EFI
+arch-chroot "${ROOT_MNT}" ls -lah /efi/EFI
+# create grub
+arch-chroot "${ROOT_MNT}" grub-install --target=x86_64-efi --efi-directory=/efi --boot-directory=/boot --bootloader-id=arch
+# check the arch boot-loader folder is now present in /efi/EFI
+arch-chroot "${ROOT_MNT}" ls -lah /efi/EFI
+# check the grubx64.efi boot-loader's been created
+arch-chroot "${ROOT_MNT}" ls -lah /efi/EFI/arch
+# check the grub/ folder is now present in /boot
+arch-chroot "${ROOT_MNT}" ls -lah /boot
+# check /boot/grub contains fonts/, grub.cfg, grubenv, locale/, themes/, x86_64-efi/
+arch-chroot "${ROOT_MNT}" ls -lah /boot/grub
+# if /boot/grub/grub.cfg is missing, create it and check again
+arch-chroot "${ROOT_MNT}" grub-mkconfig -o /boot/grub/grub.cfg
+arch-chroot "${ROOT_MNT}" ls -lah /boot/grub
+# check the boot entry for Arch Linux has been created and its index is the first in the boot order
+arch-chroot "${ROOT_MNT}" efibootmgr
+echo
+
 # install the systemd-boot bootloader
-arch-chroot "${ROOT_MNT}" bootctl install --esp-path=/efi
+#arch-chroot "${ROOT_MNT}" bootctl install --esp-path=/efi
+
 # lock the root account
 arch-chroot "${ROOT_MNT}" usermod -L root
-# and we're done
 echo
 
 echo "-----------------------------------"
