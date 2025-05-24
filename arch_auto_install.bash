@@ -62,16 +62,21 @@ GUI_PACKAGES=(
 #         sbctl
 #        )
 
-# partition
+# set locale, timezone, NTP
+loadkeys "${KEYMAP}"
+timedatectl set-timezone "${TIMEZONE}"
+timedatectl set-ntp true
+
 echo "Creating partitions..."
 sgdisk -Z "${TARGET}"
+# ef00: EFI System
+# 8304: Linux x86-64 root (/)
 sgdisk \
-    -n1:0:+1G -t1:ef00 -c1:EFISYSTEM \
+    -n1:0:+1G -t1:ef00 -c1:EFI \
     -N2       -t2:8304 -c2:linux \
     "${TARGET}"
 sleep 2
 echo
-
 # reload partition table
 partprobe -s "${TARGET}"
 sleep 2
@@ -90,13 +95,16 @@ echo
 
 echo "Making File Systems..."
 # create file systems
-mkfs.vfat -F32 -n EFISYSTEM "/dev/disk/by-partlabel/EFISYSTEM"
-mkfs.ext4 -L linux "/dev/mapper/root"
+mkfs.vfat -F32 -n EFI "/dev/disk/by-partlabel/EFI"
+mkfs.btrfs -f -L linux /dev/mapper/root
 # mount the root, and create + mount the EFI directory
 echo "Mounting File Systems..."
 mount "/dev/mapper/root" "${ROOT_MNT}"
 mkdir "${ROOT_MNT}/efi" -p
-mount -t vfat "/dev/disk/by-partlabel/EFISYSTEM" "${ROOT_MNT}/efi"
+mount -t vfat "/dev/disk/by-partlabel/EFI" "${ROOT_MNT}/efi"
+echo
+echo "Create BTRFS subvolumes..."
+btrfs subvolume create "${ROOT_MNT}/home"
 echo
 
 # inspect filesystem changes
