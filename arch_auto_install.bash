@@ -53,17 +53,13 @@ PACMAN_PACKAGES=(
         cmatrix
         dive
         fastfetch
-        figlet
         firefox
 	firewalld
         fzf
         git
         github-cli
         git-filter-repo
-	ipset
-	iptables-nft
         jq
-        lolcat
         man-db
         man-pages
 	mtools
