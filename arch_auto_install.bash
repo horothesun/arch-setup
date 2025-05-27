@@ -280,7 +280,8 @@ echo "Setting up Secure Boot..."
 if [[ "$(efivar --print-decimal --name 8be4df61-93ca-11d2-aa0d-00e098032b8c-SetupMode)" -eq 1 ]]; then
     arch-chroot "${ROOT_MNT}" sbctl create-keys
     arch-chroot "${ROOT_MNT}" sbctl enroll-keys --microsoft
-    arch-chroot "${ROOT_MNT}" sbctl sign --save --output /efi/EFI/arch/grubx64.efi.signed /efi/EFI/arch/grubx64.efi
+    #arch-chroot "${ROOT_MNT}" sbctl sign --save --output /efi/EFI/arch/grubx64.efi.signed /efi/EFI/arch/grubx64.efi
+    arch-chroot "${ROOT_MNT}" sbctl sign --save /efi/EFI/arch/grubx64.efi
     arch-chroot "${ROOT_MNT}" sbctl sign --save "${default_uki//\"}"
 else
     echo "Not in Secure Boot setup mode. Skipping..."
