@@ -155,13 +155,13 @@ echo "Create BTRFS subvolumes..."
 cd "${ROOT_MNT}"
 btrfs subvolume create @
 btrfs subvolume create @home
-btrfs subvolume create --parents /opt
-btrfs subvolume create --parents /srv
-btrfs subvolume create --parents /var/cache
-btrfs subvolume create --parents /var/lib/libvirt/images
-btrfs subvolume create --parents /var/log
-btrfs subvolume create --parents /var/spool
-btrfs subvolume create --parents /var/tmp
+btrfs subvolume create --parents @opt
+btrfs subvolume create --parents @srv
+btrfs subvolume create --parents @var/cache
+btrfs subvolume create --parents @var/lib/libvirt/images
+btrfs subvolume create --parents @var/log
+btrfs subvolume create --parents @var/spool
+btrfs subvolume create --parents @var/tmp
 cd -
 echo
 
