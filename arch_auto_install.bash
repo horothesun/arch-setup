@@ -255,7 +255,6 @@ arch-chroot "${ROOT_MNT}" sed -i \
     /etc/default/grub
 echo "Move grub/ from /efi"
 arch-chroot "${ROOT_MNT}" ls -lah /efi
-arch-chroot "${ROOT_MNT}" ls -lah /efi/grub
 # remove grub from /efi
 arch-chroot "${ROOT_MNT}" rm -rf /efi/grub
 # check the arch boot-loader folder is missing from /efi/EFI
