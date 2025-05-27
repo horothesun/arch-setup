@@ -116,11 +116,12 @@ timedatectl set-ntp true
 
 echo "Creating partitions..."
 sgdisk -Z "${TARGET}"
+# https://wiki.archlinux.org/title/GPT_fdisk#Partition_type
 # ef00: EFI System
-# 8304: Linux x86-64 root (/)
+# 8309: Linux LUKS
 sgdisk \
     -n1:0:+1G -t1:ef00 -c1:EFI \
-    -N2       -t2:8304 -c2:linux \
+    -N2       -t2:8309 -c2:linux \
     "${TARGET}"
 sleep 2
 echo
@@ -154,13 +155,13 @@ echo "Create BTRFS subvolumes..."
 cd "${ROOT_MNT}"
 btrfs subvolume create @
 btrfs subvolume create @home
-btrfs subvolume create /opt
-btrfs subvolume create /srv
-btrfs subvolume create /var/cache
-btrfs subvolume create /var/lib/libvirt/images
-btrfs subvolume create /var/log
-btrfs subvolume create /var/spool
-btrfs subvolume create /var/tmp
+btrfs subvolume create --parents /opt
+btrfs subvolume create --parents /srv
+btrfs subvolume create --parents /var/cache
+btrfs subvolume create --parents /var/lib/libvirt/images
+btrfs subvolume create --parents /var/log
+btrfs subvolume create --parents /var/spool
+btrfs subvolume create --parents /var/tmp
 cd -
 echo
 
@@ -251,11 +252,11 @@ arch-chroot "${ROOT_MNT}" mkinitcpio -p linux
 echo
 
 echo "Setting up Secure Boot..."
-if [[ "$(efivar -d --name 8be4df61-93ca-11d2-aa0d-00e098032b8c-SetupMode)" -eq 1 ]]; then
+if [[ "$(efivar --print-decimal --name 8be4df61-93ca-11d2-aa0d-00e098032b8c-SetupMode)" -eq 1 ]]; then
     arch-chroot "${ROOT_MNT}" sbctl create-keys
     arch-chroot "${ROOT_MNT}" sbctl enroll-keys --microsoft
-    arch-chroot "${ROOT_MNT}" sbctl sign -s -o "/usr/lib/systemd/boot/efi/systemd-bootx64.efi.signed /usr/lib/systemd/boot/efi/systemd-bootx64.efi"
-    arch-chroot "${ROOT_MNT}" sbctl sign -s "${default_uki//\"}"
+    arch-chroot "${ROOT_MNT}" sbctl sign --save --output "/usr/lib/systemd/boot/efi/systemd-bootx64.efi.signed /usr/lib/systemd/boot/efi/systemd-bootx64.efi"
+    arch-chroot "${ROOT_MNT}" sbctl sign --save "${default_uki//\"}"
 else
     echo "Not in Secure Boot setup mode. Skipping..."
 fi
@@ -292,6 +293,9 @@ echo
 # lock the root account
 arch-chroot "${ROOT_MNT}" usermod -L root
 echo
+
+# ZRAM / Swap setup
+# ...
 
 echo "-----------------------------------"
 echo "- Install complete. Please reboot -"
