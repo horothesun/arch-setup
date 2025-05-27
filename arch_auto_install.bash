@@ -244,11 +244,11 @@ echo
 
 # regenerate the ramdisk, this will create our UKI
 echo "Generating UKI and installing Boot Loader..."
-arch-chroot "${ROOT_MNT}" mkinitcpio -p linux
+arch-chroot "${ROOT_MNT}" mkinitcpio --preset linux
 echo
 
 echo "GRUB setup..."
-arch-chroot "${ROOT_MNT}" rm -rf /efi/EFI/Linux
+#arch-chroot "${ROOT_MNT}" rm -rf /efi/EFI/Linux
 # enable GRUB cryptodisk
 arch-chroot "${ROOT_MNT}" sed -i \
     -e 's/^#GRUB_ENABLE_CRYPTODISK=y/GRUB_ENABLE_CRYPTODISK=y/g' \
