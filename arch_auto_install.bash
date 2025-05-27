@@ -247,18 +247,12 @@ echo "Generating UKI and installing Boot Loader..."
 arch-chroot "${ROOT_MNT}" mkinitcpio -p linux
 echo
 
-echo "Setting up Secure Boot..."
-if [[ "$(efivar --print-decimal --name 8be4df61-93ca-11d2-aa0d-00e098032b8c-SetupMode)" -eq 1 ]]; then
-    arch-chroot "${ROOT_MNT}" sbctl create-keys
-    arch-chroot "${ROOT_MNT}" sbctl enroll-keys --microsoft
-    arch-chroot "${ROOT_MNT}" sbctl sign --save --output "/usr/lib/systemd/boot/efi/systemd-bootx64.efi.signed /usr/lib/systemd/boot/efi/systemd-bootx64.efi"
-    arch-chroot "${ROOT_MNT}" sbctl sign --save "${default_uki//\"}"
-else
-    echo "Not in Secure Boot setup mode. Skipping..."
-fi
-echo
-
 echo "GRUB setup..."
+arch-chroot "${ROOT_MNT}" rm -rf /efi/EFI/Linux
+# enable GRUB cryptodisk
+arch-chroot "${ROOT_MNT}" sed -i \
+    -e 's/^#GRUB_ENABLE_CRYPTODISK=y/GRUB_ENABLE_CRYPTODISK=y/g' \
+    /etc/default/grub
 echo "Move grub/ from /efi"
 arch-chroot "${ROOT_MNT}" ls -lah /efi
 arch-chroot "${ROOT_MNT}" ls -lah /efi/grub
@@ -277,14 +271,22 @@ arch-chroot "${ROOT_MNT}" ls -lah /boot
 # check /boot/grub contains fonts/, grub.cfg, grubenv, locale/, themes/, x86_64-efi/
 arch-chroot "${ROOT_MNT}" ls -lah /boot/grub
 # if /boot/grub/grub.cfg is missing, create it and check again
-arch-chroot "${ROOT_MNT}" grub-mkconfig -o /boot/grub/grub.cfg
+arch-chroot "${ROOT_MNT}" grub-mkconfig --output /boot/grub/grub.cfg
 arch-chroot "${ROOT_MNT}" ls -lah /boot/grub
 # check the boot entry for Arch Linux has been created and its index is the first in the boot order
 arch-chroot "${ROOT_MNT}" efibootmgr
 echo
 
-# install the systemd-boot bootloader
-#arch-chroot "${ROOT_MNT}" bootctl install --esp-path=/efi
+echo "Setting up Secure Boot..."
+if [[ "$(efivar --print-decimal --name 8be4df61-93ca-11d2-aa0d-00e098032b8c-SetupMode)" -eq 1 ]]; then
+    arch-chroot "${ROOT_MNT}" sbctl create-keys
+    arch-chroot "${ROOT_MNT}" sbctl enroll-keys --microsoft
+    arch-chroot "${ROOT_MNT}" sbctl sign --save --output /efi/EFI/arch/grubx64.efi.signed /efi/EFI/arch/grubx64.efi
+    arch-chroot "${ROOT_MNT}" sbctl sign --save "${default_uki//\"}"
+else
+    echo "Not in Secure Boot setup mode. Skipping..."
+fi
+echo
 
 # lock the root account
 arch-chroot "${ROOT_MNT}" usermod -L root
