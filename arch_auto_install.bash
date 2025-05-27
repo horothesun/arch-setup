@@ -29,7 +29,7 @@ CRYPT_PASSWORD="changeme"
 PACSTRAP_PACKAGES=(
         amd-ucode
         base
-	brtfs-progs
+	btrfs-progs
         cryptsetup
         dosfstools
         efibootmgr
