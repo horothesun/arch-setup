@@ -298,7 +298,11 @@ sudo snapper undochange 2..1
 banner Hello
 sudo pacman -Rs banner
 snapper list
+```
 
+### Create pre and post snapshots
+
+```bash
 # manually create a 'pre' snapshot (e.g. before experimenting with AUR packages)
 snapper -c root create -t pre -c number -d "pre AUR package"
 # ... install pacman and AUR packages, test the programs ...
@@ -405,30 +409,22 @@ SSH_ASKPASS_REQUIRE="force" SSH_ASKPASS="${HOME}/.ssh/askpass.sh" ssh-add "${HOM
 git config --global core.editor "nvim"
 ```
 
-## [WIP] Bluetooth
+## Bluetooth
 
 ```bash
-snapper -c root create -t pre -c number -d "pre Bluetooth setup"
-
-sudo pacman -Syu
-sudo pacman -S bluez bluez-utils bluez-deprecated-tools
-sudo reboot
-
-# check if the btusb kernel module is loaded
-lsmod | grep btusb
-
-systemctl enable bluetooth
-systemctl start bluetooth
 systemctl status bluetooth
 
-# TODO: test pairing with a device with bluetoothctl
-# ...
-
-# TODO: get the "pre Bluetooth setup" snapshot number
-snapper --jsonout -c root list | jq '.'
-snapper -c root create -t post --pre-number <PRE_SNAPSHOT_NUMBER> -c number -d "post Bluetooth setup"
-snapper list
+# pair->connect->trust devices with bluetoothctl
+bluetoothctl scan on
+bluetoothctl devices
+bluetoothctl pair <MAC-ADDRESS>
+bluetoothctl connect <MAC-ADDRESS>
+bluetoothctl trust <MAC-ADDRESS>
+bluetoothctl devices Connected
+bluetoothctl scan off
 ```
+
+Control your Bluetooth audio devices with the `pavucontrol` GUI app.
 
 ## Apps
 
@@ -436,7 +432,6 @@ snapper list
 yay -S scala-cli
 sudo pacman -S sbt
 yay -S terraform-ls
-yay -S figlet-fonts
 # yay -S aws-cli-v2 # FAILED setup
 ```
 

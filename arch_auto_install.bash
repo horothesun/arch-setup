@@ -49,6 +49,9 @@ PACMAN_PACKAGES=(
         bash-completion
         bash-language-server
         bat
+        bluez
+        bluez-utils
+        bluez-deprecated-tools pavucontrol
         btop
         cmatrix
         dive
@@ -67,6 +70,7 @@ PACMAN_PACKAGES=(
         neovim
         noto-fonts-emoji
 	openssh
+        pavucontrol
         plocate
         pipewire
         pipewire-jack
@@ -286,6 +290,11 @@ if [[ "$(efivar --print-decimal --name 8be4df61-93ca-11d2-aa0d-00e098032b8c-Setu
 else
     echo "Not in Secure Boot setup mode. Skipping..."
 fi
+echo
+
+echo "Bluetooth service..."
+arch-chroot "${ROOT_MNT}" systemctl enable bluetooth
+arch-chroot "${ROOT_MNT}" systemctl status bluetooth
 echo
 
 # lock the root account
