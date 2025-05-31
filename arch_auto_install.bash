@@ -63,6 +63,7 @@ PACMAN_PACKAGES=(
         github-cli
         git-filter-repo
         jq
+        keyd
         man-db
         man-pages
 	mtools
@@ -292,9 +293,8 @@ else
 fi
 echo
 
-echo "Bluetooth service..."
-arch-chroot "${ROOT_MNT}" systemctl enable bluetooth
-arch-chroot "${ROOT_MNT}" systemctl status bluetooth
+echo "Enable services..."
+arch-chroot "${ROOT_MNT}" systemctl enable bluetooth keyd
 echo
 
 # lock the root account

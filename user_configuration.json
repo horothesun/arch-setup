@@ -177,6 +177,7 @@
         "kwalletmanager",
         "kwallet-pam",
         "jq",
+        "keyd",
         "man-db",
         "man-pages",
         "ncdu",

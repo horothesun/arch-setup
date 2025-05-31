@@ -426,6 +426,27 @@ bluetoothctl scan off
 
 Control your Bluetooth audio devices with the `pavucontrol` GUI app.
 
+### Apple Keyboard
+
+Swap `\``/`~` with `§`/`±` keys using the `keyd` remapping daemon.
+
+Here's the `/etc/keyd/default.conf` (`sudo keyd reload` after updating the config file)
+
+```
+[ids]
+
+# Apple Magic Keyboard (acquire this by running `sudo keyd monitor`)
+004c:0267:9cc234d0
+
+[main]
+
+# swap ` and §
+` = 102nd
+102nd = `
+```
+
+Check for config loading errors by running `sudo journalctl -eu keyd`.
+
 ## Apps
 
 ```bash
