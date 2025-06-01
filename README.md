@@ -372,6 +372,35 @@ snapper -c root create --description "*** BEGINNING OF TIME ***"
 snapper list
 ```
 
+## Grub repair
+
+E.g.: after a BIOS update.
+
+Boot with a live USB, then
+
+```bash
+# show drives and partitions
+lsblk
+
+# mount /
+mount -o noatime,ssd,compress=zstd,space_cache=v2,discard=async,subvol=@ /dev/nvme0n1p2 /mnt
+
+# mount /efi
+mount /dev/nvme0n1p1 /mnt/efi
+
+# start a shell into the system
+arch-chroot /mnt
+
+grub-install --target=x86_64-efi --efi-directory=/efi --boot-directory=/boot --bootloader-id=arch
+
+# exit from chroot
+exit
+
+reboot
+```
+
+Now fix the BIOS boot order.
+
 ## git
 
 ```bash
