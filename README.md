@@ -244,6 +244,10 @@ rm -rf yay-git
 # update the packages
 yay -Syu
 
+yay -S oh-my-zsh-git
+chsh --list-shells
+chsh --shell=/usr/bin/zsh
+
 # install Snapper
 sudo pacman -S snapper snap-pac grub-btrfs inotify-tools
 

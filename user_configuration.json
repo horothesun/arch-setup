@@ -196,7 +196,9 @@
         "ttf-jetbrains-mono-nerd",
         "ttf-firacode-nerd",
         "yq",
-        "waybar"
+        "waybar",
+        "zsh",
+        "zsh-completions"
     ],
     "parallel_downloads": 10,
     "profile_config": {

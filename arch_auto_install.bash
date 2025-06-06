@@ -86,6 +86,8 @@ PACMAN_PACKAGES=(
         ttf-jetbrains-mono-nerd
         ttf-firacode-nerd
         yq
+        zsh
+        zsh-completions
         )    
 ### Desktop packages #####
 #HYPRLAND_PACKAGES=(
@@ -165,6 +167,17 @@ btrfs subvolume create --parents @var/spool
 btrfs subvolume create --parents @var/tmp
 cd -
 echo
+
+# mount /
+#mount -o noatime,ssd,compress=zstd,space_cache=v2,discard=async,subvol=@ /dev/nvme0n1p2 /mnt
+
+# mount /efi
+#mount /dev/nvme0n1p1 /mnt/efi
+
+# start a shell into the system
+#arch-chroot /mnt
+
+#grub-install --target=x86_64-efi --efi-directory=/efi --boot-directory=/boot --bootloader-id=arch
 
 # inspect filesystem changes
 lsblk
@@ -295,6 +308,24 @@ echo
 
 echo "Enable services..."
 arch-chroot "${ROOT_MNT}" systemctl enable bluetooth keyd
+echo
+
+echo "YAY install..."
+arch-chroot "${ROOT_MNT}" git clone https://aur.archlinux.org/yay-git.git
+arch-chroot "${ROOT_MNT}" cd yay-git
+arch-chroot "${ROOT_MNT}" makepkg -si
+arch-chroot "${ROOT_MNT}" cd ..
+arch-chroot "${ROOT_MNT}" rm -rf yay-git
+echo
+
+echo "YAY update and setup packages..."
+arch-chroot "${ROOT_MNT}" yay -Syu --noconfirm --norebuild --answerdiff=None --answeredit=None
+arch-chroot "${ROOT_MNT}" yay -S --noconfirm --norebuild --answerdiff=None --answeredit=None oh-my-zsh-git
+echo
+
+echo "ZSH set as default..."
+arch-chroot "${ROOT_MNT}" chsh --list-shells
+arch-chroot "${ROOT_MNT}" chsh --shell=/usr/bin/zsh
 echo
 
 # lock the root account
