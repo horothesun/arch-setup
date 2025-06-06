@@ -87,7 +87,6 @@ PACMAN_PACKAGES=(
         ttf-firacode-nerd
         yq
         zsh
-        zsh-completions
         )    
 ### Desktop packages #####
 #HYPRLAND_PACKAGES=(

@@ -197,8 +197,7 @@
         "ttf-firacode-nerd",
         "yq",
         "waybar",
-        "zsh",
-        "zsh-completions"
+        "zsh"
     ],
     "parallel_downloads": 10,
     "profile_config": {
