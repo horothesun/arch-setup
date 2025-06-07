@@ -248,7 +248,6 @@ sed -i \
     -e '/^#ParallelDownloads.*/s/^#//' \
     -e '/^ParallelDownloads.*/c\ParallelDownloads = 10' \
     -e '/^#VerbosePkgLists/s/^#//' \
-    -e '/^VerbosePkgLists/a\ILoveCandy' \
     "${ROOT_MNT}/etc/pacman.conf"
 echo
 
