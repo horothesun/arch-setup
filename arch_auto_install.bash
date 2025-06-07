@@ -240,8 +240,16 @@ declare $(grep default_uki "${ROOT_MNT}/etc/mkinitcpio.d/linux.preset")
 arch-chroot "${ROOT_MNT}" mkdir -p "$(dirname "${default_uki//\"}")"
 echo
 
-echo "Enable pacman multilib repository..."
-sed -i -e '/#\[multilib\]/,+1s/^#//' "${ROOT_MNT}/etc/pacman.conf"
+echo "Customize pacman.conf..."
+sed -i \
+    -e '/#\[multilib\]/,+1s/^#//' \
+    -e '/^#Color/s/^#//' \
+    -e '/^#CheckSpace/s/^#//' \
+    -e '/^#ParallelDownloads.*/s/^#//' \
+    -e '/^ParallelDownloads.*/c\ParallelDownloads = 10' \
+    -e '/^#VerbosePkgLists/s/^#//' \
+    -e '/^VerbosePkgLists/a\ILoveCandy' \
+    "${ROOT_MNT}/etc/pacman.conf"
 echo
 
 echo "Installing base packages..."
