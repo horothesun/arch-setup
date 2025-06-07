@@ -501,6 +501,11 @@ launch it, set `brave://flags/#ozone-platform-hint` to "Wayland" (to fix fractio
 
 Set `brave://flags/#scrollable-tabstrip` to "Enabled" to actually disable the feature.
 
+Follow [this guide](https://wiki.archlinux.org/title/KDE_Wallet#Unlocking_KWallet_automatically_in_a_window_manager)
+to setup a default KDE Wallet named `kdewallet` with same password of your user and automatically unlocked at startup.
+
+> TBC: it might be necessary to let Brave create its own KDE Wallet (named `Default keyring`) at first startup, then to remove it.
+
 ### IntelliJ Idea IDE
 
 Install with
