@@ -45,6 +45,7 @@ PACSTRAP_PACKAGES=(
 PACMAN_PACKAGES=(
         alacritty
         alsa-utils
+        amdgpu_top
         asciiquarium
         bash-completion
         bash-language-server

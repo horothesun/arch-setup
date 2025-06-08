@@ -158,6 +158,7 @@
     "packages": [
         "alacritty",
         "amd-ucode",
+        "amdgpu_top",
         "asciiquarium",
         "bash-completion",
         "bash-language-server",
