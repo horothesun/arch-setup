@@ -187,6 +187,7 @@
         "plocate",
         "python-cookiecutter",
         "sbctl",
+        "sbt",
         "speedtest-cli",
         "starship",
         "stow",

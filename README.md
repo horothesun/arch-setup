@@ -376,6 +376,14 @@ snapper -c root create --description "*** BEGINNING OF TIME ***"
 snapper list
 ```
 
+## KDE Wallet (required by Brave)
+
+Follow [this guide](https://wiki.archlinux.org/title/KDE_Wallet#Unlocking_KWallet_automatically_in_a_window_manager)
+to setup a default KDE Wallet named `kdewallet` with same password of your user and automatically unlocked at startup
+(currently defined in hyprland autostart).
+
+> TBC: it might be necessary to let Brave create its own KDE Wallet (named `Default keyring`) at first startup, then to remove it.
+
 ## Grub repair
 
 E.g.: after a BIOS update.
@@ -484,7 +492,6 @@ Check for config loading errors by running `sudo journalctl -eu keyd`.
 
 ```bash
 yay -S scala-cli
-sudo pacman -S sbt
 yay -S terraform-ls
 # yay -S aws-cli-v2 # FAILED setup
 ```
@@ -500,11 +507,6 @@ yay -S brave-bin
 launch it, set `brave://flags/#ozone-platform-hint` to "Wayland" (to fix fractional scaling font issues) and restart.
 
 Set `brave://flags/#scrollable-tabstrip` to "Enabled" to actually disable the feature.
-
-Follow [this guide](https://wiki.archlinux.org/title/KDE_Wallet#Unlocking_KWallet_automatically_in_a_window_manager)
-to setup a default KDE Wallet named `kdewallet` with same password of your user and automatically unlocked at startup.
-
-> TBC: it might be necessary to let Brave create its own KDE Wallet (named `Default keyring`) at first startup, then to remove it.
 
 ### IntelliJ Idea IDE
 

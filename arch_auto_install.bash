@@ -29,12 +29,12 @@ CRYPT_PASSWORD="changeme"
 PACSTRAP_PACKAGES=(
         amd-ucode
         base
-	btrfs-progs
+        btrfs-progs
         cryptsetup
         dosfstools
         efibootmgr
-	grub
-	grub-btrfs
+        grub
+        grub-btrfs
         linux
         linux-firmware
         networkmanager
@@ -51,13 +51,14 @@ PACMAN_PACKAGES=(
         bat
         bluez
         bluez-utils
-        bluez-deprecated-tools pavucontrol
+        bluez-deprecated-tools
+        pavucontrol
         btop
         cmatrix
         dive
         fastfetch
         firefox
-	firewalld
+        firewalld
         fzf
         git
         github-cli
@@ -66,17 +67,18 @@ PACMAN_PACKAGES=(
         keyd
         man-db
         man-pages
-	mtools
+        mtools
         ncdu
         neovim
         noto-fonts-emoji
-	openssh
+        openssh
         pavucontrol
         plocate
         pipewire
         pipewire-jack
         pipewire-pulse
         python-cookiecutter
+        sbt
         speedtest-cli
         starship
         stow
