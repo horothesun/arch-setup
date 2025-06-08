@@ -123,7 +123,7 @@ archinstall --config-url="https://raw.githubusercontent.com/horothesun/archinsta
 then continue from [here](#chroot-post-install), otherwise
 
 - Check the CPU supports LUKS disk encryption with `grep -o aes /proc/cpuinfo | uniq` (`aes` as result means yes)
-- Additional packages (AMD specific): `amd-ucode bash-completion git man-db man-pages plocate neovim alacritty firefox`
+- Additional packages (AMD specific): `amd-ucode bash-completion git man-db man-pages plocate neovim alacritty`
 - Additional repositories: `multilib` only
 - Save config files to `/root/user_configuration.json`
 - Copy config files from live USB install to local PC via `scp` (on the other PC run)

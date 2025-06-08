@@ -57,13 +57,13 @@ PACMAN_PACKAGES=(
         cmatrix
         dive
         fastfetch
-        firefox
         firewalld
         fzf
         git
         github-cli
         git-filter-repo
         jq
+        kdeconnect
         keyd
         man-db
         man-pages

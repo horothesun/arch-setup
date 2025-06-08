@@ -177,6 +177,7 @@
         "kwalletmanager",
         "kwallet-pam",
         "jq",
+        "kdeconnect",
         "keyd",
         "man-db",
         "man-pages",
