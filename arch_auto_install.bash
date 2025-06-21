@@ -329,12 +329,34 @@ echo
 
 echo "YAY update and setup packages..."
 arch-chroot "${ROOT_MNT}" yay -Syu --noconfirm --norebuild --answerdiff=None --answeredit=None
-arch-chroot "${ROOT_MNT}" yay -S --noconfirm --norebuild --answerdiff=None --answeredit=None oh-my-zsh-git
+arch-chroot "${ROOT_MNT}" yay -S --noconfirm --norebuild --answerdiff=None --answeredit=None \
+    oh-my-zsh-git \
+    sddm-astronaut-theme
 echo
 
 echo "ZSH set as default..."
 arch-chroot "${ROOT_MNT}" chsh --list-shells
 arch-chroot "${ROOT_MNT}" chsh --shell=/usr/bin/zsh
+echo
+
+echo "SDDM theme..."
+arch-chroot "${ROOT_MNT}" cat > /etc/sddm.conf
+[Theme]
+Current=sddm-astronaut-theme
+EOF
+mkdir -p /etc/sddm.conf.d
+arch-chroot "${ROOT_MNT}" cat > /etc/sddm.conf.d/virtualkbd.conf
+[General]
+InputMethod=qtvirtualkeyboard
+EOF
+arch-chroot "${ROOT_MNT}" sed -i "s/^ConfigFile=.*/ConfigFile=Themes\/purple_leaves.conf/g" /usr/share/sddm/themes/sddm-astronaut-theme/metadata.desktop
+arch-chroot "${ROOT_MNT}" sed -i \
+    -e '/^ScreenWidth=.*/c\ScreenWidth="2560"' \
+    -e '/^ScreenHeight=.*/c\ScreenHeight="1440"' \
+    -e '/^DateFormat=.*/c\DateFormat="ddd, dd MMMM"' \
+    -e '/^TranslateVirtualKeyboardButtonOn=.*/c\TranslateVirtualKeyboardButtonOn=" "' \
+    -e '/^TranslateVirtualKeyboardButtonOff=.*/c\TranslateVirtualKeyboardButtonOff=" "' \
+    "${ROOT_MNT}/usr/share/sddm/themes/sddm-astronaut-theme/Themes/purple_leaves.conf"
 echo
 
 # lock the root account
