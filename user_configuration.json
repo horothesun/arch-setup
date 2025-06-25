@@ -188,6 +188,7 @@
         "pavucontrol",
         "plocate",
         "python-cookiecutter",
+        "rofi-wayland",
         "sbctl",
         "sbt",
         "speedtest-cli",

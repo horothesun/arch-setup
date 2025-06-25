@@ -96,6 +96,7 @@ PACMAN_PACKAGES=(
 #        hyprpolkitagent
 #        kwalletmanager
 #        kwallet-pam
+#        rofi-wayland
 #        waybar
 #        )
 GUI_PACKAGES=(
