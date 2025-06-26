@@ -89,6 +89,7 @@ PACMAN_PACKAGES=(
         ttf-jetbrains-mono-nerd
         ttf-firacode-nerd
         yq
+        wtype
         zsh
         )    
 ### Desktop packages #####
@@ -96,6 +97,7 @@ PACMAN_PACKAGES=(
 #        hyprpolkitagent
 #        kwalletmanager
 #        kwallet-pam
+#        rofi-emoji
 #        rofi-wayland
 #        waybar
 #        )

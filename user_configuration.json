@@ -188,6 +188,7 @@
         "pavucontrol",
         "plocate",
         "python-cookiecutter",
+        "rofi-emoji",
         "rofi-wayland",
         "sbctl",
         "sbt",
@@ -201,6 +202,7 @@
         "ttf-firacode-nerd",
         "yq",
         "waybar",
+        "wtype",
         "zsh"
     ],
     "parallel_downloads": 10,
