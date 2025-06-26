@@ -244,6 +244,8 @@ rm -rf yay-git
 # update the packages
 yay -Syu
 
+yay -S informant
+
 yay -S oh-my-zsh-git
 chsh --list-shells
 chsh --shell=/usr/bin/zsh
