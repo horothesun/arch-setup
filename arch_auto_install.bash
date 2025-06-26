@@ -89,6 +89,7 @@ PACMAN_PACKAGES=(
         ttf-jetbrains-mono-nerd
         ttf-firacode-nerd
         yq
+        wl-clipboard
         wtype
         zsh
         )    
