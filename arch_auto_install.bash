@@ -56,6 +56,7 @@ PACMAN_PACKAGES=(
         pavucontrol
         btop
         cmatrix
+        cliphist
         dive
         fastfetch
         firewalld
