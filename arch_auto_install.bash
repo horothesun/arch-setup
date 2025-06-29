@@ -228,10 +228,15 @@ sed -i -e '/^# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/s/^# //' "${ROOT_MNT}/etc/sudo
 # create a basic kernel cmdline, we're using DPS so we don't need to have anything here really,
 # but if the file doesn't exist, mkinitcpio will complain
 echo "quiet rw" > "${ROOT_MNT}/etc/kernel/cmdline"
-# change the HOOKS in mkinitcpio.conf to use systemd hooks
+# update /etc/mkinitcpio.conf
+# - add the i2c-dev module for the ddcutil (external monitor brightness/contrast control)
+# - change the HOOKS in mkinitcpio.conf to use systemd hooks (udev -> systemd, keymap consolefont -> sd-vconsole sd-encrypt)
+# Note: original HOOKS=(base udev autodetect microcode modconf kms keyboard keymap consolefont block filesystems fsck grub-btrfs-overlayfs)
 sed -i \
-    -e 's/base udev/base systemd/g' \
-    -e 's/keymap consolefont/sd-vconsole sd-encrypt/g' \
+    -e '/^MODULES=(.*/c\MODULES=(btrfs i2c-dev)' \
+    -e '/^BINARIES=(.*/c\BINARIES=(/urs/bin/btrfs)' \
+    -e '/^FILES=(.*/c\FILES=()' \
+    -e '/^HOOKS=(.*/c\HOOKS=(base systemd autodetect microcode modconf kms keyboard sd-vconsole sd-encrypt block filesystems fsck grub-btrfs-overlayfs)' \
     "${ROOT_MNT}/etc/mkinitcpio.conf"
 # change the preset file to generate a Unified Kernel Image instead of an initram disk + kernel
 sed -i \
