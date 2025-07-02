@@ -329,6 +329,7 @@ echo
 
 echo "Enable services..."
 arch-chroot "${ROOT_MNT}" systemctl enable bluetooth keyd
+arch-chroot "${ROOT_MNT}" systemctl --user enable --now hypridle.service
 echo
 
 echo "YAY install..."
