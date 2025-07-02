@@ -175,6 +175,8 @@
         "git",
         "github-cli",
         "git-filter-repo",
+        "hypridle",
+        "hyprlock",
         "hyprpolkitagent",
         "kwalletmanager",
         "kwallet-pam",

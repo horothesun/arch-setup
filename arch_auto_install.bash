@@ -96,6 +96,8 @@ PACMAN_PACKAGES=(
         )    
 ### Desktop packages #####
 #HYPRLAND_PACKAGES=(
+#        hypridle
+#        hyprlock
 #        hyprpolkitagent
 #        kwalletmanager
 #        kwallet-pam
