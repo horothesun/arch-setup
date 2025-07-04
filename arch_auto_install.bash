@@ -345,7 +345,6 @@ arch-chroot "${ROOT_MNT}" yay -Syu --noconfirm --norebuild --answerdiff=None --a
 arch-chroot "${ROOT_MNT}" yay -S --noconfirm --norebuild --answerdiff=None --answeredit=None \
     informant \
     oh-my-zsh-git \
-    rofi-power-menu \
     sddm-astronaut-theme
 echo
 
