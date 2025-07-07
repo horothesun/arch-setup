@@ -271,6 +271,8 @@ echo
 
 # read the UKI setting and create the folder structure otherwise mkinitcpio will crash
 declare $(grep default_uki "${ROOT_MNT}/etc/mkinitcpio.d/linux.preset")
+arch-chroot "${ROOT_MNT}" echo "default_uki: ${default_uki}"
+arch-chroot "${ROOT_MNT}" echo "dirname: $(dirname "${default_uki//\"}")"
 arch-chroot "${ROOT_MNT}" mkdir -p "$(dirname "${default_uki//\"}")"
 echo
 
