@@ -242,13 +242,31 @@ sed -i \
     -e '/^HOOKS=(.*/c\HOOKS=(base systemd autodetect microcode modconf kms keyboard sd-vconsole sd-encrypt block filesystems fsck grub-btrfs-overlayfs)' \
     "${ROOT_MNT}/etc/mkinitcpio.conf"
 # change the preset file to generate a Unified Kernel Image instead of an initram disk + kernel
-sed -i \
-    -e '/^#ALL_config/s/^#//' \
-    -e '/^#default_uki/s/^#//' \
-    -e '/^#default_options/s/^#//' \
-    -e 's/default_image=/#default_image=/g' \
-    -e "s/PRESETS=('default' 'fallback')/PRESETS=('default')/g" \
-    "${ROOT_MNT}/etc/mkinitcpio.d/linux.preset"
+#sed -i \
+#    -e '/^#ALL_config/s/^#//' \
+#    -e '/^#default_uki/s/^#//' \
+#    -e '/^#default_options/s/^#//' \
+#    -e 's/default_image=/#default_image=/g' \
+#    -e "s/PRESETS=('default' 'fallback')/PRESETS=('default')/g" \
+#    "${ROOT_MNT}/etc/mkinitcpio.d/linux.preset"
+cat <<EOF > "${ROOT_MNT}/etc/mkinitcpio.d/linux.preset"
+# mkinitcpio preset file for the 'linux' package
+
+#ALL_config="/etc/mkinitcpio.conf"
+ALL_kver="/boot/vmlinuz-linux"
+
+PRESETS=('default' 'fallback')
+
+#default_config="/etc/mkinitcpio.conf"
+#default_image="/boot/initramfs-linux.img"
+default_uki="/efi/EFI/arch/arch-linux.efi"
+#default_options="--splash=/usr/share/systemd/bootctl/splash-arch.bmp"
+
+#fallback_config="/etc/mkinitcpio.conf"
+#fallback_image="/boot/initramfs-linux-fallback.img"
+fallback_uki="/efi/EFI/arch/arch-linux-fallback.efi"
+fallback_options="-S autodetect"
+EOF
 echo
 
 # read the UKI setting and create the folder structure otherwise mkinitcpio will crash
@@ -320,8 +338,8 @@ echo "Setting up Secure Boot..."
 if [[ "$(efivar --print-decimal --name 8be4df61-93ca-11d2-aa0d-00e098032b8c-SetupMode)" -eq 1 ]]; then
     arch-chroot "${ROOT_MNT}" sbctl create-keys
     arch-chroot "${ROOT_MNT}" sbctl enroll-keys --microsoft
-    #arch-chroot "${ROOT_MNT}" sbctl sign --save --output /efi/EFI/arch/grubx64.efi.signed /efi/EFI/arch/grubx64.efi
-    arch-chroot "${ROOT_MNT}" sbctl sign --save /efi/EFI/arch/grubx64.efi
+    arch-chroot "${ROOT_MNT}" sbctl sign --save --output /efi/EFI/arch/grubx64.efi.signed /efi/EFI/arch/grubx64.efi
+    #arch-chroot "${ROOT_MNT}" sbctl sign --save /efi/EFI/arch/grubx64.efi
     arch-chroot "${ROOT_MNT}" sbctl sign --save "${default_uki//\"}"
 else
     echo "Not in Secure Boot setup mode. Skipping..."
