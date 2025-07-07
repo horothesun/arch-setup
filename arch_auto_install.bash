@@ -103,6 +103,7 @@ PACMAN_PACKAGES=(
 #        kwallet-pam
 #        rofi-emoji
 #        rofi-wayland
+#        uwsm
 #        waybar
 #        )
 GUI_PACKAGES=(
@@ -270,7 +271,7 @@ echo "Installing base packages..."
 arch-chroot "${ROOT_MNT}" pacman -Sy "${PACMAN_PACKAGES[@]}" --noconfirm --quiet
 echo
 
-echo "Installing GUI..."
+echo "Installing GUI packages..."
 arch-chroot "${ROOT_MNT}" pacman -Sy "${GUI_PACKAGES[@]}" --noconfirm --quiet
 echo
 
@@ -329,7 +330,9 @@ echo
 
 echo "Enable services..."
 arch-chroot "${ROOT_MNT}" systemctl enable bluetooth keyd
-arch-chroot "${ROOT_MNT}" systemctl --user enable --now hypridle.service
+echo
+echo "⚠️⚠️⚠️ REMINDER: enable systemd user units once logged in as a user! ⚠️⚠️⚠️"
+echo 'arch-chroot "${ROOT_MNT}" systemctl --user enable --now hypridle.service'
 echo
 
 echo "YAY install..."
@@ -344,8 +347,8 @@ echo "YAY update and setup packages..."
 arch-chroot "${ROOT_MNT}" yay -Syu --noconfirm --norebuild --answerdiff=None --answeredit=None
 arch-chroot "${ROOT_MNT}" yay -S --noconfirm --norebuild --answerdiff=None --answeredit=None \
     informant \
-    oh-my-zsh-git \
     sddm-astronaut-theme
+#    oh-my-zsh-git
 echo
 
 echo "ZSH set as default..."
