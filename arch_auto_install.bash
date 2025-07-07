@@ -307,6 +307,9 @@ echo
 echo "Generating UKI and installing Boot Loader..."
 arch-chroot "${ROOT_MNT}" mkinitcpio --preset linux
 echo
+echo "Remove any leftover initramfs-*.img images..."
+arch-chroot "${ROOT_MNT}" rm /boot/initramfs-*.img
+echo
 
 echo "GRUB setup..."
 #arch-chroot "${ROOT_MNT}" rm -rf /efi/EFI/Linux
