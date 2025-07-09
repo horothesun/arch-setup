@@ -307,6 +307,9 @@ echo
 echo "Generating UKI and installing Boot Loader..."
 arch-chroot "${ROOT_MNT}" mkinitcpio --preset linux
 echo
+echo "UKI images in ${default_uki_dirname}:"
+arch-chroot "${ROOT_MNT}" ls -lah "${default_uki_dirname}"
+echo
 echo "Remove any leftover initramfs-*.img images..."
 arch-chroot "${ROOT_MNT}" rm /boot/initramfs-*.img
 echo
@@ -324,7 +327,101 @@ arch-chroot "${ROOT_MNT}" rm -rf /efi/grub
 # check the arch boot-loader folder is missing from /efi/EFI
 arch-chroot "${ROOT_MNT}" ls -lah /efi/EFI
 # create grub
-arch-chroot "${ROOT_MNT}" grub-install --target=x86_64-efi --efi-directory=/efi --boot-directory=/boot --bootloader-id=arch
+declare GRUB_MODULES="
+	all_video
+	boot
+	btrfs
+	cat
+	chain
+	configfile
+	echo
+	efifwsetup
+	efinet
+	ext2
+	fat
+	font
+	gettext
+	gfxmenu
+	gfxterm
+	gfxterm_background
+	gzio
+	halt
+	help
+	hfsplus
+	iso9660
+	jpeg
+	keystatus
+	loadenv
+	loopback
+	linux
+	ls
+	lsefi
+	lsefimmap
+	lsefisystab
+	lssal
+	memdisk
+	minicmd
+	normal
+	ntfs
+	part_apple
+	part_msdos
+	part_gpt
+	password_pbkdf2
+	peimage
+	png
+	probe
+	reboot
+	regexp
+	search
+	search_fs_uuid
+	search_fs_file
+	search_label
+	serial
+	sleep
+	smbios
+	squash4
+	test
+	tpm
+	true
+	video
+	xfs
+	zfs
+	zfscrypt
+	zfsinfo
+	cpuid
+	play
+	cryptodisk
+	gcry_arcfour
+	gcry_blowfish
+	gcry_camellia
+	gcry_cast5
+	gcry_crc
+	gcry_des
+	gcry_dsa
+	gcry_idea
+	gcry_md4
+	gcry_md5
+	gcry_rfc2268
+	gcry_rijndael
+	gcry_rmd160
+	gcry_rsa
+	gcry_seed
+	gcry_serpent
+	gcry_sha1
+	gcry_sha256
+	gcry_sha512
+	gcry_tiger
+	gcry_twofish
+	gcry_whirlpool
+	luks
+	lvm
+	mdraid09
+	mdraid1x
+	raid5rec
+	raid6rec
+	"
+arch-chroot "${ROOT_MNT}" grub-install --target=x86_64-efi --efi-directory=/efi --boot-directory=/boot --bootloader-id=arch --modules=${GRUB_MODULES}
+# ORIGINAL: arch-chroot "${ROOT_MNT}" grub-install --target=x86_64-efi --efi-directory=/efi --boot-directory=/boot --bootloader-id=arch
 # check the arch boot-loader folder is now present in /efi/EFI
 arch-chroot "${ROOT_MNT}" ls -lah /efi/EFI
 # check the grubx64.efi boot-loader's been created
