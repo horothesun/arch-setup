@@ -20,6 +20,7 @@ USERNAME="user"
 # the entry below is the hash of 'password'
 USER_PASSWORD="\$6\$/VBa6GuBiFiBmi6Q\$yNALrCViVtDDNjyGBsDG7IbnNR0Y/Tda5Uz8ToyxXXpw86XuCVAlhXlIvzy1M8O.DWFB6TRCia0hMuAJiXOZy/"
 ROOT_MNT="/mnt"
+LINUX_PARTITION_LABEL="LINUX"
 
 # to fully automate the setup, change BAD_IDEA=no to yes, and enter a cleartext password for the disk encryption 
 BAD_IDEA="no"
@@ -134,7 +135,7 @@ sgdisk -Z "${TARGET}"
 # 8309: Linux LUKS
 sgdisk \
     -n1:0:+1G -t1:ef00 -c1:EFI \
-    -N2       -t2:8309 -c2:linux \
+    -N2       -t2:8309 -c2:"${LINUX_PARTITION_LABEL}" \
     "${TARGET}"
 sleep 2
 echo
@@ -146,48 +147,42 @@ echo
 echo "Encrypting root partition..."
 # if BAD_IDEA=yes, then pipe cryptpass and carry on, if not, prompt for it
 if [[ "${BAD_IDEA}" == "yes" ]]; then
-    echo -n "${CRYPT_PASSWORD}" | cryptsetup luksFormat --type luks2 "/dev/disk/by-partlabel/linux" -
-    echo -n "${CRYPT_PASSWORD}" | cryptsetup luksOpen "/dev/disk/by-partlabel/linux" root -
+    echo -n "${CRYPT_PASSWORD}" | cryptsetup luksFormat --type luks2 "/dev/disk/by-partlabel/${LINUX_PARTITION_LABEL}" -
+    echo -n "${CRYPT_PASSWORD}" | cryptsetup luksOpen "/dev/disk/by-partlabel/${LINUX_PARTITION_LABEL}" root -
 else
-    cryptsetup luksFormat --type luks2 "/dev/disk/by-partlabel/linux"
-    cryptsetup luksOpen "/dev/disk/by-partlabel/linux" root
+    cryptsetup luksFormat --type luks2 "/dev/disk/by-partlabel/${LINUX_PARTITION_LABEL}"
+    cryptsetup luksOpen "/dev/disk/by-partlabel/${LINUX_PARTITION_LABEL}" root
 fi
 echo
 
 echo "Making File Systems..."
 # create file systems
 mkfs.vfat -F32 -n EFI "/dev/disk/by-partlabel/EFI"
-mkfs.btrfs -f -L linux /dev/mapper/root
+mkfs.btrfs -f -L "${LINUX_PARTITION_LABEL}" /dev/mapper/root
 # mount the root, and create + mount the EFI directory
 echo "Mounting File Systems..."
 mount "/dev/mapper/root" "${ROOT_MNT}"
+echo
+echo "Mount /efi..."
 mkdir "${ROOT_MNT}/efi" -p
 mount -t vfat "/dev/disk/by-partlabel/EFI" "${ROOT_MNT}/efi"
 echo
 echo "Create BTRFS subvolumes..."
-cd "${ROOT_MNT}"
-btrfs subvolume create @
-btrfs subvolume create @home
-btrfs subvolume create --parents @opt
-btrfs subvolume create --parents @srv
-btrfs subvolume create --parents @var/cache
-btrfs subvolume create --parents @var/lib/libvirt/images
-btrfs subvolume create --parents @var/log
-btrfs subvolume create --parents @var/spool
-btrfs subvolume create --parents @var/tmp
-cd -
+btrfs subvolume create /
+btrfs subvolume create /home
+btrfs subvolume create /opt
+btrfs subvolume create /srv
+btrfs subvolume create /var/cache
+btrfs subvolume create /var/lib/libvirt/images
+btrfs subvolume create /var/log
+btrfs subvolume create /var/spool
+btrfs subvolume create /var/tmp
 echo
-
-# mount /
-#mount -o noatime,ssd,compress=zstd,space_cache=v2,discard=async,subvol=@ /dev/nvme0n1p2 /mnt
-
-# mount /efi
-#mount /dev/nvme0n1p1 /mnt/efi
-
-# start a shell into the system
-#arch-chroot /mnt
-
-#grub-install --target=x86_64-efi --efi-directory=/efi --boot-directory=/boot --bootloader-id=arch
+echo "Mount BTRFS subvolumes..."
+# check current setup at /etc/fstab
+mount -o noatime,ssd,compress=zstd,space_cache=v2,discard=async,subvol=@ "/dev/disk/by-partlabel/${LINUX_PARTITION_LABEL}" "${ROOT_MNT}"
+# TODO: mount remaining subvolumes...
+echo
 
 # inspect filesystem changes
 lsblk
@@ -201,9 +196,10 @@ reflector --country GB --age 24 --protocol http,https --sort rate --save "/etc/p
 pacstrap -K "${ROOT_MNT}" "${PACSTRAP_PACKAGES[@]}" 
 echo
 
-# generate filesystem table
-#genfstab -U -p "${ROOT_MNT}" >> /mnt/etc/fstab
-cat /mnt/etc/fstab
+echo "Generate filesystem table..."
+genfstab -U -p "${ROOT_MNT}" >> "${ROOT_MNT}/etc/fstab"
+echo "${ROOT_MNT}/etc/fstab"
+cat "${ROOT_MNT}/etc/fstab"
 echo
 
 echo "Setting up environment..."
@@ -259,12 +255,12 @@ PRESETS=('default' 'fallback')
 
 #default_config="/etc/mkinitcpio.conf"
 #default_image="/boot/initramfs-linux.img"
-default_uki="/efi/EFI/arch/arch-linux.efi"
+default_uki="/efi/EFI/Linux/arch-linux.efi"
 #default_options="--splash=/usr/share/systemd/bootctl/splash-arch.bmp"
 
 #fallback_config="/etc/mkinitcpio.conf"
 #fallback_image="/boot/initramfs-linux-fallback.img"
-fallback_uki="/efi/EFI/arch/arch-linux-fallback.efi"
+fallback_uki="/efi/EFI/Linux/arch-linux-fallback.efi"
 fallback_options="-S autodetect"
 EOF
 echo
@@ -327,105 +323,105 @@ arch-chroot "${ROOT_MNT}" rm -rf /efi/grub
 # check the arch boot-loader folder is missing from /efi/EFI
 arch-chroot "${ROOT_MNT}" ls -lah /efi/EFI
 # create grub
-declare GRUB_MODULES="
-	all_video
-	boot
-	btrfs
-	cat
-	chain
-	configfile
-	echo
-	efifwsetup
-	efinet
-	ext2
-	fat
-	font
-	gettext
-	gfxmenu
-	gfxterm
-	gfxterm_background
-	gzio
-	halt
-	help
-	hfsplus
-	iso9660
-	jpeg
-	keystatus
-	loadenv
-	loopback
-	linux
-	ls
-	lsefi
-	lsefimmap
-	lsefisystab
-	lssal
-	memdisk
-	minicmd
-	normal
-	ntfs
-	part_apple
-	part_msdos
-	part_gpt
-	password_pbkdf2
-	peimage
-	png
-	probe
-	reboot
-	regexp
-	search
-	search_fs_uuid
-	search_fs_file
-	search_label
-	serial
-	sleep
-	smbios
-	squash4
-	test
-	tpm
-	true
-	video
-	xfs
-	zfs
-	zfscrypt
-	zfsinfo
-	cpuid
-	play
-	cryptodisk
-	gcry_arcfour
-	gcry_blowfish
-	gcry_camellia
-	gcry_cast5
-	gcry_crc
-	gcry_des
-	gcry_dsa
-	gcry_idea
-	gcry_md4
-	gcry_md5
-	gcry_rfc2268
-	gcry_rijndael
-	gcry_rmd160
-	gcry_rsa
-	gcry_seed
-	gcry_serpent
-	gcry_sha1
-	gcry_sha256
-	gcry_sha512
-	gcry_tiger
-	gcry_twofish
-	gcry_whirlpool
-	luks
-	lvm
-	mdraid09
-	mdraid1x
-	raid5rec
-	raid6rec
-	"
-arch-chroot "${ROOT_MNT}" grub-install --target=x86_64-efi --efi-directory=/efi --boot-directory=/boot --bootloader-id=arch --modules=${GRUB_MODULES}
-# ORIGINAL: arch-chroot "${ROOT_MNT}" grub-install --target=x86_64-efi --efi-directory=/efi --boot-directory=/boot --bootloader-id=arch
+#declare GRUB_MODULES="
+#	all_video
+#	boot
+#	btrfs
+#	cat
+#	chain
+#	configfile
+#	echo
+#	efifwsetup
+#	efinet
+#	ext2
+#	fat
+#	font
+#	gettext
+#	gfxmenu
+#	gfxterm
+#	gfxterm_background
+#	gzio
+#	halt
+#	help
+#	hfsplus
+#	iso9660
+#	jpeg
+#	keystatus
+#	loadenv
+#	loopback
+#	linux
+#	ls
+#	lsefi
+#	lsefimmap
+#	lsefisystab
+#	lssal
+#	memdisk
+#	minicmd
+#	normal
+#	ntfs
+#	part_apple
+#	part_msdos
+#	part_gpt
+#	password_pbkdf2
+#	peimage
+#	png
+#	probe
+#	reboot
+#	regexp
+#	search
+#	search_fs_uuid
+#	search_fs_file
+#	search_label
+#	serial
+#	sleep
+#	smbios
+#	squash4
+#	test
+#	tpm
+#	true
+#	video
+#	xfs
+#	zfs
+#	zfscrypt
+#	zfsinfo
+#	cpuid
+#	play
+#	cryptodisk
+#	gcry_arcfour
+#	gcry_blowfish
+#	gcry_camellia
+#	gcry_cast5
+#	gcry_crc
+#	gcry_des
+#	gcry_dsa
+#	gcry_idea
+#	gcry_md4
+#	gcry_md5
+#	gcry_rfc2268
+#	gcry_rijndael
+#	gcry_rmd160
+#	gcry_rsa
+#	gcry_seed
+#	gcry_serpent
+#	gcry_sha1
+#	gcry_sha256
+#	gcry_sha512
+#	gcry_tiger
+#	gcry_twofish
+#	gcry_whirlpool
+#	luks
+#	lvm
+#	mdraid09
+#	mdraid1x
+#	raid5rec
+#	raid6rec
+#	"
+#arch-chroot "${ROOT_MNT}" grub-install --target=x86_64-efi --efi-directory=/efi --boot-directory=/boot --bootloader-id=Linux --modules=${GRUB_MODULES}
+arch-chroot "${ROOT_MNT}" grub-install --target=x86_64-efi --efi-directory=/efi --boot-directory=/boot --bootloader-id=Linux
 # check the arch boot-loader folder is now present in /efi/EFI
 arch-chroot "${ROOT_MNT}" ls -lah /efi/EFI
 # check the grubx64.efi boot-loader's been created
-arch-chroot "${ROOT_MNT}" ls -lah /efi/EFI/arch
+arch-chroot "${ROOT_MNT}" ls -lah /efi/EFI/Linux
 # check the grub/ folder is now present in /boot
 arch-chroot "${ROOT_MNT}" ls -lah /boot
 # check /boot/grub contains fonts/, grub.cfg, grubenv, locale/, themes/, x86_64-efi/
@@ -437,17 +433,17 @@ arch-chroot "${ROOT_MNT}" ls -lah /boot/grub
 arch-chroot "${ROOT_MNT}" efibootmgr
 echo
 
-echo "Setting up Secure Boot..."
-if [[ "$(efivar --print-decimal --name 8be4df61-93ca-11d2-aa0d-00e098032b8c-SetupMode)" -eq 1 ]]; then
-    arch-chroot "${ROOT_MNT}" sbctl create-keys
-    arch-chroot "${ROOT_MNT}" sbctl enroll-keys --microsoft
-    arch-chroot "${ROOT_MNT}" sbctl sign --save --output /efi/EFI/arch/grubx64.efi.signed /efi/EFI/arch/grubx64.efi
-    #arch-chroot "${ROOT_MNT}" sbctl sign --save /efi/EFI/arch/grubx64.efi
-    arch-chroot "${ROOT_MNT}" sbctl sign --save "${default_uki//\"}"
-else
-    echo "Not in Secure Boot setup mode. Skipping..."
-fi
-echo
+#echo "Setting up Secure Boot..."
+#if [[ "$(efivar --print-decimal --name 8be4df61-93ca-11d2-aa0d-00e098032b8c-SetupMode)" -eq 1 ]]; then
+#    arch-chroot "${ROOT_MNT}" sbctl create-keys
+#    arch-chroot "${ROOT_MNT}" sbctl enroll-keys --microsoft
+#    arch-chroot "${ROOT_MNT}" sbctl sign --save --output /efi/EFI/Linux/grubx64.efi.signed /efi/EFI/Linux/grubx64.efi
+#    #arch-chroot "${ROOT_MNT}" sbctl sign --save /efi/EFI/Linux/grubx64.efi
+#    arch-chroot "${ROOT_MNT}" sbctl sign --save "${default_uki//\"}"
+#else
+#    echo "Not in Secure Boot setup mode. Skipping..."
+#fi
+#echo
 
 echo "Enable services..."
 arch-chroot "${ROOT_MNT}" systemctl enable bluetooth keyd
