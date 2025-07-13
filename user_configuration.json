@@ -192,6 +192,7 @@
         "plocate",
         "python-cookiecutter",
         "rofi-emoji",
+        "reflector",
         "rofi-wayland",
         "sbctl",
         "sbt",

@@ -81,6 +81,7 @@ PACMAN_PACKAGES=(
         pipewire-jack
         pipewire-pulse
         python-cookiecutter
+        reflector
         sbt
         speedtest-cli
         starship
