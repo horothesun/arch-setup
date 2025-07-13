@@ -170,15 +170,15 @@ mount -t vfat "/dev/disk/by-partlabel/EFI" "${ROOT_MNT}/efi"
 echo
 echo "Create BTRFS subvolumes..."
 cd "${ROOT_MNT}" 
-btrfs subvolume create /
-btrfs subvolume create /home
-btrfs subvolume create /opt
-btrfs subvolume create /srv
-btrfs subvolume create /var/cache
-btrfs subvolume create /var/lib/libvirt/images
-btrfs subvolume create /var/log
-btrfs subvolume create /var/spool
-btrfs subvolume create /var/tmp
+btrfs subvolume create "@"
+btrfs subvolume create "@home"
+btrfs subvolume create "@opt"
+btrfs subvolume create "@srv"
+btrfs subvolume create "@cache"
+btrfs subvolume create "@images"
+btrfs subvolume create "@log"
+btrfs subvolume create "@spool"
+btrfs subvolume create "@tmp"
 echo
 echo "Mount BTRFS subvolumes..."
 function mountBtrfsSubvolume() {
