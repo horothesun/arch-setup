@@ -180,9 +180,18 @@ btrfs subvolume create /var/spool
 btrfs subvolume create /var/tmp
 echo
 echo "Mount BTRFS subvolumes..."
-# check current setup at /etc/fstab
-mount -o noatime,ssd,compress=zstd,space_cache=v2,discard=async,subvol=@ "/dev/disk/by-partlabel/${LINUX_PARTITION_LABEL}" "${ROOT_MNT}"
-# TODO: mount remaining subvolumes...
+function mountBtrfsSubvolume() {
+  mount -o noatime,ssd,compress=zstd:1,space_cache=v2,discard=async,subvol="$1" "/dev/disk/by-partlabel/${LINUX_PARTITION_LABEL}" "${ROOT_MNT}$2"
+}
+mountBtrfsSubvolume "@"       "${ROOT_MNT}"
+mountBtrfsSubvolume "@home"   "${ROOT_MNT}/home"
+mountBtrfsSubvolume "@opt"    "${ROOT_MNT}/opt"
+mountBtrfsSubvolume "@srv"    "${ROOT_MNT}/srv"
+mountBtrfsSubvolume "@cache"  "${ROOT_MNT}/var/cache"
+mountBtrfsSubvolume "@images" "${ROOT_MNT}/var/lib/libvirt/images"
+mountBtrfsSubvolume "@log"    "${ROOT_MNT}/var/log"
+mountBtrfsSubvolume "@spool"  "${ROOT_MNT}/var/spool"
+mountBtrfsSubvolume "@tmp"    "${ROOT_MNT}/var/tmp"
 echo
 
 # inspect filesystem changes
