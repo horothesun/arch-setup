@@ -2,12 +2,6 @@
 # uncomment to view debugging information 
 set -xeuo pipefail
 
-# check if we're root
-if [[ "$UID" -ne 0 ]]; then
-    echo "This script needs to be run as root!" >&2
-    exit 3
-fi
-
 # config options
 TARGET="/dev/sda"
 LOCALE="en_GB.UTF-8"
@@ -15,6 +9,12 @@ KEYMAP="uk"
 TIMEZONE="Europe/London"
 HOSTNAME="archlinux01"
 USERNAME="user"
+
+# check if we're root
+if [[ "$UID" -ne 0 ]]; then
+    echo "This script needs to be run as root!" >&2
+    exit 3
+fi
 
 # SHA512 hash of password. To generate, run 'mkpasswd -m sha-512' (install `whois` package), don't forget to prefix any $ symbols with \
 # the entry below is the hash of 'password'
@@ -140,7 +140,7 @@ sgdisk \
     "${TARGET}"
 sleep 2
 echo
-# reload partition table
+echo "Reload partition table..."
 partprobe -s "${TARGET}"
 sleep 2
 echo
@@ -156,12 +156,12 @@ else
 fi
 echo
 
-echo "Making File Systems..."
+echo "Making the File Systems..."
 # create file systems
 mkfs.vfat -F32 -n EFI "/dev/disk/by-partlabel/EFI"
 mkfs.btrfs -f -L "${LINUX_PARTITION_LABEL}" /dev/mapper/root
 # mount the root, and create + mount the EFI directory
-echo "Mounting File Systems..."
+echo "Mounting the File Systems..."
 mount "/dev/mapper/root" "${ROOT_MNT}"
 echo
 echo "Mount /efi..."
@@ -181,7 +181,9 @@ btrfs subvolume create /var/tmp
 echo
 echo "Mount BTRFS subvolumes..."
 function mountBtrfsSubvolume() {
-  mount -o noatime,ssd,compress=zstd:1,space_cache=v2,discard=async,subvol="$1" "/dev/disk/by-partlabel/${LINUX_PARTITION_LABEL}" "${ROOT_MNT}$2"
+    mount -o "noatime,ssd,compress=zstd:1,space_cache=v2,discard=async,subvol=$1" \
+        "/dev/disk/by-partlabel/${LINUX_PARTITION_LABEL}" \
+        "${ROOT_MNT}$2"
 }
 mountBtrfsSubvolume "@"       "${ROOT_MNT}"
 mountBtrfsSubvolume "@home"   "${ROOT_MNT}/home"
@@ -443,6 +445,7 @@ arch-chroot "${ROOT_MNT}" ls -lah /boot/grub
 arch-chroot "${ROOT_MNT}" efibootmgr
 echo
 
+# TODO: test once UKI + GRUB work properly
 #echo "Setting up Secure Boot..."
 #if [[ "$(efivar --print-decimal --name 8be4df61-93ca-11d2-aa0d-00e098032b8c-SetupMode)" -eq 1 ]]; then
 #    arch-chroot "${ROOT_MNT}" sbctl create-keys
@@ -459,11 +462,11 @@ echo "Enable services..."
 arch-chroot "${ROOT_MNT}" systemctl enable bluetooth keyd
 echo
 echo "⚠️⚠️⚠️ REMINDER: enable systemd user units once logged in as a user! ⚠️⚠️⚠️"
-echo 'arch-chroot "${ROOT_MNT}" systemctl --user enable --now hypridle.service'
+echo "sudo systemctl --user enable --now hypridle.service"
 echo
 
 echo "YAY install..."
-arch-chroot "${ROOT_MNT}" git clone https://aur.archlinux.org/yay-git.git
+arch-chroot "${ROOT_MNT}" git clone "https://aur.archlinux.org/yay-git.git"
 arch-chroot "${ROOT_MNT}" cd yay-git
 arch-chroot "${ROOT_MNT}" makepkg -si
 arch-chroot "${ROOT_MNT}" cd ..
@@ -475,7 +478,6 @@ arch-chroot "${ROOT_MNT}" yay -Syu --noconfirm --norebuild --answerdiff=None --a
 arch-chroot "${ROOT_MNT}" yay -S --noconfirm --norebuild --answerdiff=None --answeredit=None \
     informant \
     sddm-astronaut-theme
-#    oh-my-zsh-git
 echo
 
 echo "ZSH set as default..."
@@ -508,7 +510,7 @@ arch-chroot "${ROOT_MNT}" usermod -L root
 echo
 
 # ZRAM / Swap setup
-# ...
+# TODO: consider for hibernation (suspend-to-disk)...
 
 echo "-----------------------------------"
 echo "- Install complete. Please reboot -"
