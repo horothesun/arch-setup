@@ -169,6 +169,7 @@ mkdir "${ROOT_MNT}/efi" -p
 mount -t vfat "/dev/disk/by-partlabel/EFI" "${ROOT_MNT}/efi"
 echo
 echo "Create BTRFS subvolumes..."
+cd "${ROOT_MNT}" 
 btrfs subvolume create /
 btrfs subvolume create /home
 btrfs subvolume create /opt
@@ -181,19 +182,20 @@ btrfs subvolume create /var/tmp
 echo
 echo "Mount BTRFS subvolumes..."
 function mountBtrfsSubvolume() {
-    mount -o "noatime,ssd,compress=zstd:1,space_cache=v2,discard=async,subvol=$1" \
+    mount --options "noatime,ssd,compress=zstd:1,space_cache=v2,discard=async,subvol=$1" \
         "/dev/disk/by-partlabel/${LINUX_PARTITION_LABEL}" \
-        "${ROOT_MNT}$2"
+        "$2"
 }
-mountBtrfsSubvolume "@"       "${ROOT_MNT}"
-mountBtrfsSubvolume "@home"   "${ROOT_MNT}/home"
-mountBtrfsSubvolume "@opt"    "${ROOT_MNT}/opt"
-mountBtrfsSubvolume "@srv"    "${ROOT_MNT}/srv"
-mountBtrfsSubvolume "@cache"  "${ROOT_MNT}/var/cache"
-mountBtrfsSubvolume "@images" "${ROOT_MNT}/var/lib/libvirt/images"
-mountBtrfsSubvolume "@log"    "${ROOT_MNT}/var/log"
-mountBtrfsSubvolume "@spool"  "${ROOT_MNT}/var/spool"
-mountBtrfsSubvolume "@tmp"    "${ROOT_MNT}/var/tmp"
+mountBtrfsSubvolume "@"       "/"
+mountBtrfsSubvolume "@home"   "/home"
+mountBtrfsSubvolume "@opt"    "/opt"
+mountBtrfsSubvolume "@srv"    "/srv"
+mountBtrfsSubvolume "@cache"  "/var/cache"
+mountBtrfsSubvolume "@images" "/var/lib/libvirt/images"
+mountBtrfsSubvolume "@log"    "/var/log"
+mountBtrfsSubvolume "@spool"  "/var/spool"
+mountBtrfsSubvolume "@tmp"    "/var/tmp"
+cd -
 echo
 
 # inspect filesystem changes
