@@ -157,15 +157,11 @@ fi
 echo
 
 echo "Making the File Systems..."
-# create file systems
+echo "Create file systems"
 mkfs.vfat -F32 -n EFI "/dev/disk/by-partlabel/EFI"
 mkfs.btrfs -f -L "${LINUX_PARTITION_LABEL}" /dev/mapper/root
-# mount the root, and create + mount the EFI directory
-echo "Mount /efi..."
-mkdir "${ROOT_MNT}/efi" -p
-mount -t vfat "/dev/disk/by-partlabel/EFI" "${ROOT_MNT}/efi"
 echo
-echo "Mounting the File Systems..."
+echo "Mounting the encrypted partition..."
 mount "/dev/mapper/root" "${ROOT_MNT}"
 echo
 echo "Create BTRFS subvolumes..."
@@ -182,7 +178,7 @@ btrfs subvolume create "@tmp"
 cd -
 umount "${ROOT_MNT}" 
 echo
-echo "Mount BTRFS subvolumes..."
+echo "Mounting BTRFS subvolumes..."
 function mountBtrfsSubvolume() {
     mkdir -p "$2"
     mount --options "noatime,ssd,compress=zstd:1,space_cache=v2,discard=async,subvol=$1" \
@@ -198,6 +194,10 @@ mountBtrfsSubvolume "@images" "${ROOT_MNT}/var/lib/libvirt/images"
 mountBtrfsSubvolume "@log"    "${ROOT_MNT}/var/log"
 mountBtrfsSubvolume "@spool"  "${ROOT_MNT}/var/spool"
 mountBtrfsSubvolume "@tmp"    "${ROOT_MNT}/var/tmp"
+echo
+echo "Mounting EFI partition..."
+mkdir "${ROOT_MNT}/efi" -p
+mount -t vfat "/dev/disk/by-partlabel/EFI" "${ROOT_MNT}/efi"
 echo
 
 # inspect filesystem changes
