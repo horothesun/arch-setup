@@ -249,7 +249,7 @@ echo "quiet rw" > "${ROOT_MNT}/etc/kernel/cmdline"
 # Note: original HOOKS=(base udev autodetect microcode modconf kms keyboard keymap consolefont block filesystems fsck grub-btrfs-overlayfs)
 sed -i \
     -e '/^MODULES=(.*/c\MODULES=(btrfs i2c-dev)' \
-    -e '/^BINARIES=(.*/c\BINARIES=(/urs/bin/btrfs)' \
+    -e '/^BINARIES=(.*/c\BINARIES=(/usr/bin/btrfs)' \
     -e '/^FILES=(.*/c\FILES=()' \
     -e '/^HOOKS=(.*/c\HOOKS=(base systemd autodetect microcode modconf kms keyboard sd-vconsole sd-encrypt block filesystems fsck grub-btrfs-overlayfs)' \
     "${ROOT_MNT}/etc/mkinitcpio.conf"
