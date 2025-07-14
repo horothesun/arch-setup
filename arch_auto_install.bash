@@ -479,6 +479,7 @@ echo "YAY update and setup packages..."
 arch-chroot "${ROOT_MNT}" yay -Syu --noconfirm --norebuild --answerdiff=None --answeredit=None
 arch-chroot "${ROOT_MNT}" yay -S --noconfirm --norebuild --answerdiff=None --answeredit=None \
     informant \
+    oh-my-zsh-git \
     sddm-astronaut-theme
 echo
 

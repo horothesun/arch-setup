@@ -246,7 +246,7 @@ yay -Syu
 
 yay -S informant
 
-#yay -S oh-my-zsh-git
+yay -S oh-my-zsh-git
 chsh --list-shells
 chsh --shell=/usr/bin/zsh
 
