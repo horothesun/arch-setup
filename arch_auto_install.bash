@@ -285,7 +285,7 @@ echo
 declare $(grep default_uki "${ROOT_MNT}/etc/mkinitcpio.d/linux.preset")
 declare default_uki_dirname=$(dirname "${default_uki//\"}")
 arch-chroot "${ROOT_MNT}" echo "default_uki: ${default_uki}"
-arch-chroot "${ROOT_MNT}" echo ""default_uki_dirname: ${default_uki_dirname}"
+arch-chroot "${ROOT_MNT}" echo "default_uki_dirname: ${default_uki_dirname}"
 arch-chroot "${ROOT_MNT}" mkdir -p "${default_uki_dirname}"
 echo
 
