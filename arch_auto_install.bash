@@ -129,7 +129,7 @@ loadkeys "${KEYMAP}"
 timedatectl set-timezone "${TIMEZONE}"
 timedatectl set-ntp true
 
-echo "Creating partitions..."
+# Creating partitions...
 sgdisk -Z "${TARGET}"
 # https://wiki.archlinux.org/title/GPT_fdisk#Partition_type
 # ef00: EFI System
@@ -140,12 +140,12 @@ sgdisk \
     "${TARGET}"
 sleep 2
 echo
-echo "Reload partition table..."
+# Reload partition table...
 partprobe -s "${TARGET}"
 sleep 2
 echo
 
-echo "Encrypting root partition..."
+# Encrypting root partition...
 # if BAD_IDEA=yes, then pipe cryptpass and carry on, if not, prompt for it
 if [[ "${BAD_IDEA}" == "yes" ]]; then
     echo -n "${CRYPT_PASSWORD}" | cryptsetup luksFormat --type luks2 "/dev/disk/by-partlabel/${LINUX_PARTITION_LABEL}" -
@@ -156,15 +156,15 @@ else
 fi
 echo
 
-echo "Making the File Systems..."
-echo "Create file systems"
+# Making the File Systems...
+# Create file systems
 mkfs.vfat -F32 -n EFI "/dev/disk/by-partlabel/EFI"
 mkfs.btrfs -f -L "${LINUX_PARTITION_LABEL}" /dev/mapper/root
 echo
-echo "Mounting the encrypted partition..."
+# Mounting the encrypted partition...
 mount "/dev/mapper/root" "${ROOT_MNT}"
 echo
-echo "Create BTRFS subvolumes..."
+# Create BTRFS subvolumes...
 cd "${ROOT_MNT}" 
 btrfs subvolume create "@"
 btrfs subvolume create "@home"
@@ -178,7 +178,7 @@ btrfs subvolume create "@tmp"
 cd -
 umount "${ROOT_MNT}" 
 echo
-echo "Mounting BTRFS subvolumes..."
+# Mounting BTRFS subvolumes...
 function mountBtrfsSubvolume() {
     mkdir -p "$2"
     mount --options "noatime,ssd,compress=zstd:1,space_cache=v2,discard=async,subvol=$1" \
@@ -195,7 +195,7 @@ mountBtrfsSubvolume "@log"    "${ROOT_MNT}/var/log"
 mountBtrfsSubvolume "@spool"  "${ROOT_MNT}/var/spool"
 mountBtrfsSubvolume "@tmp"    "${ROOT_MNT}/var/tmp"
 echo
-echo "Mounting EFI partition..."
+# Mounting EFI partition...
 mkdir "${ROOT_MNT}/efi" -p
 mount -t vfat "/dev/disk/by-partlabel/EFI" "${ROOT_MNT}/efi"
 echo
@@ -207,18 +207,17 @@ blkid
 echo
 
 # update pacman mirrors and then pacstrap base install
-echo "Pacstrapping..."
+# Pacstrapping...
 reflector --country GB --age 24 --protocol http,https --sort rate --save "/etc/pacman.d/mirrorlist"
 pacstrap -K "${ROOT_MNT}" "${PACSTRAP_PACKAGES[@]}" 
 echo
 
-echo "Generate filesystem table..."
+# Generate filesystem table...
 genfstab -U -p "${ROOT_MNT}" >> "${ROOT_MNT}/etc/fstab"
-echo "${ROOT_MNT}/etc/fstab"
 cat "${ROOT_MNT}/etc/fstab"
 echo
 
-echo "Setting up environment..."
+# Setting up environment...
 # set up locale/env: add our locale to locale.gen
 sed -i -e "/^#"${LOCALE}"/s/^#//" "${ROOT_MNT}/etc/locale.gen"
 # remove any existing config files that may have been pacstrapped, systemd-firstboot will then regenerate them
@@ -235,7 +234,7 @@ systemd-firstboot \
 arch-chroot "${ROOT_MNT}" locale-gen
 echo
 
-echo "Configuring for first boot..."
+# Configuring for first boot...
 # add the local user
 arch-chroot "${ROOT_MNT}" useradd -G wheel -m -p "${USER_PASSWORD}" "${USERNAME}" 
 # uncomment the wheel group in the sudoers file
@@ -289,7 +288,7 @@ arch-chroot "${ROOT_MNT}" echo "default_uki_dirname: ${default_uki_dirname}"
 arch-chroot "${ROOT_MNT}" mkdir -p "${default_uki_dirname}"
 echo
 
-echo "Customize pacman.conf..."
+# Customize pacman.conf...
 sed -i \
     -e '/#\[multilib\]/,+1s/^#//' \
     -e '/^#Color/s/^#//' \
@@ -300,39 +299,38 @@ sed -i \
     "${ROOT_MNT}/etc/pacman.conf"
 echo
 
-echo "Installing base packages..."
+# Installing base packages...
 arch-chroot "${ROOT_MNT}" pacman -Sy "${PACMAN_PACKAGES[@]}" --noconfirm --quiet
 echo
 
-echo "Installing GUI packages..."
+# Installing GUI packages...
 arch-chroot "${ROOT_MNT}" pacman -Sy "${GUI_PACKAGES[@]}" --noconfirm --quiet
 echo
 
 # enable the services we will need on start up
-echo "Enabling services..."
+# Enabling services...
 systemctl --root "${ROOT_MNT}" enable systemd-resolved systemd-timesyncd NetworkManager sddm
 # mask systemd-networkd as we will use NetworkManager instead
 systemctl --root "${ROOT_MNT}" mask systemd-networkd
 echo
 
 # regenerate the ramdisk, this will create our UKI
-echo "Generating UKI and installing Boot Loader..."
+# Generating UKI and installing Boot Loader...
 arch-chroot "${ROOT_MNT}" mkinitcpio --preset linux
 echo
-echo "UKI images in ${default_uki_dirname}:"
+echo "UKI images in ${default_uki_dirname}"
 arch-chroot "${ROOT_MNT}" ls -lah "${default_uki_dirname}"
 echo
-echo "Remove any leftover initramfs-*.img images..."
-arch-chroot "${ROOT_MNT}" rm /boot/initramfs-*.img
+# Remove any leftover initramfs-*.img images...
+arch-chroot "${ROOT_MNT}" rm /boot/initramfs-linux.img /boot/initramfs-linux-fallback.img
 echo
 
-echo "GRUB setup..."
-#arch-chroot "${ROOT_MNT}" rm -rf /efi/EFI/Linux
+# GRUB setup...
 # enable GRUB cryptodisk
 arch-chroot "${ROOT_MNT}" sed -i \
     -e 's/^#GRUB_ENABLE_CRYPTODISK=y/GRUB_ENABLE_CRYPTODISK=y/g' \
     /etc/default/grub
-echo "Move grub/ from /efi"
+# Move grub/ from /efi"
 arch-chroot "${ROOT_MNT}" ls -lah /efi
 # remove grub from /efi
 arch-chroot "${ROOT_MNT}" rm -rf /efi/grub
@@ -462,53 +460,55 @@ echo
 #fi
 #echo
 
-echo "Enable services..."
+# Enable services...
 arch-chroot "${ROOT_MNT}" systemctl enable bluetooth keyd
 echo
-echo "⚠️⚠️⚠️ REMINDER: enable systemd user units once logged in as a user! ⚠️⚠️⚠️"
-echo "sudo systemctl --user enable --now hypridle.service"
+# ⚠️⚠️⚠️ REMINDER: enable systemd user units once logged in as a user! ⚠️⚠️⚠️
+# sudo systemctl --user enable --now hypridle.service
 echo
 
-echo "YAY install..."
-arch-chroot "${ROOT_MNT}" git clone "https://aur.archlinux.org/yay-git.git"
-arch-chroot "${ROOT_MNT}" cd yay-git
-arch-chroot "${ROOT_MNT}" makepkg -si
-arch-chroot "${ROOT_MNT}" cd ..
-arch-chroot "${ROOT_MNT}" rm -rf yay-git
-echo
-
-echo "YAY update and setup packages..."
-arch-chroot "${ROOT_MNT}" yay -Syu --noconfirm --norebuild --answerdiff=None --answeredit=None
-arch-chroot "${ROOT_MNT}" yay -S --noconfirm --norebuild --answerdiff=None --answeredit=None \
-    informant \
-    oh-my-zsh-git \
-    sddm-astronaut-theme
-echo
-
-echo "ZSH set as default..."
-arch-chroot "${ROOT_MNT}" chsh --list-shells
-arch-chroot "${ROOT_MNT}" chsh --shell=/usr/bin/zsh
-echo
-
-echo "SDDM theme..."
-arch-chroot "${ROOT_MNT}" cat > /etc/sddm.conf
-[Theme]
-Current=sddm-astronaut-theme
-EOF
-mkdir -p /etc/sddm.conf.d
-arch-chroot "${ROOT_MNT}" cat > /etc/sddm.conf.d/virtualkbd.conf
-[General]
-InputMethod=qtvirtualkeyboard
-EOF
-arch-chroot "${ROOT_MNT}" sed -i "s/^ConfigFile=.*/ConfigFile=Themes\/purple_leaves.conf/g" /usr/share/sddm/themes/sddm-astronaut-theme/metadata.desktop
-arch-chroot "${ROOT_MNT}" sed -i \
-    -e '/^ScreenWidth=.*/c\ScreenWidth="2560"' \
-    -e '/^ScreenHeight=.*/c\ScreenHeight="1440"' \
-    -e '/^DateFormat=.*/c\DateFormat="ddd, dd MMMM"' \
-    -e '/^TranslateVirtualKeyboardButtonOn=.*/c\TranslateVirtualKeyboardButtonOn=" "' \
-    -e '/^TranslateVirtualKeyboardButtonOff=.*/c\TranslateVirtualKeyboardButtonOff=" "' \
-    "${ROOT_MNT}/usr/share/sddm/themes/sddm-astronaut-theme/Themes/purple_leaves.conf"
-echo
+# TODO: run arch-chroot as user...
+## YAY install...
+#arch-chroot "${ROOT_MNT}" git clone "https://aur.archlinux.org/yay-git.git"
+#arch-chroot "${ROOT_MNT}" cd yay-git
+#arch-chroot "${ROOT_MNT}" makepkg -si
+#arch-chroot "${ROOT_MNT}" cd ..
+#arch-chroot "${ROOT_MNT}" rm -rf yay-git
+#echo
+#
+## YAY update and setup packages...
+#arch-chroot "${ROOT_MNT}" yay -Syu --noconfirm --norebuild --answerdiff=None --answeredit=None
+#arch-chroot "${ROOT_MNT}" yay -S --noconfirm --norebuild --answerdiff=None --answeredit=None \
+#    informant \
+#    oh-my-zsh-git \
+#    sddm-astronaut-theme
+#echo
+#
+#
+## ZSH set as default...
+#arch-chroot "${ROOT_MNT}" chsh --list-shells
+#arch-chroot "${ROOT_MNT}" chsh --shell=/usr/bin/zsh
+#echo
+#
+## SDDM theme...
+#arch-chroot "${ROOT_MNT}" cat > /etc/sddm.conf
+#[Theme]
+#Current=sddm-astronaut-theme
+#EOF
+#mkdir -p /etc/sddm.conf.d
+#arch-chroot "${ROOT_MNT}" cat > /etc/sddm.conf.d/virtualkbd.conf
+#[General]
+#InputMethod=qtvirtualkeyboard
+#EOF
+#arch-chroot "${ROOT_MNT}" sed -i "s/^ConfigFile=.*/ConfigFile=Themes\/purple_leaves.conf/g" /usr/share/sddm/themes/sddm-astronaut-theme/metadata.desktop
+#arch-chroot "${ROOT_MNT}" sed -i \
+#    -e '/^ScreenWidth=.*/c\ScreenWidth="2560"' \
+#    -e '/^ScreenHeight=.*/c\ScreenHeight="1440"' \
+#    -e '/^DateFormat=.*/c\DateFormat="ddd, dd MMMM"' \
+#    -e '/^TranslateVirtualKeyboardButtonOn=.*/c\TranslateVirtualKeyboardButtonOn=" "' \
+#    -e '/^TranslateVirtualKeyboardButtonOff=.*/c\TranslateVirtualKeyboardButtonOff=" "' \
+#    "${ROOT_MNT}/usr/share/sddm/themes/sddm-astronaut-theme/Themes/purple_leaves.conf"
+#echo
 
 # lock the root account
 arch-chroot "${ROOT_MNT}" usermod -L root
