@@ -339,6 +339,7 @@ arch-chroot "${ROOT_MNT}" rm -rf /efi/grub
 # check the arch boot-loader folder is missing from /efi/EFI
 arch-chroot "${ROOT_MNT}" ls -lah /efi/EFI
 # create grub
+# NOTE: `peimage` module's been removed because it causes grub-install error
 declare GRUB_MODULES="
 	all_video
 	boot
@@ -379,7 +380,6 @@ declare GRUB_MODULES="
 	part_msdos
 	part_gpt
 	password_pbkdf2
-	peimage
 	png
 	probe
 	reboot
