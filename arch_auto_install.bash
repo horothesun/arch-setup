@@ -198,7 +198,7 @@ mountBtrfsSubvolume "@spool"  "${ROOT_MNT}/var/spool"
 mountBtrfsSubvolume "@tmp"    "${ROOT_MNT}/var/tmp"
 echo
 # Mounting EFI partition...
-mkdir "${ROOT_MNT}/efi" -p
+mkdir -p "${ROOT_MNT}/efi"
 mount -t vfat "/dev/disk/by-partlabel/EFI" "${ROOT_MNT}/efi"
 echo
 
