@@ -148,11 +148,11 @@ echo
 # Encrypting root partition...
 # if BAD_IDEA=yes, then pipe cryptpass and carry on, if not, prompt for it
 if [[ "${BAD_IDEA}" == "yes" ]]; then
-    echo -n "${CRYPT_PASSWORD}" | cryptsetup luksFormat --type luks2 "/dev/disk/by-partlabel/${LINUX_PARTITION_LABEL}" -
+    echo -n "${CRYPT_PASSWORD}" | cryptsetup luksFormat --type luks2 --pbkdf pbkdf2 "/dev/disk/by-partlabel/${LINUX_PARTITION_LABEL}" -
     #echo -n "${CRYPT_PASSWORD}" | cryptsetup luksConvertKey --pbkdf pbkdf2 "/dev/disk/by-partlabel/${LINUX_PARTITION_LABEL}"
     echo -n "${CRYPT_PASSWORD}" | cryptsetup luksOpen "/dev/disk/by-partlabel/${LINUX_PARTITION_LABEL}" root -
 else
-    cryptsetup luksFormat --type luks2 "/dev/disk/by-partlabel/${LINUX_PARTITION_LABEL}"
+    cryptsetup luksFormat --type luks2 --pbkdf pbkdf2 "/dev/disk/by-partlabel/${LINUX_PARTITION_LABEL}"
     #cryptsetup luksConvertKey --pbkdf pbkdf2 "/dev/disk/by-partlabel/${LINUX_PARTITION_LABEL}"
     cryptsetup luksOpen "/dev/disk/by-partlabel/${LINUX_PARTITION_LABEL}" root
 fi
