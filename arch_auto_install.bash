@@ -439,7 +439,7 @@ declare GRUB_MODULES="
     password_pbkdf2
     tpm
     "
-arch-chroot "${ROOT_MNT}" grub-install --target=x86_64-efi --efi-directory=/efi --boot-directory=/boot --bootloader-id=Linux --modules=${GRUB_MODULES}
+arch-chroot "${ROOT_MNT}" grub-install --target=x86_64-efi --efi-directory=/efi --boot-directory=/boot --bootloader-id=Linux --modules="${GRUB_MODULES}"
 # check the arch boot-loader folder is now present in /efi/EFI
 arch-chroot "${ROOT_MNT}" ls -lah /efi/EFI
 # check the grubx64.efi boot-loader's been created
