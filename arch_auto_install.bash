@@ -448,9 +448,12 @@ arch-chroot "${ROOT_MNT}" ls -lah /efi/EFI/Linux
 arch-chroot "${ROOT_MNT}" ls -lah /boot
 # check /boot/grub contains fonts/, grub.cfg, grubenv, locale/, themes/, x86_64-efi/
 arch-chroot "${ROOT_MNT}" ls -lah /boot/grub
-# if /boot/grub/grub.cfg is missing, create it and check again
+echo
+# create /boot/grub/grub.cfg
 arch-chroot "${ROOT_MNT}" grub-mkconfig --output /boot/grub/grub.cfg
+echo
 arch-chroot "${ROOT_MNT}" ls -lah /boot/grub
+echo
 # check the boot entry for Arch Linux has been created and its index is the first in the boot order
 arch-chroot "${ROOT_MNT}" efibootmgr
 echo
