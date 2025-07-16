@@ -452,6 +452,9 @@ echo
 # create /boot/grub/grub.cfg
 arch-chroot "${ROOT_MNT}" grub-mkconfig --output /boot/grub/grub.cfg
 echo
+# TODO: chainload UKI image https://wiki.archlinux.org/title/GRUB#Chainloading_a_unified_kernel_image
+# ...
+echo
 arch-chroot "${ROOT_MNT}" ls -lah /boot/grub
 echo
 # check the boot entry for Arch Linux has been created and its index is the first in the boot order
