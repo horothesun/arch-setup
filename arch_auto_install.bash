@@ -28,101 +28,114 @@ CRYPT_PASSWORD="changeme"
 
 # packages to pacstrap
 PACSTRAP_PACKAGES=(
-        amd-ucode
-        base
-        btrfs-progs
-        cryptsetup
-        dosfstools
-        efibootmgr
-        grub
-        grub-btrfs
-        linux
-        linux-firmware
-        networkmanager
-        sbctl
-        sudo
-        util-linux
+    amd-ucode
+    base
+    btrfs-progs
+    cryptsetup
+    dosfstools
+    efibootmgr
+    grub
+    grub-btrfs
+    linux
+    linux-firmware
+    networkmanager
+    sbctl
+    sudo
+    util-linux
 )
+
 PACMAN_PACKAGES=(
-        alacritty
-        alsa-utils
-        amdgpu_top
-        asciiquarium
-        bash-completion
-        bash-language-server
-        bat
-        bluez
-        bluez-utils
-        bluez-deprecated-tools
-        pavucontrol
-        btop
-        cmatrix
-        cliphist
-        dive
-        fastfetch
-        firewalld
-        fzf
-        git
-        github-cli
-        git-filter-repo
-        jq
-        kdeconnect
-        keyd
-        man-db
-        man-pages
-        mtools
-        ncdu
-        neovim
-        noto-fonts-emoji
-        openssh
-        pavucontrol
-        plocate
-        pipewire
-        pipewire-jack
-        pipewire-pulse
-        python-cookiecutter
-        reflector
-        sbt
-        speedtest-cli
-        starship
-        stow
-        tldr
-        translate-shell
-        tree
-        ttf-jetbrains-mono-nerd
-        ttf-firacode-nerd
-        yq
-        wl-clipboard
-        wtype
-        zsh
-        )    
+    alacritty
+    alsa-utils
+    amdgpu_top
+    asciiquarium
+    bash-completion
+    bash-language-server
+    bat
+    bluez
+    bluez-utils
+    bluez-deprecated-tools
+    pavucontrol
+    btop
+    cmatrix
+    cliphist
+    dive
+    fastfetch
+    firewalld
+    fzf
+    git
+    github-cli
+    git-filter-repo
+    jq
+    kdeconnect
+    keyd
+    man-db
+    man-pages
+    mtools
+    ncdu
+    neovim
+    noto-fonts-emoji
+    openssh
+    pavucontrol
+    plocate
+    pipewire
+    pipewire-jack
+    pipewire-pulse
+    python-cookiecutter
+    reflector
+    sbt
+    speedtest-cli
+    starship
+    stow
+    tldr
+    translate-shell
+    tree
+    ttf-jetbrains-mono-nerd
+    ttf-firacode-nerd
+    yq
+    wget
+    wl-clipboard
+    wtype
+    zsh
+)    
+
 ### Desktop packages #####
-#HYPRLAND_PACKAGES=(
-#        hypridle
-#        hyprlock
-#        hyprpolkitagent
-#        kwalletmanager
-#        kwallet-pam
-#        rofi-emoji
-#        rofi-wayland
-#        uwsm
-#        waybar
-#        )
-GUI_PACKAGES=(
-        xfce4
-        xfce4-terminal
-        xfce4-goodies
-        sddm
-        nm-connection-editor
-        mousepad
-        )
-#GUI_PACKAGES=(
-#         plasma 
-#         sddm 
-#         kitty
-#         nm-connection-editor
-#         mousepad
-#        )
+HYPRLAND_PACKAGES=(
+    dolphin
+    hypridle
+    hyprland
+    hyprlock
+    hyprshot
+    hyprpolkitagent
+    kitty
+    kwalletmanager
+    kwallet-pam
+    polkit-kde-agent
+    qt5-wayland
+    qt6-wayland
+    rofi-emoji
+    rofi-wayland
+    sddm
+    swaync
+    uwsm
+    waybar
+    xdg-desktop-portal-hyprland
+)
+PLASMA_PACKAGES=(
+    plasma 
+    sddm 
+    kitty
+    nm-connection-editor
+    mousepad
+)
+XFCE_PACKAGES=(
+    xfce4
+    xfce4-terminal
+    xfce4-goodies
+    sddm
+    nm-connection-editor
+    mousepad
+)
 
 # set locale, timezone, NTP
 loadkeys "${KEYMAP}"
@@ -306,7 +319,7 @@ arch-chroot "${ROOT_MNT}" pacman -Sy "${PACMAN_PACKAGES[@]}" --noconfirm --quiet
 echo
 
 # Installing GUI packages...
-arch-chroot "${ROOT_MNT}" pacman -Sy "${GUI_PACKAGES[@]}" --noconfirm --quiet
+arch-chroot "${ROOT_MNT}" pacman -Sy "${HYPRLAND_PACKAGES[@]}" --noconfirm --quiet
 echo
 
 # enable the services we will need on start up
