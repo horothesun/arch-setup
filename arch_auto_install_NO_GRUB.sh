@@ -345,7 +345,7 @@ console-mode max
 editor no
 EOF
 echo
-arch-chroot "${ROOT_MNT}" bootctl --esp-path=/efi --boot-path=/boot install
+arch-chroot "${ROOT_MNT}" bootctl --esp-path=/efi install
 systemctl --root "${ROOT_MNT}" enable systemd-boot-update
 echo
 # check the boot entry for Arch Linux has been created and its index is the first in the boot order
