@@ -316,8 +316,10 @@ echo
 
 # read the UKI setting and create the folder structure otherwise mkinitcpio will crash
 declare $(grep default_uki "${ROOT_MNT}/etc/mkinitcpio.d/linux.preset")
+declare $(grep fallback_uki "${ROOT_MNT}/etc/mkinitcpio.d/linux.preset")
 declare default_uki_dirname=$(dirname "${default_uki//\"}")
 arch-chroot "${ROOT_MNT}" echo "default_uki: ${default_uki}"
+arch-chroot "${ROOT_MNT}" echo "fallback_uki: ${fallback_uki}"
 arch-chroot "${ROOT_MNT}" echo "default_uki_dirname: ${default_uki_dirname}"
 arch-chroot "${ROOT_MNT}" mkdir -p "${default_uki_dirname}"
 echo
@@ -379,6 +381,10 @@ echo
 arch-chroot "${ROOT_MNT}" bootctl --esp-path=/efi install
 systemctl --root "${ROOT_MNT}" enable systemd-boot-update
 echo
+# cleaup /efi/EFI
+arch-chroot "${ROOT_MNT}" ls -lahR /efi/EFI
+arch-chroot "${ROOT_MNT}" rm -fr /efi/EFI/systemd
+echo
 # regenerate UKIs
 arch-chroot "${ROOT_MNT}" mkinitcpio --preset linux
 echo
@@ -386,18 +392,20 @@ echo
 arch-chroot "${ROOT_MNT}" efibootmgr
 echo
 
-# TODO: test once UKI + GRUB work properly
-#echo "Setting up Secure Boot..."
-#if [[ "$(efivar --print-decimal --name 8be4df61-93ca-11d2-aa0d-00e098032b8c-SetupMode)" -eq 1 ]]; then
-#    arch-chroot "${ROOT_MNT}" sbctl create-keys
-#    arch-chroot "${ROOT_MNT}" sbctl enroll-keys --microsoft
-#    arch-chroot "${ROOT_MNT}" sbctl sign --save --output /efi/EFI/Linux/grubx64.efi.signed /efi/EFI/Linux/grubx64.efi
-#    #arch-chroot "${ROOT_MNT}" sbctl sign --save /efi/EFI/Linux/grubx64.efi
-#    arch-chroot "${ROOT_MNT}" sbctl sign --save "${default_uki//\"}"
-#else
-#    echo "Not in Secure Boot setup mode. Skipping..."
-#fi
-#echo
+# Secure Boot...
+arch-chroot "${ROOT_MNT}" sbctl status
+if [[ "$(efivar --print-decimal --name 8be4df61-93ca-11d2-aa0d-00e098032b8c-SetupMode)" -eq 1 ]]; then
+    echo "Setting up Secure Boot..."
+    arch-chroot "${ROOT_MNT}" sbctl create-keys
+    arch-chroot "${ROOT_MNT}" sbctl enroll-keys --microsoft
+    arch-chroot "${ROOT_MNT}" sbctl sign --save --output "/usr/lib/systemd/boot/efi/systemd-bootx64.efi.signed" "/usr/lib/systemd/boot/efi/systemd-bootx64.efi"
+    arch-chroot "${ROOT_MNT}" sbctl sign --save "/efi/EFI/BOOT/BOOTX64.EFI"
+    arch-chroot "${ROOT_MNT}" sbctl sign --save "${default_uki//\"}"
+    arch-chroot "${ROOT_MNT}" sbctl sign --save "${fallback_uki//\"}"
+else
+    echo "Not in Secure Boot setup mode. Skipping..."
+fi
+echo
 
 # Enable services...
 arch-chroot "${ROOT_MNT}" systemctl enable bluetooth keyd
