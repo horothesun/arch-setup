@@ -282,7 +282,7 @@ PRESETS=('default' 'fallback')
 #default_config="/etc/mkinitcpio.conf"
 #default_image="/boot/initramfs-linux.img"
 default_uki="/efi/EFI/Linux/arch-linux.efi"
-#default_options="--splash=/usr/share/systemd/bootctl/splash-arch.bmp"
+default_options="--splash=/usr/share/systemd/bootctl/splash-arch.bmp"
 
 #fallback_config="/etc/mkinitcpio.conf"
 #fallback_image="/boot/initramfs-linux-fallback.img"
@@ -339,10 +339,21 @@ echo
 # systemd-boot setup...
 mkdir -p "${ROOT_MNT}/efi/loader"
 cat <<EOF > "${ROOT_MNT}/efi/loader/loader.conf"
-default arch-linux.efi
+default arch.conf
 timeout 4
 console-mode max
 editor no
+EOF
+echo
+export LINUX_LUKS_INFO=$( blkid | jq --raw-input --compact-output 'def cleanString(s): s | split("=")[1] | split("\"")[1] ; select(contains("PARTLABEL=\"LINUX\"")) | split(" ") | { "PATH": .[0] | split(":")[0], "UUID": cleanString(.[1]), "TYPE": cleanString(.[2]), "PARTLABEL": cleanString(.[3]), "PARTUUID": cleanString(.[4]) }' )
+export LINUX_LUKS_UUID=$( echo "${LINUX_LUKS_INFO}" | jq --raw-output '.UUID' )
+export LINUX_LUKS_PARTUUID=$( echo "${LINUX_LUKS_INFO}" | jq --raw-output '.PARTUUID' )
+mkdir -p "${ROOT_MNT}/efi/entries"
+cat <<EOF > "${ROOT_MNT}/efi/entries/arch.conf"
+title   Arch Linux
+linux   /vmlinuz-linux
+initrd  /initramfs-linux.img
+options rd.luks.name=${LINUX_LUKS_UUID}=cryptroot root=/dev/mapper/cryptroot rootflags=subvol=@ rd.luks.options=discard rw mem_sleep_default=deep
 EOF
 echo
 arch-chroot "${ROOT_MNT}" bootctl --esp-path=/efi install
