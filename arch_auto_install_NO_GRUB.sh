@@ -96,10 +96,13 @@ PACSTRAP_PACKAGES=(
 #    wl-clipboard
 #    wtype
 #    zsh
-#)    
+#)
 PACMAN_PACKAGES=(
     alacritty
     amdgpu_top
+    bluez
+    bluez-utils
+    bluez-deprecated-tools
     fastfetch
     git
     jq
@@ -115,7 +118,7 @@ PACMAN_PACKAGES=(
     speedtest-cli
     tldr
     tree
-)    
+)
 
 ### Desktop packages #####
 # TODO: uncomment!!! 🔥🔥🔥
