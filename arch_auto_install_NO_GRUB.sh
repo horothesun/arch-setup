@@ -338,8 +338,8 @@ echo
 
 # systemd-boot setup...
 mkdir -p "${ROOT_MNT}/efi/loader"
+#default arch.conf
 cat <<EOF > "${ROOT_MNT}/efi/loader/loader.conf"
-default arch.conf
 timeout 4
 console-mode max
 editor no
@@ -347,23 +347,42 @@ EOF
 echo
 pacman -Sy jq --noconfirm --quiet
 echo
-export LINUX_LUKS_INFO=$( blkid | jq --raw-input --compact-output 'def cleanString(s): s | split("=")[1] | split("\"")[1] ; select(contains("PARTLABEL=\"LINUX\"")) | split(" ") | { "PATH": .[0] | split(":")[0], "UUID": cleanString(.[1]), "TYPE": cleanString(.[2]), "PARTLABEL": cleanString(.[3]), "PARTUUID": cleanString(.[4]) }' )
+export LINUX_LUKS_INFO=$(
+    blkid |\
+        jq --raw-input --compact-output '
+            def cleanString(s): s | split("=")[1] | split("\"")[1] ;
+	    select(contains("PARTLABEL=\"LINUX\""))
+	  | split(" ")
+	  | {
+              "PATH": .[0] | split(":")[0],
+              "UUID": cleanString(.[1]),
+              "TYPE": cleanString(.[2]),
+              "PARTLABEL": cleanString(.[3]),
+              "PARTUUID": cleanString(.[4])
+            }
+        '
+)
 export LINUX_LUKS_UUID=$( echo "${LINUX_LUKS_INFO}" | jq --raw-output '.UUID' )
 export LINUX_LUKS_PARTUUID=$( echo "${LINUX_LUKS_INFO}" | jq --raw-output '.PARTUUID' )
-mkdir -p "${ROOT_MNT}/efi/entries"
 echo
-cat <<EOF > "${ROOT_MNT}/efi/entries/arch.conf"
-title Arch Linux
-efi /EFI/Linux/arch-linux.efi
-options rd.luks.name=${LINUX_LUKS_UUID}=root root=/dev/mapper/root rootflags=subvol=@ rd.luks.options=discard rw mem_sleep_default=deep
+cat <<EOF > "${ROOT_MNT}/etc/kernel/cmdline"
+rd.luks.name=${LINUX_LUKS_UUID}=root root=/dev/mapper/root rootflags=subvol=@ rd.luks.options=discard rw mem_sleep_default=deep
 EOF
 echo
-cat <<EOF > "${ROOT_MNT}/efi/entries/arch-fallback.conf"
-title Arch Linux Fallback
-efi /EFI/Linux/arch-linux-fallback.efi
-options rd.luks.name=${LINUX_LUKS_UUID}=root root=/dev/mapper/root rootflags=subvol=@ rd.luks.options=discard rw mem_sleep_default=deep
-EOF
-echo
+#mkdir -p "${ROOT_MNT}/efi/entries"
+#echo
+#cat <<EOF > "${ROOT_MNT}/efi/entries/arch.conf"
+#title Arch Linux
+#efi /EFI/Linux/arch-linux.efi
+#options rd.luks.name=${LINUX_LUKS_UUID}=root root=/dev/mapper/root rootflags=subvol=@ rd.luks.options=discard rw mem_sleep_default=deep
+#EOF
+#echo
+#cat <<EOF > "${ROOT_MNT}/efi/entries/arch-fallback.conf"
+#title Arch Linux Fallback
+#efi /EFI/Linux/arch-linux-fallback.efi
+#options rd.luks.name=${LINUX_LUKS_UUID}=root root=/dev/mapper/root rootflags=subvol=@ rd.luks.options=discard rw mem_sleep_default=deep
+#EOF
+#echo
 arch-chroot "${ROOT_MNT}" bootctl --esp-path=/efi install
 systemctl --root "${ROOT_MNT}" enable systemd-boot-update
 echo
