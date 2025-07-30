@@ -366,7 +366,7 @@ export LINUX_LUKS_UUID=$( echo "${LINUX_LUKS_INFO}" | jq --raw-output '.UUID' )
 export LINUX_LUKS_PARTUUID=$( echo "${LINUX_LUKS_INFO}" | jq --raw-output '.PARTUUID' )
 echo
 cat <<EOF > "${ROOT_MNT}/etc/kernel/cmdline"
-rd.luks.name=${LINUX_LUKS_UUID}=root root=/dev/mapper/root rootflags=subvol=@ rd.luks.options=discard rw mem_sleep_default=deep
+quiet rw rd.luks.name=${LINUX_LUKS_UUID}=root root=/dev/mapper/root rootflags=subvol=@
 EOF
 echo
 #mkdir -p "${ROOT_MNT}/efi/entries"
@@ -385,6 +385,9 @@ echo
 #echo
 arch-chroot "${ROOT_MNT}" bootctl --esp-path=/efi install
 systemctl --root "${ROOT_MNT}" enable systemd-boot-update
+echo
+# regenerate UKIs
+arch-chroot "${ROOT_MNT}" mkinitcpio --preset linux
 echo
 # check the boot entry for Arch Linux has been created and its index is the first in the boot order
 arch-chroot "${ROOT_MNT}" efibootmgr
