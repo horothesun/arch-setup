@@ -42,82 +42,109 @@ PACSTRAP_PACKAGES=(
     util-linux
 )
 
+# TODO: uncomment!!! 🔥🔥🔥
+#PACMAN_PACKAGES=(
+#    alacritty
+#    alsa-utils
+#    amdgpu_top
+#    asciiquarium
+#    bash-completion
+#    bash-language-server
+#    bat
+#    bluez
+#    bluez-utils
+#    bluez-deprecated-tools
+#    pavucontrol
+#    btop
+#    cmatrix
+#    cliphist
+#    dive
+#    fastfetch
+#    firewalld
+#    fzf
+#    git
+#    github-cli
+#    git-filter-repo
+#    jq
+#    kdeconnect
+#    keyd
+#    man-db
+#    man-pages
+#    mtools
+#    ncdu
+#    neovim
+#    noto-fonts-emoji
+#    openssh
+#    pavucontrol
+#    plocate
+#    pipewire
+#    pipewire-jack
+#    pipewire-pulse
+#    python-cookiecutter
+#    reflector
+#    sbt
+#    speedtest-cli
+#    starship
+#    stow
+#    tldr
+#    translate-shell
+#    tree
+#    ttf-jetbrains-mono-nerd
+#    ttf-firacode-nerd
+#    yq
+#    wget
+#    wl-clipboard
+#    wtype
+#    zsh
+#)    
 PACMAN_PACKAGES=(
     alacritty
-    alsa-utils
     amdgpu_top
-    asciiquarium
-    bash-completion
-    bash-language-server
-    bat
-    bluez
-    bluez-utils
-    bluez-deprecated-tools
-    pavucontrol
-    btop
-    cmatrix
-    cliphist
-    dive
     fastfetch
-    firewalld
-    fzf
     git
-    github-cli
-    git-filter-repo
     jq
-    kdeconnect
     keyd
     man-db
     man-pages
     mtools
     ncdu
     neovim
-    noto-fonts-emoji
     openssh
-    pavucontrol
     plocate
-    pipewire
-    pipewire-jack
-    pipewire-pulse
-    python-cookiecutter
     reflector
-    sbt
     speedtest-cli
-    starship
-    stow
     tldr
-    translate-shell
     tree
-    ttf-jetbrains-mono-nerd
-    ttf-firacode-nerd
-    yq
-    wget
-    wl-clipboard
-    wtype
-    zsh
 )    
 
 ### Desktop packages #####
+# TODO: uncomment!!! 🔥🔥🔥
+#HYPRLAND_PACKAGES=(
+#    dolphin
+#    hypridle
+#    hyprland
+#    hyprlock
+#    hyprshot
+#    hyprpolkitagent
+#    kitty
+#    kwalletmanager
+#    kwallet-pam
+#    polkit-kde-agent
+#    qt5-wayland
+#    qt6-wayland
+#    rofi-emoji
+#    rofi-wayland
+#    sddm
+#    swaync
+#    uwsm
+#    waybar
+#    xdg-desktop-portal-hyprland
+#)
 HYPRLAND_PACKAGES=(
-    dolphin
-    hypridle
     hyprland
-    hyprlock
-    hyprshot
-    hyprpolkitagent
     kitty
-    kwalletmanager
-    kwallet-pam
-    polkit-kde-agent
-    qt5-wayland
-    qt6-wayland
-    rofi-emoji
-    rofi-wayland
     sddm
-    swaync
     uwsm
-    waybar
-    xdg-desktop-portal-hyprland
 )
 PLASMA_PACKAGES=(
     plasma 
@@ -146,8 +173,8 @@ sgdisk -Z "${TARGET}"
 # ef00: EFI System
 # 8309: Linux LUKS
 sgdisk \
-    -n1:0:+1G -t1:ef00 -c1:EFI \
-    -N2       -t2:8309 -c2:"${LINUX_PARTITION_LABEL}" \
+    -n1:0:+800M -t1:ef00 -c1:EFI \
+    -N2         -t2:8309 -c2:"${LINUX_PARTITION_LABEL}" \
     "${TARGET}"
 sleep 2
 echo
