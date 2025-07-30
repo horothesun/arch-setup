@@ -282,7 +282,7 @@ PRESETS=('default' 'fallback')
 #default_config="/etc/mkinitcpio.conf"
 #default_image="/boot/initramfs-linux.img"
 default_uki="/efi/EFI/Linux/arch-linux.efi"
-default_options="--splash=/usr/share/systemd/bootctl/splash-arch.bmp"
+#default_options="--splash=/usr/share/systemd/bootctl/splash-arch.bmp"
 
 #fallback_config="/etc/mkinitcpio.conf"
 #fallback_image="/boot/initramfs-linux-fallback.img"
@@ -344,6 +344,8 @@ timeout 4
 console-mode max
 editor no
 EOF
+echo
+pacman -Sy jq --noconfirm --quiet
 echo
 export LINUX_LUKS_INFO=$( blkid | jq --raw-input --compact-output 'def cleanString(s): s | split("=")[1] | split("\"")[1] ; select(contains("PARTLABEL=\"LINUX\"")) | split(" ") | { "PATH": .[0] | split(":")[0], "UUID": cleanString(.[1]), "TYPE": cleanString(.[2]), "PARTLABEL": cleanString(.[3]), "PARTUUID": cleanString(.[4]) }' )
 export LINUX_LUKS_UUID=$( echo "${LINUX_LUKS_INFO}" | jq --raw-output '.UUID' )
