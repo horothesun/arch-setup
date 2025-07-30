@@ -349,11 +349,17 @@ export LINUX_LUKS_INFO=$( blkid | jq --raw-input --compact-output 'def cleanStri
 export LINUX_LUKS_UUID=$( echo "${LINUX_LUKS_INFO}" | jq --raw-output '.UUID' )
 export LINUX_LUKS_PARTUUID=$( echo "${LINUX_LUKS_INFO}" | jq --raw-output '.PARTUUID' )
 mkdir -p "${ROOT_MNT}/efi/entries"
+echo
 cat <<EOF > "${ROOT_MNT}/efi/entries/arch.conf"
-title   Arch Linux
-linux   /vmlinuz-linux
-initrd  /initramfs-linux.img
-options rd.luks.name=${LINUX_LUKS_UUID}=cryptroot root=/dev/mapper/cryptroot rootflags=subvol=@ rd.luks.options=discard rw mem_sleep_default=deep
+title Arch Linux
+efi /EFI/Linux/arch-linux.efi
+options rd.luks.name=${LINUX_LUKS_UUID}=root root=/dev/mapper/root rootflags=subvol=@ rd.luks.options=discard rw mem_sleep_default=deep
+EOF
+echo
+cat <<EOF > "${ROOT_MNT}/efi/entries/arch-fallback.conf"
+title Arch Linux Fallback
+efi /EFI/Linux/arch-linux-fallback.efi
+options rd.luks.name=${LINUX_LUKS_UUID}=root root=/dev/mapper/root rootflags=subvol=@ rd.luks.options=discard rw mem_sleep_default=deep
 EOF
 echo
 arch-chroot "${ROOT_MNT}" bootctl --esp-path=/efi install
