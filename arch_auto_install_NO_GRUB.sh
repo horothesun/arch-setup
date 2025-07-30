@@ -294,13 +294,6 @@ sed -i \
     -e '/^HOOKS=(.*/c\HOOKS=(base systemd autodetect microcode modconf kms keyboard sd-vconsole sd-encrypt block filesystems fsck)' \
     "${ROOT_MNT}/etc/mkinitcpio.conf"
 # change the preset file to generate a Unified Kernel Image instead of an initram disk + kernel
-#sed -i \
-#    -e '/^#ALL_config/s/^#//' \
-#    -e '/^#default_uki/s/^#//' \
-#    -e '/^#default_options/s/^#//' \
-#    -e 's/default_image=/#default_image=/g' \
-#    -e "s/PRESETS=('default' 'fallback')/PRESETS=('default')/g" \
-#    "${ROOT_MNT}/etc/mkinitcpio.d/linux.preset"
 cat <<EOF > "${ROOT_MNT}/etc/mkinitcpio.d/linux.preset"
 # mkinitcpio preset file for the 'linux' package
 
@@ -376,27 +369,13 @@ editor no
 EOF
 echo
 export LINUX_LUKS_UUID=$( blkid --match-tag UUID --output value "/dev/disk/by-partlabel/${LINUX_PARTITION_LABEL}" )
-echo
+# TODO: full options: rd.luks.name=${LINUX_LUKS_UUID}=root root=/dev/mapper/root rootflags=subvol=@ rd.luks.options=discard rw mem_sleep_default=deep
 cat <<EOF > "${ROOT_MNT}/etc/kernel/cmdline"
 quiet rw rd.luks.name=${LINUX_LUKS_UUID}=root root=/dev/mapper/root rootflags=subvol=@
 EOF
 echo
 cat "${ROOT_MNT}/etc/kernel/cmdline"
 echo
-#mkdir -p "${ROOT_MNT}/efi/entries"
-#echo
-#cat <<EOF > "${ROOT_MNT}/efi/entries/arch.conf"
-#title Arch Linux
-#efi /EFI/Linux/arch-linux.efi
-#options rd.luks.name=${LINUX_LUKS_UUID}=root root=/dev/mapper/root rootflags=subvol=@ rd.luks.options=discard rw mem_sleep_default=deep
-#EOF
-#echo
-#cat <<EOF > "${ROOT_MNT}/efi/entries/arch-fallback.conf"
-#title Arch Linux Fallback
-#efi /EFI/Linux/arch-linux-fallback.efi
-#options rd.luks.name=${LINUX_LUKS_UUID}=root root=/dev/mapper/root rootflags=subvol=@ rd.luks.options=discard rw mem_sleep_default=deep
-#EOF
-#echo
 arch-chroot "${ROOT_MNT}" bootctl --esp-path=/efi install
 systemctl --root "${ROOT_MNT}" enable systemd-boot-update
 echo
@@ -477,9 +456,9 @@ echo
 # ZRAM / Swap setup
 # TODO: consider for hibernation (suspend-to-disk)...
 
-echo "-----------------------------------"
-echo "- Install complete. Please reboot -"
-echo "-----------------------------------"
+#-----------------------------------
+#- Install complete. Please reboot -
+#-----------------------------------
 sleep 10
 sync
 echo
