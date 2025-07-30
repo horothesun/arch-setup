@@ -372,29 +372,13 @@ console-mode max
 editor no
 EOF
 echo
-pacman -Sy jq --noconfirm --quiet
-echo
-export LINUX_LUKS_INFO=$(
-    blkid |\
-        jq --raw-input --compact-output '
-            def cleanString(s): s | split("=")[1] | split("\"")[1] ;
-	    select(contains("PARTLABEL=\"LINUX\""))
-	  | split(" ")
-	  | {
-              "PATH": .[0] | split(":")[0],
-              "UUID": cleanString(.[1]),
-              "TYPE": cleanString(.[2]),
-              "PARTLABEL": cleanString(.[3]),
-              "PARTUUID": cleanString(.[4])
-            }
-        '
-)
-export LINUX_LUKS_UUID=$( echo "${LINUX_LUKS_INFO}" | jq --raw-output '.UUID' )
-export LINUX_LUKS_PARTUUID=$( echo "${LINUX_LUKS_INFO}" | jq --raw-output '.PARTUUID' )
+export LINUX_LUKS_UUID=$( blkid --match-tag UUID --output value "/dev/disk/by-partlabel/${LINUX_PARTITION_LABEL}" )
 echo
 cat <<EOF > "${ROOT_MNT}/etc/kernel/cmdline"
 quiet rw rd.luks.name=${LINUX_LUKS_UUID}=root root=/dev/mapper/root rootflags=subvol=@
 EOF
+echo
+cat "${ROOT_MNT}/etc/kernel/cmdline"
 echo
 #mkdir -p "${ROOT_MNT}/efi/entries"
 #echo
