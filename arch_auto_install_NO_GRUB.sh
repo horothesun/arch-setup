@@ -280,9 +280,15 @@ echo
 arch-chroot "${ROOT_MNT}" useradd -G wheel -m -p "${USER_PASSWORD}" "${USERNAME}" 
 # uncomment the wheel group in the sudoers file
 sed -i -e '/^# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/s/^# //' "${ROOT_MNT}/etc/sudoers"
-# create a basic kernel cmdline, we're using DPS so we don't need to have anything here really,
-# but if the file doesn't exist, mkinitcpio will complain
-echo "quiet rw" > "${ROOT_MNT}/etc/kernel/cmdline"
+# create /etc/kernel/cmdline (if the file doesn't exist, mkinitcpio will complain)
+export LINUX_LUKS_UUID=$( blkid --match-tag UUID --output value "/dev/disk/by-partlabel/${LINUX_PARTITION_LABEL}" )
+# TODO: full options: rd.luks.name=${LINUX_LUKS_UUID}=root root=/dev/mapper/root rootflags=subvol=@ rd.luks.options=discard rw mem_sleep_default=deep
+cat <<EOF > "${ROOT_MNT}/etc/kernel/cmdline"
+quiet rw rd.luks.name=${LINUX_LUKS_UUID}=root root=/dev/mapper/root rootflags=subvol=@
+EOF
+echo
+cat "${ROOT_MNT}/etc/kernel/cmdline"
+echo
 # update /etc/mkinitcpio.conf
 # - add the i2c-dev module for the ddcutil (external monitor brightness/contrast control)
 # - change the HOOKS in mkinitcpio.conf to use systemd hooks (udev -> systemd, keymap consolefont -> sd-vconsole sd-encrypt)
@@ -350,7 +356,6 @@ systemctl --root "${ROOT_MNT}" enable systemd-resolved systemd-timesyncd Network
 systemctl --root "${ROOT_MNT}" mask systemd-networkd
 echo
 
-# regenerate the ramdisk, this will create our UKI
 # Generating UKI and installing Boot Loader...
 arch-chroot "${ROOT_MNT}" mkinitcpio --preset linux
 echo
@@ -370,23 +375,12 @@ console-mode max
 editor no
 EOF
 echo
-export LINUX_LUKS_UUID=$( blkid --match-tag UUID --output value "/dev/disk/by-partlabel/${LINUX_PARTITION_LABEL}" )
-# TODO: full options: rd.luks.name=${LINUX_LUKS_UUID}=root root=/dev/mapper/root rootflags=subvol=@ rd.luks.options=discard rw mem_sleep_default=deep
-cat <<EOF > "${ROOT_MNT}/etc/kernel/cmdline"
-quiet rw rd.luks.name=${LINUX_LUKS_UUID}=root root=/dev/mapper/root rootflags=subvol=@
-EOF
-echo
-cat "${ROOT_MNT}/etc/kernel/cmdline"
-echo
 arch-chroot "${ROOT_MNT}" bootctl --esp-path=/efi install
 systemctl --root "${ROOT_MNT}" enable systemd-boot-update
 echo
 # cleaup /efi/EFI
-arch-chroot "${ROOT_MNT}" ls -lahR /efi/EFI
 arch-chroot "${ROOT_MNT}" rm -fr /efi/EFI/systemd
-echo
-# regenerate UKIs
-arch-chroot "${ROOT_MNT}" mkinitcpio --preset linux
+arch-chroot "${ROOT_MNT}" ls -lahR /efi/EFI
 echo
 # check the boot entry for Arch Linux has been created and its index is the first in the boot order
 arch-chroot "${ROOT_MNT}" efibootmgr
