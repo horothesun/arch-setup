@@ -42,83 +42,87 @@ PACSTRAP_PACKAGES=(
     util-linux
 )
 
-# TODO: uncomment!!! 🔥🔥🔥
-#PACMAN_PACKAGES=(
-#    alacritty
-#    alsa-utils
-#    amdgpu_top
-#    asciiquarium
-#    bash-completion
-#    bash-language-server
-#    bat
-#    bluez
-#    bluez-utils
-#    bluez-deprecated-tools
-#    pavucontrol
-#    btop
-#    cmatrix
-#    cliphist
-#    dive
-#    fastfetch
-#    firewalld
-#    fzf
-#    git
-#    github-cli
-#    git-filter-repo
-#    jq
-#    kdeconnect
-#    keyd
-#    man-db
-#    man-pages
-#    mtools
-#    ncdu
-#    neovim
-#    noto-fonts-emoji
-#    openssh
-#    pavucontrol
-#    plocate
-#    pipewire
-#    pipewire-jack
-#    pipewire-pulse
-#    python-cookiecutter
-#    reflector
-#    sbt
-#    speedtest-cli
-#    starship
-#    stow
-#    tldr
-#    translate-shell
-#    tree
-#    ttf-jetbrains-mono-nerd
-#    ttf-firacode-nerd
-#    yq
-#    wget
-#    wl-clipboard
-#    wtype
-#    zsh
-#)
 PACMAN_PACKAGES=(
     alacritty
+    alsa-utils
     amdgpu_top
+    asciiquarium
+    bash-completion
+    bash-language-server
+    bat
     bluez
     bluez-utils
     bluez-deprecated-tools
+    pavucontrol
+    btop
+    cmatrix
+    cliphist
+    dive
     fastfetch
+    firewalld
+    fzf
     git
+    github-cli
+    git-filter-repo
     jq
+    kdeconnect
     keyd
     man-db
     man-pages
     mtools
     ncdu
     neovim
+    noto-fonts-emoji
     openssh
+    pavucontrol
     plocate
+    pipewire
+    pipewire-jack
+    pipewire-pulse
+    python-cookiecutter
     reflector
+    sbt
+    snapper
+    snap-pac
     speedtest-cli
+    starship
+    stow
     tldr
+    translate-shell
     tree
+    ttf-jetbrains-mono-nerd
+    ttf-firacode-nerd
+    yq
+    wget
+    wl-clipboard
+    wtype
+    zsh
 )
+# TODO: uncomment!!! 🔥🔥🔥
+#PACMAN_PACKAGES=(
+#    alacritty
+#    amdgpu_top
+#    bluez
+#    bluez-utils
+#    bluez-deprecated-tools
+#    fastfetch
+#    git
+#    jq
+#    keyd
+#    man-db
+#    man-pages
+#    mtools
+#    ncdu
+#    neovim
+#    openssh
+#    plocate
+#    reflector
+#    snapper
+#    snap-pac
+#    speedtest-cli
+#    tldr
+#    tree
+#)
 
 ### Desktop packages #####
 # TODO: uncomment!!! 🔥🔥🔥
@@ -429,6 +433,44 @@ echo
 #arch-chroot "${ROOT_MNT}" chsh --list-shells
 #arch-chroot "${ROOT_MNT}" chsh --shell=/usr/bin/zsh
 #echo
+
+# TODO: snapper setup... 🔥🔥🔥
+## create snapper config for /
+#sudo snapper -c root create-config /
+#
+#sudo snapper list-configs
+#
+## allow current user to manage root snapshots
+#sudo snapper -c root set-config ALLOW_USERS="$USER" SYNC_ACL=yes
+#
+#ls -d /.snapshots/
+#
+## APPEND '.snapshots' to /etc/updatedb.conf in the 'PRUNENAMES' space-separated list,
+## to avoid slowing down the system when there're lots of snapshots
+#sudo vim /etc/updatedb.conf
+#
+## disable automatic timeline snapshots (temporarily, to avoid snapshots to be created while setting up snapper)
+#sudo systemctl status snapper-timeline.timer snapper-cleanup.timer
+#sudo systemctl disable --now snapper-timeline.timer snapper-cleanup.timer
+#sudo systemctl status snapper-timeline.timer snapper-cleanup.timer
+#
+## we shouldn't have any snapshots yet
+#snapper list
+#
+## enable OverlayFS to enable booting from grub into a read-only snapshot, as a live USB in a non-persistent state
+## (APPEND 'grub-btrfs-overlayfs' to the 'HOOKS' space-separated list)
+#sudo vim /etc/mkinitcpio.conf
+#
+## regenerate initramfs
+#sudo mkinitcpio -P
+#
+## enable the grub-btrfsd service to auto-update grub when new snapshots are created/deleted
+#sudo systemctl enable --now grub-btrfsd.service
+#sudo systemctl status grub-btrfsd.service
+#
+## test snapper on a pacman package install
+##
+
 #
 ## SDDM theme...
 #arch-chroot "${ROOT_MNT}" cat > /etc/sddm.conf

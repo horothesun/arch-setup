@@ -83,6 +83,8 @@ PACMAN_PACKAGES=(
     pipewire-pulse
     python-cookiecutter
     reflector
+    snapper
+    snap-pac
     sbt
     speedtest-cli
     starship
