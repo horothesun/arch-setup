@@ -30,6 +30,7 @@ CRYPT_PASSWORD="changeme"
 PACSTRAP_PACKAGES=(
     amd-ucode
     base
+    base-devel
     btrfs-progs
     cryptsetup
     dosfstools

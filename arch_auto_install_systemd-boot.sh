@@ -170,6 +170,12 @@ XFCE_PACKAGES=(
     mousepad
 )
 
+AUR_PACKAGES=(
+    informant
+    oh-my-zsh-git
+    sddm-astronaut-theme
+)
+
 # set locale, timezone, NTP
 loadkeys "${KEYMAP}"
 timedatectl set-timezone "${TIMEZONE}"
@@ -412,25 +418,16 @@ echo
 # sudo systemctl --user enable --now hypridle.service
 echo
 
-# TODO: run arch-chroot as user...
-## YAY install...
-#arch-chroot "${ROOT_MNT}" su - "${USER_NAME}" --command "git clone https://aur.archlinux.org/yay-git.git ; cd yay-git ; makepkg --syncdeps --install --noconfirm ; cd .. ; rm -rf yay-git"
-#arch-chroot "${ROOT_MNT}" git clone "https://aur.archlinux.org/yay-git.git"
-#arch-chroot "${ROOT_MNT}" cd yay-git
-#arch-chroot "${ROOT_MNT}" makepkg --syncdeps --install --noconfirm
-#arch-chroot "${ROOT_MNT}" cd ..
-#arch-chroot "${ROOT_MNT}" rm -rf yay-git
-#echo
-#
-## YAY update and setup packages...
-#arch-chroot "${ROOT_MNT}" yay -Syu --noconfirm --norebuild --answerdiff=None --answeredit=None
-#arch-chroot "${ROOT_MNT}" yay -S --noconfirm --norebuild --answerdiff=None --answeredit=None \
-#    informant \
-#    oh-my-zsh-git \
-#    sddm-astronaut-theme
-#echo
-#
-#
+# YAY install...
+arch-chroot "${ROOT_MNT}" su - "${USER_NAME}" --command "git clone https://aur.archlinux.org/yay-git.git ; cd yay-git ; makepkg --syncdeps --install --noconfirm ; cd .. ; rm -rf yay-git"
+echo
+
+# YAY update and setup packages...
+arch-chroot "${ROOT_MNT}" su - "${USER_NAME}" --command "yay -Syu --noconfirm --norebuild --answerdiff=None --answeredit=None"
+arch-chroot "${ROOT_MNT}" su - "${USER_NAME}" --command "yay -S --noconfirm --norebuild --answerdiff=None --answeredit=None ${AUR_PACKAGES[@]}"
+echo
+
+
 ## ZSH set as default...
 #arch-chroot "${ROOT_MNT}" chsh --list-shells
 #arch-chroot "${ROOT_MNT}" chsh --shell=/usr/bin/zsh
