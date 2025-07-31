@@ -170,6 +170,14 @@ XFCE_PACKAGES=(
     mousepad
 )
 
+# TODO: uncomment!!! 🔥🔥🔥
+#AUR_PACKAGES=(
+#    brave-bin
+#    informant
+#    intellij-idea-community-edition-bin
+#    oh-my-zsh-git
+#    sddm-astronaut-theme
+#)
 AUR_PACKAGES=(
     informant
     oh-my-zsh-git
