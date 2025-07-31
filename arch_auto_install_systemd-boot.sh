@@ -8,7 +8,7 @@ LOCALE="en_GB.UTF-8"
 KEYMAP="uk"
 TIMEZONE="Europe/London"
 HOSTNAME="archlinux01"
-USERNAME="user"
+USER_NAME="user"
 
 # check if we're root
 if [[ "$UID" -ne 0 ]]; then
@@ -281,7 +281,7 @@ echo
 
 # Configuring for first boot...
 # add the local user
-arch-chroot "${ROOT_MNT}" useradd -G wheel -m -p "${USER_PASSWORD}" "${USERNAME}"
+arch-chroot "${ROOT_MNT}" useradd -G wheel -m -p "${USER_PASSWORD}" "${USER_NAME}"
 # uncomment the wheel group in the sudoers file
 sed -i -e '/^# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/s/^# //' "${ROOT_MNT}/etc/sudoers"
 # create /etc/kernel/cmdline (if the file doesn't exist, mkinitcpio will complain)
@@ -413,6 +413,7 @@ echo
 
 # TODO: run arch-chroot as user...
 ## YAY install...
+#arch-chroot "${ROOT_MNT}" su - "${USER_NAME}" --command "git clone https://aur.archlinux.org/yay-git.git ; cd yay-git ; makepkg -si ; cd .. ; rm -rf yay-git"
 #arch-chroot "${ROOT_MNT}" git clone "https://aur.archlinux.org/yay-git.git"
 #arch-chroot "${ROOT_MNT}" cd yay-git
 #arch-chroot "${ROOT_MNT}" makepkg -si

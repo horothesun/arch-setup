@@ -8,7 +8,7 @@ LOCALE="en_GB.UTF-8"
 KEYMAP="uk"
 TIMEZONE="Europe/London"
 HOSTNAME="archlinux01"
-USERNAME="user"
+USER_NAME="user"
 
 # check if we're root
 if [[ "$UID" -ne 0 ]]; then
@@ -253,7 +253,7 @@ echo
 
 # Configuring for first boot...
 # add the local user
-arch-chroot "${ROOT_MNT}" useradd -G wheel -m -p "${USER_PASSWORD}" "${USERNAME}"
+arch-chroot "${ROOT_MNT}" useradd -G wheel -m -p "${USER_PASSWORD}" "${USER_NAME}"
 # uncomment the wheel group in the sudoers file
 sed -i -e '/^# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/s/^# //' "${ROOT_MNT}/etc/sudoers"
 # create a basic kernel cmdline, we're using DPS so we don't need to have anything here really,
