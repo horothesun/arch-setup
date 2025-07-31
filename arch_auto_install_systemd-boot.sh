@@ -1,5 +1,5 @@
 #!/bin/bash
-# uncomment to view debugging information 
+# uncomment to view debugging information
 set -xeuo pipefail
 
 # config options
@@ -22,7 +22,7 @@ USER_PASSWORD="\$6\$/VBa6GuBiFiBmi6Q\$yNALrCViVtDDNjyGBsDG7IbnNR0Y/Tda5Uz8ToyxXX
 ROOT_MNT="/mnt"
 LINUX_PARTITION_LABEL="LINUX"
 
-# to fully automate the setup, change BAD_IDEA=no to yes, and enter a cleartext password for the disk encryption 
+# to fully automate the setup, change BAD_IDEA=no to yes, and enter a cleartext password for the disk encryption
 BAD_IDEA="no"
 CRYPT_PASSWORD="changeme"
 
@@ -34,8 +34,6 @@ PACSTRAP_PACKAGES=(
     cryptsetup
     dosfstools
     efibootmgr
-    grub
-    grub-btrfs
     linux
     linux-firmware
     networkmanager
@@ -44,86 +42,116 @@ PACSTRAP_PACKAGES=(
     util-linux
 )
 
+# TODO: uncomment!!! 🔥🔥🔥
+#PACMAN_PACKAGES=(
+#    alacritty
+#    alsa-utils
+#    amdgpu_top
+#    asciiquarium
+#    bash-completion
+#    bash-language-server
+#    bat
+#    bluez
+#    bluez-utils
+#    bluez-deprecated-tools
+#    pavucontrol
+#    btop
+#    cmatrix
+#    cliphist
+#    dive
+#    fastfetch
+#    firewalld
+#    fzf
+#    git
+#    github-cli
+#    git-filter-repo
+#    jq
+#    kdeconnect
+#    keyd
+#    man-db
+#    man-pages
+#    mtools
+#    ncdu
+#    neovim
+#    noto-fonts-emoji
+#    openssh
+#    pavucontrol
+#    plocate
+#    pipewire
+#    pipewire-jack
+#    pipewire-pulse
+#    python-cookiecutter
+#    reflector
+#    sbt
+#    speedtest-cli
+#    starship
+#    stow
+#    tldr
+#    translate-shell
+#    tree
+#    ttf-jetbrains-mono-nerd
+#    ttf-firacode-nerd
+#    yq
+#    wget
+#    wl-clipboard
+#    wtype
+#    zsh
+#)
 PACMAN_PACKAGES=(
     alacritty
-    alsa-utils
     amdgpu_top
-    asciiquarium
-    bash-completion
-    bash-language-server
-    bat
     bluez
     bluez-utils
     bluez-deprecated-tools
-    pavucontrol
-    btop
-    cmatrix
-    cliphist
-    dive
     fastfetch
-    firewalld
-    fzf
     git
-    github-cli
-    git-filter-repo
     jq
-    kdeconnect
     keyd
     man-db
     man-pages
     mtools
     ncdu
     neovim
-    noto-fonts-emoji
     openssh
-    pavucontrol
     plocate
-    pipewire
-    pipewire-jack
-    pipewire-pulse
-    python-cookiecutter
     reflector
-    sbt
     speedtest-cli
-    starship
-    stow
     tldr
-    translate-shell
     tree
-    ttf-jetbrains-mono-nerd
-    ttf-firacode-nerd
-    yq
-    wget
-    wl-clipboard
-    wtype
-    zsh
-)    
+)
 
 ### Desktop packages #####
+# TODO: uncomment!!! 🔥🔥🔥
+#HYPRLAND_PACKAGES=(
+#    dolphin
+#    hypridle
+#    hyprland
+#    hyprlock
+#    hyprshot
+#    hyprpolkitagent
+#    kitty
+#    kwalletmanager
+#    kwallet-pam
+#    polkit-kde-agent
+#    qt5-wayland
+#    qt6-wayland
+#    rofi-emoji
+#    rofi-wayland
+#    sddm
+#    swaync
+#    uwsm
+#    waybar
+#    xdg-desktop-portal-hyprland
+#)
 HYPRLAND_PACKAGES=(
-    dolphin
-    hypridle
     hyprland
-    hyprlock
-    hyprshot
-    hyprpolkitagent
     kitty
-    kwalletmanager
-    kwallet-pam
-    polkit-kde-agent
-    qt5-wayland
-    qt6-wayland
-    rofi-emoji
-    rofi-wayland
     sddm
-    swaync
     uwsm
-    waybar
-    xdg-desktop-portal-hyprland
 )
 PLASMA_PACKAGES=(
-    plasma 
-    sddm 
+    plasma
+    sddm
     kitty
     nm-connection-editor
     mousepad
@@ -148,8 +176,8 @@ sgdisk -Z "${TARGET}"
 # ef00: EFI System
 # 8309: Linux LUKS
 sgdisk \
-    -n1:0:+1G -t1:ef00 -c1:EFI \
-    -N2       -t2:8309 -c2:"${LINUX_PARTITION_LABEL}" \
+    -n1:0:+600M -t1:ef00 -c1:EFI \
+    -N2         -t2:8309 -c2:"${LINUX_PARTITION_LABEL}" \
     "${TARGET}"
 sleep 2
 echo
@@ -161,12 +189,10 @@ echo
 # Encrypting root partition...
 # if BAD_IDEA=yes, then pipe cryptpass and carry on, if not, prompt for it
 if [[ "${BAD_IDEA}" == "yes" ]]; then
-    echo -n "${CRYPT_PASSWORD}" | cryptsetup luksFormat --type luks1 --pbkdf pbkdf2 "/dev/disk/by-partlabel/${LINUX_PARTITION_LABEL}" -
-    #echo -n "${CRYPT_PASSWORD}" | cryptsetup luksConvertKey --pbkdf pbkdf2 "/dev/disk/by-partlabel/${LINUX_PARTITION_LABEL}"
+    echo -n "${CRYPT_PASSWORD}" | cryptsetup luksFormat --type luks2 "/dev/disk/by-partlabel/${LINUX_PARTITION_LABEL}" -
     echo -n "${CRYPT_PASSWORD}" | cryptsetup luksOpen "/dev/disk/by-partlabel/${LINUX_PARTITION_LABEL}" root -
 else
-    cryptsetup luksFormat --type luks1 --pbkdf pbkdf2 "/dev/disk/by-partlabel/${LINUX_PARTITION_LABEL}"
-    #cryptsetup luksConvertKey --pbkdf pbkdf2 "/dev/disk/by-partlabel/${LINUX_PARTITION_LABEL}"
+    cryptsetup luksFormat --type luks2 "/dev/disk/by-partlabel/${LINUX_PARTITION_LABEL}"
     cryptsetup luksOpen "/dev/disk/by-partlabel/${LINUX_PARTITION_LABEL}" root
 fi
 echo
@@ -180,7 +206,7 @@ echo
 mount "/dev/mapper/root" "${ROOT_MNT}"
 echo
 # Create BTRFS subvolumes...
-cd "${ROOT_MNT}" 
+cd "${ROOT_MNT}"
 btrfs subvolume create "@"
 btrfs subvolume create "@home"
 btrfs subvolume create "@opt"
@@ -191,7 +217,7 @@ btrfs subvolume create "@log"
 btrfs subvolume create "@spool"
 btrfs subvolume create "@tmp"
 cd -
-umount "${ROOT_MNT}" 
+umount "${ROOT_MNT}"
 echo
 # Mounting BTRFS subvolumes...
 function mountBtrfsSubvolume() {
@@ -224,7 +250,7 @@ echo
 # update pacman mirrors and then pacstrap base install
 # Pacstrapping...
 reflector --country GB --age 24 --protocol http,https --sort rate --save "/etc/pacman.d/mirrorlist"
-pacstrap -K "${ROOT_MNT}" "${PACSTRAP_PACKAGES[@]}" 
+pacstrap -K "${ROOT_MNT}" "${PACSTRAP_PACKAGES[@]}"
 echo
 
 # Generate filesystem table...
@@ -251,12 +277,18 @@ echo
 
 # Configuring for first boot...
 # add the local user
-arch-chroot "${ROOT_MNT}" useradd -G wheel -m -p "${USER_PASSWORD}" "${USERNAME}" 
+arch-chroot "${ROOT_MNT}" useradd -G wheel -m -p "${USER_PASSWORD}" "${USERNAME}"
 # uncomment the wheel group in the sudoers file
 sed -i -e '/^# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/s/^# //' "${ROOT_MNT}/etc/sudoers"
-# create a basic kernel cmdline, we're using DPS so we don't need to have anything here really,
-# but if the file doesn't exist, mkinitcpio will complain
-echo "quiet rw" > "${ROOT_MNT}/etc/kernel/cmdline"
+# create /etc/kernel/cmdline (if the file doesn't exist, mkinitcpio will complain)
+export LINUX_LUKS_UUID=$( blkid --match-tag UUID --output value "/dev/disk/by-partlabel/${LINUX_PARTITION_LABEL}" )
+# TODO: full options: rd.luks.name=${LINUX_LUKS_UUID}=root root=/dev/mapper/root rootflags=subvol=@ rd.luks.options=discard rw mem_sleep_default=deep
+cat <<EOF > "${ROOT_MNT}/etc/kernel/cmdline"
+quiet rw rd.luks.name=${LINUX_LUKS_UUID}=root root=/dev/mapper/root rootflags=subvol=@
+EOF
+echo
+cat "${ROOT_MNT}/etc/kernel/cmdline"
+echo
 # update /etc/mkinitcpio.conf
 # - add the i2c-dev module for the ddcutil (external monitor brightness/contrast control)
 # - change the HOOKS in mkinitcpio.conf to use systemd hooks (udev -> systemd, keymap consolefont -> sd-vconsole sd-encrypt)
@@ -265,16 +297,9 @@ sed -i \
     -e '/^MODULES=(.*/c\MODULES=(btrfs i2c-dev)' \
     -e '/^BINARIES=(.*/c\BINARIES=(/usr/bin/btrfs)' \
     -e '/^FILES=(.*/c\FILES=()' \
-    -e '/^HOOKS=(.*/c\HOOKS=(base systemd autodetect microcode modconf kms keyboard sd-vconsole sd-encrypt block filesystems fsck grub-btrfs-overlayfs)' \
+    -e '/^HOOKS=(.*/c\HOOKS=(base systemd autodetect microcode modconf kms keyboard sd-vconsole sd-encrypt block filesystems fsck)' \
     "${ROOT_MNT}/etc/mkinitcpio.conf"
 # change the preset file to generate a Unified Kernel Image instead of an initram disk + kernel
-#sed -i \
-#    -e '/^#ALL_config/s/^#//' \
-#    -e '/^#default_uki/s/^#//' \
-#    -e '/^#default_options/s/^#//' \
-#    -e 's/default_image=/#default_image=/g' \
-#    -e "s/PRESETS=('default' 'fallback')/PRESETS=('default')/g" \
-#    "${ROOT_MNT}/etc/mkinitcpio.d/linux.preset"
 cat <<EOF > "${ROOT_MNT}/etc/mkinitcpio.d/linux.preset"
 # mkinitcpio preset file for the 'linux' package
 
@@ -297,8 +322,10 @@ echo
 
 # read the UKI setting and create the folder structure otherwise mkinitcpio will crash
 declare $(grep default_uki "${ROOT_MNT}/etc/mkinitcpio.d/linux.preset")
+declare $(grep fallback_uki "${ROOT_MNT}/etc/mkinitcpio.d/linux.preset")
 declare default_uki_dirname=$(dirname "${default_uki//\"}")
 arch-chroot "${ROOT_MNT}" echo "default_uki: ${default_uki}"
+arch-chroot "${ROOT_MNT}" echo "fallback_uki: ${fallback_uki}"
 arch-chroot "${ROOT_MNT}" echo "default_uki_dirname: ${default_uki_dirname}"
 arch-chroot "${ROOT_MNT}" mkdir -p "${default_uki_dirname}"
 echo
@@ -329,7 +356,6 @@ systemctl --root "${ROOT_MNT}" enable systemd-resolved systemd-timesyncd Network
 systemctl --root "${ROOT_MNT}" mask systemd-networkd
 echo
 
-# regenerate the ramdisk, this will create our UKI
 # Generating UKI and installing Boot Loader...
 arch-chroot "${ROOT_MNT}" mkinitcpio --preset linux
 echo
@@ -340,152 +366,39 @@ echo
 arch-chroot "${ROOT_MNT}" rm /boot/initramfs-linux.img /boot/initramfs-linux-fallback.img
 echo
 
-# GRUB setup...
-# enable GRUB cryptodisk
-arch-chroot "${ROOT_MNT}" sed -i \
-    -e 's/^#GRUB_ENABLE_CRYPTODISK=y/GRUB_ENABLE_CRYPTODISK=y/g' \
-    /etc/default/grub
-# Move grub/ from /efi"
-arch-chroot "${ROOT_MNT}" ls -lah /efi
-# remove grub from /efi
-arch-chroot "${ROOT_MNT}" rm -rf /efi/grub
-# check the arch boot-loader folder is missing from /efi/EFI
-arch-chroot "${ROOT_MNT}" ls -lah /efi/EFI
-# create grub
-# NOTE: `peimage` module's been removed because it causes grub-install error
-declare GRUB_MODULES="
-	all_video
-	boot
-	btrfs
-	cat
-	chain
-	configfile
-	echo
-	efifwsetup
-	efinet
-	ext2
-	fat
-	font
-	gettext
-	gfxmenu
-	gfxterm
-	gfxterm_background
-	gzio
-	halt
-	help
-	hfsplus
-	iso9660
-	jpeg
-	keystatus
-	loadenv
-	loopback
-	linux
-	ls
-	lsefi
-	lsefimmap
-	lsefisystab
-	lssal
-	memdisk
-	minicmd
-	normal
-	ntfs
-	part_apple
-	part_msdos
-	part_gpt
-	password_pbkdf2
-	png
-	probe
-	reboot
-	regexp
-	search
-	search_fs_uuid
-	search_fs_file
-	search_label
-	serial
-	sleep
-	smbios
-	squash4
-	test
-	tpm
-	true
-	video
-	xfs
-	zfs
-	zfscrypt
-	zfsinfo
-	cpuid
-	play
-	cryptodisk
-	gcry_arcfour
-	gcry_blowfish
-	gcry_camellia
-	gcry_cast5
-	gcry_crc
-	gcry_des
-	gcry_dsa
-	gcry_idea
-	gcry_md4
-	gcry_md5
-	gcry_rfc2268
-	gcry_rijndael
-	gcry_rmd160
-	gcry_rsa
-	gcry_seed
-	gcry_serpent
-	gcry_sha1
-	gcry_sha256
-	gcry_sha512
-	gcry_tiger
-	gcry_twofish
-	gcry_whirlpool
-	luks
-	lvm
-	mdraid09
-	mdraid1x
-	raid5rec
-	raid6rec
-	"
-#declare GRUB_MODULES="
-#    gcry_sha256
-#    part_gpt
-#    part_msdos
-#    password_pbkdf2
-#    tpm
-#    "
-arch-chroot "${ROOT_MNT}" grub-install --target=x86_64-efi --efi-directory=/efi --boot-directory=/boot --bootloader-id=Linux --modules="${GRUB_MODULES}"
-# check the arch boot-loader folder is now present in /efi/EFI
-arch-chroot "${ROOT_MNT}" ls -lah /efi/EFI
-# check the grubx64.efi boot-loader's been created
-arch-chroot "${ROOT_MNT}" ls -lah /efi/EFI/Linux
-# check the grub/ folder is now present in /boot
-arch-chroot "${ROOT_MNT}" ls -lah /boot
-# check /boot/grub contains fonts/, grub.cfg, grubenv, locale/, themes/, x86_64-efi/
-arch-chroot "${ROOT_MNT}" ls -lah /boot/grub
+# systemd-boot setup...
+mkdir -p "${ROOT_MNT}/efi/loader"
+cat <<EOF > "${ROOT_MNT}/efi/loader/loader.conf"
+timeout 4
+console-mode max
+editor no
+EOF
 echo
-# create /boot/grub/grub.cfg
-arch-chroot "${ROOT_MNT}" grub-mkconfig --output /boot/grub/grub.cfg
+arch-chroot "${ROOT_MNT}" bootctl --esp-path=/efi install
+systemctl --root "${ROOT_MNT}" enable systemd-boot-update
 echo
-# TODO: chainload UKI image https://wiki.archlinux.org/title/GRUB#Chainloading_a_unified_kernel_image
-# ...
-echo
-arch-chroot "${ROOT_MNT}" ls -lah /boot/grub
+# cleaup /efi/EFI
+arch-chroot "${ROOT_MNT}" rm -fr /efi/EFI/systemd
+arch-chroot "${ROOT_MNT}" ls -lahR /efi/EFI
 echo
 # check the boot entry for Arch Linux has been created and its index is the first in the boot order
 arch-chroot "${ROOT_MNT}" efibootmgr
 echo
 
-# TODO: test once UKI + GRUB work properly
-#echo "Setting up Secure Boot..."
-#if [[ "$(efivar --print-decimal --name 8be4df61-93ca-11d2-aa0d-00e098032b8c-SetupMode)" -eq 1 ]]; then
-#    arch-chroot "${ROOT_MNT}" sbctl create-keys
-#    arch-chroot "${ROOT_MNT}" sbctl enroll-keys --microsoft
-#    arch-chroot "${ROOT_MNT}" sbctl sign --save --output /efi/EFI/Linux/grubx64.efi.signed /efi/EFI/Linux/grubx64.efi
-#    #arch-chroot "${ROOT_MNT}" sbctl sign --save /efi/EFI/Linux/grubx64.efi
-#    arch-chroot "${ROOT_MNT}" sbctl sign --save "${default_uki//\"}"
-#else
-#    echo "Not in Secure Boot setup mode. Skipping..."
-#fi
-#echo
+# Secure Boot...
+arch-chroot "${ROOT_MNT}" sbctl status
+if [[ "$(efivar --print-decimal --name 8be4df61-93ca-11d2-aa0d-00e098032b8c-SetupMode)" -eq 1 ]]; then
+    echo "Setting up Secure Boot..."
+    arch-chroot "${ROOT_MNT}" sbctl create-keys
+    arch-chroot "${ROOT_MNT}" sbctl enroll-keys --microsoft
+    arch-chroot "${ROOT_MNT}" sbctl sign --save --output "/usr/lib/systemd/boot/efi/systemd-bootx64.efi.signed" "/usr/lib/systemd/boot/efi/systemd-bootx64.efi"
+    arch-chroot "${ROOT_MNT}" sbctl sign --save "/efi/EFI/BOOT/BOOTX64.EFI"
+    arch-chroot "${ROOT_MNT}" sbctl sign --save "${default_uki//\"}"
+    arch-chroot "${ROOT_MNT}" sbctl sign --save "${fallback_uki//\"}"
+else
+    echo "Not in Secure Boot setup mode. Skipping..."
+fi
+echo
 
 # Enable services...
 arch-chroot "${ROOT_MNT}" systemctl enable bluetooth keyd
@@ -544,9 +457,9 @@ echo
 # ZRAM / Swap setup
 # TODO: consider for hibernation (suspend-to-disk)...
 
-echo "-----------------------------------"
-echo "- Install complete. Please reboot -"
-echo "-----------------------------------"
+#-----------------------------------
+#- Install complete. Please reboot -
+#-----------------------------------
 sleep 10
 sync
 echo
