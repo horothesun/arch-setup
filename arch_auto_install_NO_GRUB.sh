@@ -176,7 +176,7 @@ sgdisk -Z "${TARGET}"
 # ef00: EFI System
 # 8309: Linux LUKS
 sgdisk \
-    -n1:0:+800M -t1:ef00 -c1:EFI \
+    -n1:0:+600M -t1:ef00 -c1:EFI \
     -N2         -t2:8309 -c2:"${LINUX_PARTITION_LABEL}" \
     "${TARGET}"
 sleep 2
@@ -368,7 +368,6 @@ echo
 
 # systemd-boot setup...
 mkdir -p "${ROOT_MNT}/efi/loader"
-#default arch.conf
 cat <<EOF > "${ROOT_MNT}/efi/loader/loader.conf"
 timeout 4
 console-mode max
