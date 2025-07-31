@@ -30,6 +30,7 @@ CRYPT_PASSWORD="changeme"
 PACSTRAP_PACKAGES=(
     amd-ucode
     base
+    base-devel
     btrfs-progs
     cryptsetup
     dosfstools
@@ -413,10 +414,10 @@ echo
 
 # TODO: run arch-chroot as user...
 ## YAY install...
-#arch-chroot "${ROOT_MNT}" su - "${USER_NAME}" --command "git clone https://aur.archlinux.org/yay-git.git ; cd yay-git ; makepkg -si ; cd .. ; rm -rf yay-git"
+#arch-chroot "${ROOT_MNT}" su - "${USER_NAME}" --command "git clone https://aur.archlinux.org/yay-git.git ; cd yay-git ; makepkg --syncdeps --install --noconfirm ; cd .. ; rm -rf yay-git"
 #arch-chroot "${ROOT_MNT}" git clone "https://aur.archlinux.org/yay-git.git"
 #arch-chroot "${ROOT_MNT}" cd yay-git
-#arch-chroot "${ROOT_MNT}" makepkg -si
+#arch-chroot "${ROOT_MNT}" makepkg --syncdeps --install --noconfirm
 #arch-chroot "${ROOT_MNT}" cd ..
 #arch-chroot "${ROOT_MNT}" rm -rf yay-git
 #echo
