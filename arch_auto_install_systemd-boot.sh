@@ -425,6 +425,9 @@ echo
 # sudo systemctl --user enable --now hypridle.service
 echo
 
+# Optimize mirror list
+arch-chroot "${ROOT_MNT}" reflector --country GB --age 24 --protocol http,https --sort rate --save "/etc/pacman.d/mirrorlist"
+
 # YAY install...
 arch-chroot "${ROOT_MNT}" su - "${USER_NAME}" --command "git clone https://aur.archlinux.org/yay-git.git ; cd yay-git ; makepkg --syncdeps --install --noconfirm ; cd .. ; rm -rf yay-git"
 echo
