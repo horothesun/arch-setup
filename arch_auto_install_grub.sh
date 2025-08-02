@@ -542,7 +542,7 @@ echo
 #echo
 
 # lock the root account
-arch-chroot "${ROOT_MNT}" usermod -L root
+arch-chroot "${ROOT_MNT}" usermod --lock root
 echo
 
 # ZRAM / Swap setup

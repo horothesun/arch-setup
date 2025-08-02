@@ -419,7 +419,7 @@ fi
 echo
 
 # Enable services...
-arch-chroot "${ROOT_MNT}" systemctl enable bluetooth keyd
+systemctl --root "${ROOT_MNT}" enable bluetooth keyd
 echo
 # ⚠️⚠️⚠️ REMINDER: enable systemd user units once logged in as a user! ⚠️⚠️⚠️
 # sudo systemctl --user enable --now hypridle.service
@@ -436,48 +436,42 @@ echo
 
 
 ## ZSH set as default...
-#arch-chroot "${ROOT_MNT}" chsh --list-shells
-#arch-chroot "${ROOT_MNT}" chsh --shell=/usr/bin/zsh
-#echo
+arch-chroot "${ROOT_MNT}" chsh --list-shells
+arch-chroot "${ROOT_MNT}" chsh --shell=/usr/bin/zsh "${USER_NAME}"
+echo
 
-# TODO: snapper setup... 🔥🔥🔥
-## create snapper config for /
-#sudo snapper -c root create-config /
-#
-#sudo snapper list-configs
-#
-## allow current user to manage root snapshots
-#sudo snapper -c root set-config ALLOW_USERS="$USER" SYNC_ACL=yes
-#
-#ls -d /.snapshots/
-#
+# snapper setup...
+## create snapper config for / (`--no-dbus` used because in arch-chroot environment)
+arch-chroot "${ROOT_MNT}" snapper --no-dbus --config root create-config /
+arch-chroot "${ROOT_MNT}" snapper --no-dbus list-configs
+echo
+## allow the user to manage root snapshots
+arch-chroot "${ROOT_MNT}" snapper --no-dbus --config root set-config ALLOW_USERS="${USER_NAME}" SYNC_ACL=yes
+arch-chroot "${ROOT_MNT}" ls -lahd /.snapshots/
+
 ## APPEND '.snapshots' to /etc/updatedb.conf in the 'PRUNENAMES' space-separated list,
 ## to avoid slowing down the system when there're lots of snapshots
-#sudo vim /etc/updatedb.conf
-#
-## disable automatic timeline snapshots (temporarily, to avoid snapshots to be created while setting up snapper)
-#sudo systemctl status snapper-timeline.timer snapper-cleanup.timer
-#sudo systemctl disable --now snapper-timeline.timer snapper-cleanup.timer
-#sudo systemctl status snapper-timeline.timer snapper-cleanup.timer
-#
-## we shouldn't have any snapshots yet
-#snapper list
-#
-## enable OverlayFS to enable booting from grub into a read-only snapshot, as a live USB in a non-persistent state
-## (APPEND 'grub-btrfs-overlayfs' to the 'HOOKS' space-separated list)
-#sudo vim /etc/mkinitcpio.conf
-#
-## regenerate initramfs
-#sudo mkinitcpio -P
-#
-## enable the grub-btrfsd service to auto-update grub when new snapshots are created/deleted
-#sudo systemctl enable --now grub-btrfsd.service
-#sudo systemctl status grub-btrfsd.service
-#
-## test snapper on a pacman package install
-##
+sed -i -e '/^PRUNENAMES.*/c\PRUNENAMES = ".git .hg .svn .snapshots"' "${ROOT_MNT}/etc/updatedb.conf"
+cat "${ROOT_MNT}/etc/updatedb.conf"
+echo
 
-#
+# disable automatic timeline snapshots (temporarily, to avoid snapshots to be created while setting up snapper)
+systemctl --root "${ROOT_MNT}" disable snapper-timeline.timer snapper-cleanup.timer
+
+# we shouldn't have any snapshots yet
+arch-chroot "${ROOT_MNT}" snapper --no-dbus list
+
+# TODO: setup bootloader snapshots auto-updater 🔥🔥🔥
+# ...
+
+# create first snapshot
+arch-chroot "${ROOT_MNT}" snapper --no-dbus --config root create --description "*** BEGINNING OF TIME ***"
+arch-chroot "${ROOT_MNT}" snapper --no-dbus list
+
+# enable automatic timeline snapshots (JUST FOR root CONFIG)
+systemctl --root "${ROOT_MNT}" enable snapper-timeline.timer snapper-cleanup.timer
+
+
 ## SDDM theme...
 #arch-chroot "${ROOT_MNT}" cat > /etc/sddm.conf
 #[Theme]
@@ -499,7 +493,7 @@ echo
 #echo
 
 # lock the root account
-arch-chroot "${ROOT_MNT}" usermod -L root
+arch-chroot "${ROOT_MNT}" usermod --lock root
 echo
 
 # ZRAM / Swap setup
