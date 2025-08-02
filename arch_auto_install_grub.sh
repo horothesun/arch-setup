@@ -67,6 +67,7 @@ PACMAN_PACKAGES=(
     git
     github-cli
     git-filter-repo
+    htop
     jq
     kdeconnect
     keyd
