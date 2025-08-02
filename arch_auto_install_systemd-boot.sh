@@ -431,7 +431,8 @@ echo
 
 # YAY update and setup packages...
 arch-chroot "${ROOT_MNT}" su - "${USER_NAME}" --command "yay -Syu --noconfirm --norebuild --answerdiff=None --answeredit=None"
-arch-chroot "${ROOT_MNT}" su - "${USER_NAME}" --command "yay -S --noconfirm --norebuild --answerdiff=None --answeredit=None ${AUR_PACKAGES[@]}"
+export AUR_PACKAGES_SAME_LINE="${AUR_PACKAGES[@]}"
+arch-chroot "${ROOT_MNT}" su - "${USER_NAME}" --command "yay -S --noconfirm --norebuild --answerdiff=None --answeredit=None ${AUR_PACKAGES_SAME_LINE}"
 echo
 
 
@@ -472,25 +473,27 @@ arch-chroot "${ROOT_MNT}" snapper --no-dbus list
 systemctl --root "${ROOT_MNT}" enable snapper-timeline.timer snapper-cleanup.timer
 
 
-## SDDM theme...
-#arch-chroot "${ROOT_MNT}" cat > /etc/sddm.conf
-#[Theme]
-#Current=sddm-astronaut-theme
-#EOF
-#mkdir -p /etc/sddm.conf.d
-#arch-chroot "${ROOT_MNT}" cat > /etc/sddm.conf.d/virtualkbd.conf
-#[General]
-#InputMethod=qtvirtualkeyboard
-#EOF
-#arch-chroot "${ROOT_MNT}" sed -i "s/^ConfigFile=.*/ConfigFile=Themes\/purple_leaves.conf/g" /usr/share/sddm/themes/sddm-astronaut-theme/metadata.desktop
-#arch-chroot "${ROOT_MNT}" sed -i \
-#    -e '/^ScreenWidth=.*/c\ScreenWidth="2560"' \
-#    -e '/^ScreenHeight=.*/c\ScreenHeight="1440"' \
-#    -e '/^DateFormat=.*/c\DateFormat="ddd, dd MMMM"' \
-#    -e '/^TranslateVirtualKeyboardButtonOn=.*/c\TranslateVirtualKeyboardButtonOn=" "' \
-#    -e '/^TranslateVirtualKeyboardButtonOff=.*/c\TranslateVirtualKeyboardButtonOff=" "' \
-#    "${ROOT_MNT}/usr/share/sddm/themes/sddm-astronaut-theme/Themes/purple_leaves.conf"
-#echo
+# SDDM theme...
+cat <<EOF > "${ROOT_MNT}/etc/sddm.conf"
+[Theme]
+Current=sddm-astronaut-theme
+EOF
+mkdir -p "${ROOT_MNT}/etc/sddm.conf.d"
+cat <<EOF > "${ROOT_MNT}/etc/sddm.conf.d/virtualkbd.conf"
+[General]
+InputMethod=qtvirtualkeyboard
+EOF
+cat "${ROOT_MNT}/etc/sddm.conf.d/virtualkbd.conf"
+echo
+sed -i "s/^ConfigFile=.*/ConfigFile=Themes\/purple_leaves.conf/g" "${ROOT_MNT}/usr/share/sddm/themes/sddm-astronaut-theme/metadata.desktop"
+sed -i \
+    -e '/^ScreenWidth=.*/c\ScreenWidth="2560"' \
+    -e '/^ScreenHeight=.*/c\ScreenHeight="1440"' \
+    -e '/^DateFormat=.*/c\DateFormat="ddd, dd MMMM"' \
+    -e '/^TranslateVirtualKeyboardButtonOn=.*/c\TranslateVirtualKeyboardButtonOn=" "' \
+    -e '/^TranslateVirtualKeyboardButtonOff=.*/c\TranslateVirtualKeyboardButtonOff=" "' \
+    "${ROOT_MNT}/usr/share/sddm/themes/sddm-astronaut-theme/Themes/purple_leaves.conf"
+echo
 
 # lock the root account
 arch-chroot "${ROOT_MNT}" usermod --lock root
