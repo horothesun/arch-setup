@@ -303,9 +303,7 @@ sed -i -e '/^# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/s/^# //' "${ROOT_MNT}/etc/sudo
 # create /etc/kernel/cmdline (if the file doesn't exist, mkinitcpio will complain)
 export LINUX_LUKS_UUID=$( blkid --match-tag UUID --output value "/dev/disk/by-partlabel/${LINUX_PARTITION_LABEL}" )
 # TODO: full options: rd.luks.name=${LINUX_LUKS_UUID}=root root=/dev/mapper/root rootflags=subvol=@ rd.luks.options=discard rw mem_sleep_default=deep
-cat <<EOF > "${ROOT_MNT}/etc/kernel/cmdline"
-quiet rw rd.luks.name=${LINUX_LUKS_UUID}=root root=/dev/mapper/root rootflags=subvol=@
-EOF
+echo "quiet rw rd.luks.name=${LINUX_LUKS_UUID}=root root=/dev/mapper/root rootflags=subvol=@" > "${ROOT_MNT}/etc/kernel/cmdline"
 echo
 cat "${ROOT_MNT}/etc/kernel/cmdline"
 echo
@@ -389,7 +387,7 @@ echo
 # systemd-boot setup...
 mkdir -p "${ROOT_MNT}/efi/loader"
 cat <<EOF > "${ROOT_MNT}/efi/loader/loader.conf"
-timeout 4
+timeout 5
 console-mode max
 editor no
 EOF
