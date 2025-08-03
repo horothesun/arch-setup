@@ -66,6 +66,7 @@ PACMAN_PACKAGES=(
     github-cli
     git-filter-repo
     htop
+    intellij-idea-community-edition
     jq
     kdeconnect
     keyd
@@ -175,7 +176,6 @@ XFCE_PACKAGES=(
 #AUR_PACKAGES=(
 #    brave-bin
 #    informant
-#    intellij-idea-community-edition-bin
 #    oh-my-zsh-git
 #    sddm-astronaut-theme
 #)
