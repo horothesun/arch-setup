@@ -515,12 +515,11 @@ Set `brave://flags/#scrollable-tabstrip` to "Enabled" to actually disable the fe
 Install with
 
 ```bash
-sudo pacman -S intellij-idea-community-edition
+yay -S jetbrains-toolbox
 ```
 
-launch it (create its dot-files), close it, then enable Wayland ([blog](https://blog.jetbrains.com/platform/2024/07/wayland-support-preview-in-2024-2/))
-with
+then install IntelliJ Idea Community Edition via the JetBrains Toolbox. Set VM options with
 
-```bash
-echo "-Dawt.toolkit.name=WLToolkit" >> "${HOME}/.config/JetBrains/IdeaIC2025.1/idea64.vmoptions"
-```
+- `-Xmx16384m`
+- `-Dawt.toolkit.name=WLToolkit` (enable Wayland [blog](https://blog.jetbrains.com/platform/2024/07/wayland-support-preview-in-2024-2/)) and
+
