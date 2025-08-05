@@ -10,6 +10,9 @@ TIMEZONE="Europe/London"
 HOSTNAME="archlinux01"
 USER_NAME="user"
 
+read -s -p "Provide a password for disk encryption: " CRYPT_PASSWORD
+echo
+
 read -s -p "Provide a password for the user '${USER_NAME}': " USER_PASSWORD
 echo
 
@@ -20,11 +23,8 @@ if [[ "$UID" -ne 0 ]]; then
 fi
 
 ROOT_MNT="/mnt"
+EFI_PARTITION_SIZE="600M"
 LINUX_PARTITION_LABEL="LINUX"
-
-# to fully automate the setup, change BAD_IDEA=no to yes, and enter a cleartext password for the disk encryption
-BAD_IDEA="no"
-CRYPT_PASSWORD="changeme"
 
 # packages to pacstrap
 PACSTRAP_PACKAGES=(
@@ -196,8 +196,8 @@ sgdisk -Z "${TARGET}"
 # ef00: EFI System
 # 8309: Linux LUKS
 sgdisk \
-    -n1:0:+600M -t1:ef00 -c1:EFI \
-    -N2         -t2:8309 -c2:"${LINUX_PARTITION_LABEL}" \
+    -n1:0:"+${EFI_PARTITION_SIZE}" -t1:ef00 -c1:EFI \
+    -N2                            -t2:8309 -c2:"${LINUX_PARTITION_LABEL}" \
     "${TARGET}"
 sleep 2
 echo
@@ -207,14 +207,8 @@ sleep 2
 echo
 
 # Encrypting root partition...
-# if BAD_IDEA=yes, then pipe cryptpass and carry on, if not, prompt for it
-if [[ "${BAD_IDEA}" == "yes" ]]; then
-    echo -n "${CRYPT_PASSWORD}" | cryptsetup luksFormat --type luks2 "/dev/disk/by-partlabel/${LINUX_PARTITION_LABEL}" -
-    echo -n "${CRYPT_PASSWORD}" | cryptsetup luksOpen "/dev/disk/by-partlabel/${LINUX_PARTITION_LABEL}" root -
-else
-    cryptsetup luksFormat --type luks2 "/dev/disk/by-partlabel/${LINUX_PARTITION_LABEL}"
-    cryptsetup luksOpen "/dev/disk/by-partlabel/${LINUX_PARTITION_LABEL}" root
-fi
+echo -n "${CRYPT_PASSWORD}" | cryptsetup luksFormat --type luks2 "/dev/disk/by-partlabel/${LINUX_PARTITION_LABEL}" -
+echo -n "${CRYPT_PASSWORD}" | cryptsetup luksOpen "/dev/disk/by-partlabel/${LINUX_PARTITION_LABEL}" root -
 echo
 
 # Making the File Systems...
