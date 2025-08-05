@@ -299,7 +299,7 @@ echo
 
 # Configuring for first boot...
 # add the local user
-arch-chroot "${ROOT_MNT}" useradd -G wheel -m -p "${USER_PASSWORD_HASH}" "${USER_NAME}"
+arch-chroot "${ROOT_MNT}" useradd -G wheel -m -p '$USER_PASSWORD_HASH' '$USER_NAME'
 # uncomment the wheel group in the sudoers file
 sed -i -e '/^# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/s/^# //' "${ROOT_MNT}/etc/sudoers"
 # create /etc/kernel/cmdline (if the file doesn't exist, mkinitcpio will complain)
