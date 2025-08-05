@@ -290,10 +290,10 @@ arch-chroot "${ROOT_MNT}" locale-gen
 echo
 
 # Configuring for first boot...
-# add the local user
-# install 'whois' package to get the mkpasswd tool
+# install the 'whois' package to get the mkpasswd tool
 pacman -Sy whois --noconfirm --quiet
 USER_PASSWORD_HASH=$( mkpasswd --method=sha-512 "${USER_PASSWORD}" )
+# add the local user
 arch-chroot "${ROOT_MNT}" useradd -G wheel -m -p "${USER_PASSWORD_HASH}" "${USER_NAME}"
 # uncomment the wheel group in the sudoers file
 sed -i -e '/^# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/s/^# //' "${ROOT_MNT}/etc/sudoers"
