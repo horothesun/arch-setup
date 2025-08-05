@@ -19,7 +19,7 @@ fi
 
 # install 'whois' package to get the mkpasswd tool
 pacman -Sy whois --noconfirm --quiet
-USER_PASSWORD_HASH=$( echo "${USER_PASSWORD}" | mkpasswd --method=sha-512 --stdin | sed 's/\$/\\$/g' )
+USER_PASSWORD_HASH=$( mkpasswd --method=sha-512 "password" | sed 's/\$/\\$/g' )
 
 ROOT_MNT="/mnt"
 LINUX_PARTITION_LABEL="LINUX"
