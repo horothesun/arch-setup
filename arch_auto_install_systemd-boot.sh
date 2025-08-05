@@ -17,10 +17,6 @@ if [[ "$UID" -ne 0 ]]; then
     exit 3
 fi
 
-# install 'whois' package to get the mkpasswd tool
-pacman -Sy whois --noconfirm --quiet
-#USER_PASSWORD_HASH=$( mkpasswd --method=sha-512 "${USER_PASSWORD}" | sed 's/\$/\\$/g' )
-
 ROOT_MNT="/mnt"
 LINUX_PARTITION_LABEL="LINUX"
 
@@ -299,7 +295,12 @@ echo
 
 # Configuring for first boot...
 # add the local user
-arch-chroot "${ROOT_MNT}" useradd -G wheel -m -p $( mkpasswd --method=sha-512 "${USER_PASSWORD}" | sed 's/\$/\\$/g' ) "${USER_NAME}"
+# install 'whois' package to get the mkpasswd tool
+#pacman -Sy whois --noconfirm --quiet
+#USER_PASSWORD_HASH=$( mkpasswd --method=sha-512 "${USER_PASSWORD}" | sed 's/\$/\\$/g' )
+#arch-chroot "${ROOT_MNT}" useradd -G wheel -m -p $( mkpasswd --method=sha-512 "${USER_PASSWORD}" | sed 's/\$/\\$/g' ) "${USER_NAME}"
+USER_PASSWORD_HASH=$( openssl passwd -1 "${USER_PASSWORD}" | sed 's/\$/\\$/g' )
+arch-chroot "${ROOT_MNT}" useradd -G wheel -m -p "${USER_PASSWORD_HASH}" "${USER_NAME}"
 # uncomment the wheel group in the sudoers file
 sed -i -e '/^# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/s/^# //' "${ROOT_MNT}/etc/sudoers"
 # create /etc/kernel/cmdline (if the file doesn't exist, mkinitcpio will complain)
