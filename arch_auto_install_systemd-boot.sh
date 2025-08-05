@@ -10,10 +10,8 @@ TIMEZONE="Europe/London"
 HOSTNAME="archlinux01"
 USER_NAME="user"
 
-
-read -s -p "Provide a password for the user '${USER_NAME}':" USER_PASSWORD
+read -s -p "Provide a password for the user '${USER_NAME}': " USER_PASSWORD
 echo
-
 
 # check if we're root
 if [[ "$UID" -ne 0 ]]; then
