@@ -9,6 +9,7 @@ KEYMAP="uk"
 TIMEZONE="Europe/London"
 HOSTNAME="archlinux01"
 USER_NAME="user"
+USER_PASSWORD="password"
 
 # check if we're root
 if [[ "$UID" -ne 0 ]]; then
@@ -16,9 +17,7 @@ if [[ "$UID" -ne 0 ]]; then
     exit 3
 fi
 
-# SHA512 hash of password. To generate, run 'mkpasswd -m sha-512' (install `whois` package), don't forget to prefix any $ symbols with \
-# the entry below is the hash of 'password'
-USER_PASSWORD="\$6\$/VBa6GuBiFiBmi6Q\$yNALrCViVtDDNjyGBsDG7IbnNR0Y/Tda5Uz8ToyxXXpw86XuCVAlhXlIvzy1M8O.DWFB6TRCia0hMuAJiXOZy/"
+USER_PASSWORD_HASH=$( echo "${USER_PASSWORD}" | mkpasswd --method=sha-512 --stdin | sed 's/\$/\\$/g' )
 ROOT_MNT="/mnt"
 LINUX_PARTITION_LABEL="LINUX"
 
@@ -66,7 +65,6 @@ PACMAN_PACKAGES=(
     github-cli
     git-filter-repo
     htop
-    intellij-idea-community-edition
     jq
     kdeconnect
     keyd
@@ -176,6 +174,7 @@ XFCE_PACKAGES=(
 #AUR_PACKAGES=(
 #    brave-bin
 #    informant
+#    jetbrains-toolbox
 #    oh-my-zsh-git
 #    sddm-astronaut-theme
 #)
@@ -297,7 +296,7 @@ echo
 
 # Configuring for first boot...
 # add the local user
-arch-chroot "${ROOT_MNT}" useradd -G wheel -m -p "${USER_PASSWORD}" "${USER_NAME}"
+arch-chroot "${ROOT_MNT}" useradd -G wheel -m -p "${USER_PASSWORD_HASH}" "${USER_NAME}"
 # uncomment the wheel group in the sudoers file
 sed -i -e '/^# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/s/^# //' "${ROOT_MNT}/etc/sudoers"
 # create /etc/kernel/cmdline (if the file doesn't exist, mkinitcpio will complain)
