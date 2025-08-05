@@ -1,19 +1,20 @@
 #!/bin/bash
+
 # uncomment to view debugging information
 set -xeuo pipefail
 
 # config options
 TARGET="/dev/sda"
+HOSTNAME="archlinux01"
+USER_NAME="user"
 LOCALE="en_GB.UTF-8"
 KEYMAP="uk"
 TIMEZONE="Europe/London"
-HOSTNAME="archlinux01"
-USER_NAME="user"
 
-read -s -p "Provide a password for disk encryption: " CRYPT_PASSWORD
+read -s -p "Provide the disk encryption password: " CRYPT_PASSWORD
 echo
 
-read -s -p "Provide a password for the user '${USER_NAME}': " USER_PASSWORD
+read -s -p "Provide the '${USER_NAME}' user's password: " USER_PASSWORD
 echo
 
 # check if we're root
