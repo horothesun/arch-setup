@@ -17,7 +17,10 @@ if [[ "$UID" -ne 0 ]]; then
     exit 3
 fi
 
+# install 'whois' package to get the mkpasswd tool
+pacman -Sy whois --noconfirm --quiet
 USER_PASSWORD_HASH=$( echo "${USER_PASSWORD}" | mkpasswd --method=sha-512 --stdin | sed 's/\$/\\$/g' )
+
 ROOT_MNT="/mnt"
 LINUX_PARTITION_LABEL="LINUX"
 
