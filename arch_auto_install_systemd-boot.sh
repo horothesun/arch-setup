@@ -10,12 +10,8 @@ USER_NAME="user"
 LOCALE="en_GB.UTF-8"
 KEYMAP="uk"
 TIMEZONE="Europe/London"
-
-read -s -p "Provide the disk encryption password: " CRYPT_PASSWORD
-echo
-
-read -s -p "Provide the '${USER_NAME}' user's password: " USER_PASSWORD
-echo
+EFI_PARTITION_SIZE="600M"
+LINUX_PARTITION_LABEL="LINUX"
 
 # check if we're root
 if [[ "$UID" -ne 0 ]]; then
@@ -23,9 +19,13 @@ if [[ "$UID" -ne 0 ]]; then
     exit 3
 fi
 
+read -s -p "Provide the disk encryption password: " CRYPT_PASSWORD
+echo
+
+read -s -p "Provide the \"${USER_NAME}\" user's password: " USER_PASSWORD
+echo
+
 ROOT_MNT="/mnt"
-EFI_PARTITION_SIZE="600M"
-LINUX_PARTITION_LABEL="LINUX"
 
 # packages to pacstrap
 PACSTRAP_PACKAGES=(
@@ -101,60 +101,28 @@ PACMAN_PACKAGES=(
     wtype
     zsh
 )
-# TODO: uncomment!!! 🔥🔥🔥
-#PACMAN_PACKAGES=(
-#    alacritty
-#    amdgpu_top
-#    bluez
-#    bluez-utils
-#    bluez-deprecated-tools
-#    fastfetch
-#    git
-#    jq
-#    keyd
-#    man-db
-#    man-pages
-#    mtools
-#    ncdu
-#    neovim
-#    openssh
-#    plocate
-#    reflector
-#    snapper
-#    snap-pac
-#    speedtest-cli
-#    tldr
-#    tree
-#)
 
 ### Desktop packages #####
-# TODO: uncomment!!! 🔥🔥🔥
-#HYPRLAND_PACKAGES=(
-#    dolphin
-#    hypridle
-#    hyprland
-#    hyprlock
-#    hyprshot
-#    hyprpolkitagent
-#    kitty
-#    kwalletmanager
-#    kwallet-pam
-#    polkit-kde-agent
-#    qt5-wayland
-#    qt6-wayland
-#    rofi-emoji
-#    rofi-wayland
-#    sddm
-#    swaync
-#    uwsm
-#    waybar
-#    xdg-desktop-portal-hyprland
-#)
 HYPRLAND_PACKAGES=(
+    dolphin
+    hypridle
     hyprland
+    hyprlock
+    hyprshot
+    hyprpolkitagent
     kitty
+    kwalletmanager
+    kwallet-pam
+    polkit-kde-agent
+    qt5-wayland
+    qt6-wayland
+    rofi-emoji
+    rofi-wayland
     sddm
+    swaync
     uwsm
+    waybar
+    xdg-desktop-portal-hyprland
 )
 PLASMA_PACKAGES=(
     plasma
@@ -172,16 +140,10 @@ XFCE_PACKAGES=(
     mousepad
 )
 
-# TODO: uncomment!!! 🔥🔥🔥
-#AUR_PACKAGES=(
-#    brave-bin
-#    informant
-#    jetbrains-toolbox
-#    oh-my-zsh-git
-#    sddm-astronaut-theme
-#)
 AUR_PACKAGES=(
+    brave-bin
     informant
+    jetbrains-toolbox
     oh-my-zsh-git
     sddm-astronaut-theme
 )
