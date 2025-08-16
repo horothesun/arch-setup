@@ -327,11 +327,14 @@ echo
 arch-chroot "${ROOT_MNT}" pacman -Sy "${HYPRLAND_PACKAGES[@]}" --noconfirm --quiet
 echo
 
-# enable the services we will need on start up
-# Enabling services...
-systemctl --root "${ROOT_MNT}" enable systemd-resolved systemd-timesyncd NetworkManager sddm
+# Enable services...
+systemctl --root "${ROOT_MNT}" enable bluetooth firewalld keyd NetworkManager sddm systemd-resolved systemd-timesyncd
+echo
 # mask systemd-networkd as we will use NetworkManager instead
 systemctl --root "${ROOT_MNT}" mask systemd-networkd
+echo
+# TODO: check if it's needed or we're spinning up hypridle on hyprland startup 🔥🔥🔥
+arch-chroot "${ROOT_MNT}" su - "${USER_NAME}" --command "sudo systemctl --user enable hypridle.service"
 echo
 
 # Generating UKI and installing Boot Loader...
@@ -376,13 +379,6 @@ if [[ "$(efivar --print-decimal --name 8be4df61-93ca-11d2-aa0d-00e098032b8c-Setu
 else
     echo "Not in Secure Boot setup mode. Skipping..."
 fi
-echo
-
-# Enable services...
-systemctl --root "${ROOT_MNT}" enable bluetooth keyd
-echo
-# ⚠️⚠️⚠️ REMINDER: enable systemd user units once logged in as a user! ⚠️⚠️⚠️
-# sudo systemctl --user enable --now hypridle.service
 echo
 
 # Optimize mirror list
