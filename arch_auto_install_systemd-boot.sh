@@ -61,7 +61,6 @@ PACMAN_PACKAGES=(
     cliphist
     dive
     fastfetch
-    firewalld
     fzf
     git
     github-cli
@@ -95,6 +94,7 @@ PACMAN_PACKAGES=(
     tree
     ttf-jetbrains-mono-nerd
     ttf-firacode-nerd
+    ufw
     yq
     wget
     wl-clipboard
@@ -328,13 +328,23 @@ arch-chroot "${ROOT_MNT}" pacman -Sy "${HYPRLAND_PACKAGES[@]}" --noconfirm --qui
 echo
 
 # Enable services...
-systemctl --root "${ROOT_MNT}" enable bluetooth firewalld keyd NetworkManager sddm systemd-resolved systemd-timesyncd
+systemctl --root "${ROOT_MNT}" enable bluetooth keyd NetworkManager sddm systemd-resolved systemd-timesyncd
 echo
 # mask systemd-networkd as we will use NetworkManager instead
 systemctl --root "${ROOT_MNT}" mask systemd-networkd
 echo
 # TODO: check if it's needed or we're spinning up hypridle on hyprland startup 🔥🔥🔥
 arch-chroot "${ROOT_MNT}" su - "${USER_NAME}" --command "sudo systemctl --user enable hypridle.service"
+echo
+
+# Firewall configuration...
+systemctl --root "${ROOT_MNT}" enable ufw
+arch-chroot "${ROOT_MNT}" ufw enable
+arch-chroot "${ROOT_MNT}" ufw default deny incoming
+arch-chroot "${ROOT_MNT}" ufw default allow outgoing
+arch-chroot "${ROOT_MNT}" ufw limit SSH
+arch-chroot "${ROOT_MNT}" ufw allow Transmission
+arch-chroot "${ROOT_MNT}" ufw status verbose
 echo
 
 # Generating UKI and installing Boot Loader...
