@@ -339,7 +339,7 @@ echo
 
 # Firewall configuration...
 systemctl --root "${ROOT_MNT}" enable ufw
-arch-chroot "${ROOT_MNT}" ufw enable
+#arch-chroot "${ROOT_MNT}" ufw enable
 arch-chroot "${ROOT_MNT}" ufw default deny incoming
 arch-chroot "${ROOT_MNT}" ufw default allow outgoing
 arch-chroot "${ROOT_MNT}" ufw limit SSH
