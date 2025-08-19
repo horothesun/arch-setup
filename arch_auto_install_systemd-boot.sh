@@ -338,14 +338,15 @@ arch-chroot "${ROOT_MNT}" su - "${USER_NAME}" --command "sudo systemctl --user e
 echo
 
 # Firewall configuration...
-systemctl --root "${ROOT_MNT}" enable ufw
+# TODO: fix 🔥🔥🔥
+#systemctl --root "${ROOT_MNT}" enable ufw
 #arch-chroot "${ROOT_MNT}" ufw enable
-arch-chroot "${ROOT_MNT}" ufw default deny incoming
-arch-chroot "${ROOT_MNT}" ufw default allow outgoing
-arch-chroot "${ROOT_MNT}" ufw limit SSH
-arch-chroot "${ROOT_MNT}" ufw allow Transmission
-arch-chroot "${ROOT_MNT}" ufw status verbose
-echo
+#arch-chroot "${ROOT_MNT}" ufw default deny incoming
+#arch-chroot "${ROOT_MNT}" ufw default allow outgoing
+#arch-chroot "${ROOT_MNT}" ufw limit SSH
+#arch-chroot "${ROOT_MNT}" ufw allow Transmission
+#arch-chroot "${ROOT_MNT}" ufw status verbose
+#echo
 
 # Generating UKI and installing Boot Loader...
 arch-chroot "${ROOT_MNT}" mkinitcpio --preset linux
