@@ -339,16 +339,16 @@ echo
 
 # Firewall configuration...
 # TODO: fix 🔥🔥🔥
-arch-chroot "${ROOT_MNT}" /bin/bash -c "
-    ufw default deny incoming &&
-    ufw default allow outgoing &&
-    ufw limit ssh &&
-    ufw allow Transmission
-"
-systemctl --root "${ROOT_MNT}" enable ufw
-echo
-echo "⚠️⚠️⚠️ TODO: After rebooting, run: ufw --force enable && ufw status verbose"
-echo
+#arch-chroot "${ROOT_MNT}" /bin/bash -c "
+#    ufw default deny incoming &&
+#    ufw default allow outgoing &&
+#    ufw limit SSH &&
+#    ufw allow Transmission
+#"
+#systemctl --root "${ROOT_MNT}" enable ufw
+#echo
+#echo "⚠️⚠️⚠️ TODO: After rebooting, run: ufw --force enable && ufw status verbose"
+#echo
 
 # Generating UKI and installing Boot Loader...
 arch-chroot "${ROOT_MNT}" mkinitcpio --preset linux
