@@ -104,7 +104,7 @@ PACMAN_PACKAGES=(
     zsh
 )
 
-### Desktop packages #####
+### Desktop packages
 HYPRLAND_PACKAGES=(
     dolphin
     hypridle
@@ -144,10 +144,13 @@ XFCE_PACKAGES=(
 
 AUR_PACKAGES=(
     brave-bin
+    btrfs-assistant
     informant
     jetbrains-toolbox
     oh-my-zsh-git
+    scala-cli
     sddm-astronaut-theme
+    terraform-ls
 )
 
 # set locale, timezone, NTP
