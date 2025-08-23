@@ -398,6 +398,12 @@ echo
 arch-chroot "${ROOT_MNT}" reflector --country GB --age 24 --protocol http,https --sort rate --save "/etc/pacman.d/mirrorlist"
 echo
 
+# Enable parallel compilation...
+MAKE_PARALLEL_JOBS_NUMBER=$( echo $((0.75 * $(grep '^processor' /proc/cpuinfo | sort -u | wc -l))) | cut -f1 -d"." )
+sed -i -e '/^#MAKEFLAGS=.*/c\MAKEFLAGS="-j'"${MAKE_PARALLEL_JOBS_NUMBER}"'"' "${ROOT_MNT}/etc/makepkg.conf"
+cat "${ROOT_MNT}/etc/makepkg.conf" | grep "MAKEFLAGS="
+echo
+
 # YAY install...
 arch-chroot "${ROOT_MNT}" su - "${USER_NAME}" --command "git clone https://aur.archlinux.org/yay-git.git ; cd yay-git ; makepkg --syncdeps --install --noconfirm ; cd .. ; rm -rf yay-git"
 echo
