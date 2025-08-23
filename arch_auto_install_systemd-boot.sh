@@ -53,6 +53,7 @@ PACMAN_PACKAGES=(
     bash-completion
     bash-language-server
     bat
+    bc
     bluez
     bluez-utils
     bluez-deprecated-tools
@@ -227,7 +228,8 @@ echo
 
 # update pacman mirrors and then pacstrap base install
 # Pacstrapping...
-reflector --country GB --age 24 --protocol http,https --sort rate --save "/etc/pacman.d/mirrorlist"
+# TODO: uncomment!!! 🔥🔥🔥
+#reflector --country GB --age 24 --protocol http,https --sort rate --save "/etc/pacman.d/mirrorlist"
 pacstrap -K "${ROOT_MNT}" "${PACSTRAP_PACKAGES[@]}"
 echo
 
@@ -396,11 +398,13 @@ fi
 echo
 
 # Optimize mirror list
-arch-chroot "${ROOT_MNT}" reflector --country GB --age 24 --protocol http,https --sort rate --save "/etc/pacman.d/mirrorlist"
-echo
+# TODO: uncomment!!! 🔥🔥🔥
+#arch-chroot "${ROOT_MNT}" reflector --country GB --age 24 --protocol http,https --sort rate --save "/etc/pacman.d/mirrorlist"
+#echo
 
 # Enable parallel compilation...
-MAKE_PARALLEL_JOBS_NUMBER=$( echo $((${MAKE_PARALLEL_JOBS_LOGICAL_CORES_PERCENTAGE} * $(grep '^processor' /proc/cpuinfo | sort -u | wc -l))) | cut -f1 -d"." )
+LOGICAL_CORES=$( grep '^processor' /proc/cpuinfo | sort -u | wc -l )
+MAKE_PARALLEL_JOBS_NUMBER=$( echo "(${MAKE_PARALLEL_JOBS_LOGICAL_CORES_PERCENTAGE} * ${LOGICAL_CORES}) / 1" | bc )
 sed -i -e '/^#MAKEFLAGS=.*/c\MAKEFLAGS="-j'"${MAKE_PARALLEL_JOBS_NUMBER}"'"' "${ROOT_MNT}/etc/makepkg.conf"
 cat "${ROOT_MNT}/etc/makepkg.conf" | grep "MAKEFLAGS="
 echo
