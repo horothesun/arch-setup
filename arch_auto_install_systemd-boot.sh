@@ -12,6 +12,7 @@ KEYMAP="uk"
 TIMEZONE="Europe/London"
 EFI_PARTITION_SIZE="600M"
 LINUX_PARTITION_LABEL="LINUX"
+MAKE_PARALLEL_JOBS_LOGICAL_CORES_PERCENTAGE="0.95"
 
 # check if we're root
 if [[ "$UID" -ne 0 ]]; then
@@ -399,7 +400,7 @@ arch-chroot "${ROOT_MNT}" reflector --country GB --age 24 --protocol http,https 
 echo
 
 # Enable parallel compilation...
-MAKE_PARALLEL_JOBS_NUMBER=$( echo $((0.75 * $(grep '^processor' /proc/cpuinfo | sort -u | wc -l))) | cut -f1 -d"." )
+MAKE_PARALLEL_JOBS_NUMBER=$( echo $((${MAKE_PARALLEL_JOBS_LOGICAL_CORES_PERCENTAGE} * $(grep '^processor' /proc/cpuinfo | sort -u | wc -l))) | cut -f1 -d"." )
 sed -i -e '/^#MAKEFLAGS=.*/c\MAKEFLAGS="-j'"${MAKE_PARALLEL_JOBS_NUMBER}"'"' "${ROOT_MNT}/etc/makepkg.conf"
 cat "${ROOT_MNT}/etc/makepkg.conf" | grep "MAKEFLAGS="
 echo
