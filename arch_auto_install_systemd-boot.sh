@@ -386,7 +386,7 @@ echo
 #echo "⚠️⚠️⚠️ TODO: After rebooting, run: ufw --force enable && ufw status verbose"
 #echo
 
-# Generating UKI and installing Boot Loader...
+# Generating UKIs and installing Boot Loader...
 arch-chroot "${ROOT_MNT}" mkinitcpio --preset linux
 echo
 echo "UKI images in ${default_uki_dirname}"
@@ -394,6 +394,14 @@ arch-chroot "${ROOT_MNT}" ls -lah "${default_uki_dirname}"
 echo
 # Remove any leftover initramfs-*.img images...
 arch-chroot "${ROOT_MNT}" rm /boot/initramfs-linux.img /boot/initramfs-linux-fallback.img
+echo
+arch-chroot "${ROOT_MNT}" mkinitcpio --preset linux-lts
+echo
+echo "UKI images in ${default_lts_uki_dirname}"
+arch-chroot "${ROOT_MNT}" ls -lah "${default_lts_uki_dirname}"
+echo
+# Remove any leftover initramfs-*.img images...
+arch-chroot "${ROOT_MNT}" rm /boot/initramfs-linux-lts.img /boot/initramfs-linux-lts-fallback.img
 echo
 
 # systemd-boot setup...
@@ -425,6 +433,8 @@ if [[ "$(efivar --print-decimal --name 8be4df61-93ca-11d2-aa0d-00e098032b8c-Setu
     arch-chroot "${ROOT_MNT}" sbctl sign --save "/efi/EFI/BOOT/BOOTX64.EFI"
     arch-chroot "${ROOT_MNT}" sbctl sign --save "${default_uki//\"}"
     arch-chroot "${ROOT_MNT}" sbctl sign --save "${fallback_uki//\"}"
+    arch-chroot "${ROOT_MNT}" sbctl sign --save "${default_lts_uki//\"}"
+    arch-chroot "${ROOT_MNT}" sbctl sign --save "${fallback_lts_uki//\"}"
 else
     echo "Not in Secure Boot setup mode. Skipping..."
 fi
