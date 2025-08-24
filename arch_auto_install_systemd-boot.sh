@@ -39,6 +39,7 @@ PACSTRAP_PACKAGES=(
     efibootmgr
     linux
     linux-firmware
+    linux-lts
     networkmanager
     sbctl
     sudo
@@ -283,7 +284,7 @@ sed -i \
     -e '/^FILES=(.*/c\FILES=()' \
     -e '/^HOOKS=(.*/c\HOOKS=(base systemd autodetect microcode modconf kms keyboard sd-vconsole sd-encrypt block filesystems fsck)' \
     "${ROOT_MNT}/etc/mkinitcpio.conf"
-# change the preset file to generate a Unified Kernel Image instead of an initram disk + kernel
+# change the preset files to generate a Unified Kernel Images instead of an initram disk + kernel
 cat <<EOF > "${ROOT_MNT}/etc/mkinitcpio.d/linux.preset"
 # mkinitcpio preset file for the 'linux' package
 
@@ -303,8 +304,27 @@ fallback_uki="/efi/EFI/Linux/arch-linux-fallback.efi"
 fallback_options="-S autodetect"
 EOF
 echo
+cat <<EOF > "${ROOT_MNT}/etc/mkinitcpio.d/linux-lts.preset"
+# mkinitcpio preset file for the 'linux-lts' package
 
-# read the UKI setting and create the folder structure otherwise mkinitcpio will crash
+#ALL_config="/etc/mkinitcpio.conf"
+ALL_kver="/boot/vmlinuz-linux-lts"
+
+PRESETS=('default' 'fallback')
+
+#default_config="/etc/mkinitcpio.conf"
+#default_image="/boot/initramfs-linux-lts.img"
+default_uki="/efi/EFI/Linux/arch-linux-lts.efi"
+#default_options="--splash /usr/share/systemd/bootctl/splash-arch.bmp"
+
+#fallback_config="/etc/mkinitcpio.conf"
+#fallback_image="/boot/initramfs-linux-lts-fallback.img"
+fallback_uki="/efi/EFI/Linux/arch-linux-lts-fallback.efi"
+fallback_options="-S autodetect"
+EOF
+echo
+
+# read the linux UKI setting and create the folder structure otherwise mkinitcpio will crash
 declare $(grep default_uki "${ROOT_MNT}/etc/mkinitcpio.d/linux.preset")
 declare $(grep fallback_uki "${ROOT_MNT}/etc/mkinitcpio.d/linux.preset")
 declare default_uki_dirname=$(dirname "${default_uki//\"}")
@@ -312,6 +332,16 @@ arch-chroot "${ROOT_MNT}" echo "default_uki: ${default_uki}"
 arch-chroot "${ROOT_MNT}" echo "fallback_uki: ${fallback_uki}"
 arch-chroot "${ROOT_MNT}" echo "default_uki_dirname: ${default_uki_dirname}"
 arch-chroot "${ROOT_MNT}" mkdir -p "${default_uki_dirname}"
+echo
+
+# read the linux-lts UKI setting and create the folder structure otherwise mkinitcpio will crash
+declare $(grep default_uki "${ROOT_MNT}/etc/mkinitcpio.d/linux-lts.preset" | sed 's/default_uki=/default_lts_uki=/g')
+declare $(grep fallback_uki "${ROOT_MNT}/etc/mkinitcpio.d/linux-lts.preset" | sed 's/fallback_uki=/fallback_lts_uki=/g')
+declare default_lts_uki_dirname=$(dirname "${default_lts_uki//\"}")
+arch-chroot "${ROOT_MNT}" echo "default_lts_uki: ${default_lts_uki}"
+arch-chroot "${ROOT_MNT}" echo "fallback_lts_uki: ${fallback_lts_uki}"
+arch-chroot "${ROOT_MNT}" echo "default_lts_uki_dirname: ${default_lts_uki_dirname}"
+arch-chroot "${ROOT_MNT}" mkdir -p "${default_lts_uki_dirname}"
 echo
 
 # Customize pacman.conf...
