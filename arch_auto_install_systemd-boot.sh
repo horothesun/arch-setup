@@ -46,7 +46,7 @@ PACSTRAP_PACKAGES=(
     util-linux
 )
 
-PACMAN_PACKAGES=(
+PACMAN_PACKAGES_ALL=(
     alacritty
     alsa-utils
     amdgpu_top
@@ -92,6 +92,7 @@ PACMAN_PACKAGES=(
     speedtest-cli
     starship
     stow
+    telegram-desktop
     tldr
     translate-shell
     tree
@@ -104,9 +105,40 @@ PACMAN_PACKAGES=(
     wtype
     zsh
 )
+PACMAN_PACKAGES=(
+    alsa-utils
+    bash-completion
+    bluez
+    bluez-utils
+    bluez-deprecated-tools
+    btop
+    fastfetch
+    git
+    htop
+    jq
+    keyd
+    man-db
+    man-pages
+    mtools
+    ncdu
+    neovim
+    noto-fonts-emoji
+    openssh
+    plocate
+    reflector
+    snapper
+    snap-pac
+    stow
+    tree
+    ttf-jetbrains-mono-nerd
+    ttf-firacode-nerd
+    ufw
+    wget
+    zsh
+)
 
 ### Desktop packages
-HYPRLAND_PACKAGES=(
+HYPRLAND_PACKAGES_ALL=(
     dolphin
     hypridle
     hyprland
@@ -127,6 +159,23 @@ HYPRLAND_PACKAGES=(
     waybar
     xdg-desktop-portal-hyprland
 )
+HYPRLAND_PACKAGES=(
+    dolphin
+    hypridle
+    hyprland
+    hyprpolkitagent
+    kitty
+    kwalletmanager
+    kwallet-pam
+    polkit-kde-agent
+    qt5-wayland
+    qt6-wayland
+    rofi-wayland
+    sddm
+    swaync
+    uwsm
+    xdg-desktop-portal-hyprland
+)
 PLASMA_PACKAGES=(
     plasma
     sddm
@@ -143,7 +192,7 @@ XFCE_PACKAGES=(
     mousepad
 )
 
-AUR_PACKAGES=(
+AUR_PACKAGES_ALL=(
     brave-bin
     btrfs-assistant
     informant
@@ -152,6 +201,12 @@ AUR_PACKAGES=(
     scala-cli
     sddm-astronaut-theme
     terraform-ls
+)
+AUR_PACKAGES=(
+    brave-bin
+    btrfs-assistant
+    oh-my-zsh-git
+    sddm-astronaut-theme
 )
 
 # set locale, timezone, NTP
@@ -232,8 +287,7 @@ echo
 
 # update pacman mirrors and then pacstrap base install
 # Pacstrapping...
-# TODO: uncomment!!! 🔥🔥🔥
-#reflector --country GB --age 24 --protocol http,https --sort rate --save "/etc/pacman.d/mirrorlist"
+reflector --country GB --age 24 --protocol http,https --sort rate --save "/etc/pacman.d/mirrorlist"
 pacstrap -K "${ROOT_MNT}" "${PACSTRAP_PACKAGES[@]}"
 echo
 
@@ -441,9 +495,8 @@ fi
 echo
 
 # Optimize mirror list
-# TODO: uncomment!!! 🔥🔥🔥
-#arch-chroot "${ROOT_MNT}" reflector --country GB --age 24 --protocol http,https --sort rate --save "/etc/pacman.d/mirrorlist"
-#echo
+arch-chroot "${ROOT_MNT}" reflector --country GB --age 24 --protocol http,https --sort rate --save "/etc/pacman.d/mirrorlist"
+echo
 
 # Enable parallel compilation...
 LOGICAL_CORES=$( grep '^processor' /proc/cpuinfo | sort -u | wc -l )
