@@ -200,13 +200,14 @@ AUR_PACKAGES_ALL=(
     oh-my-zsh-git
     scala-cli
     sddm-astronaut-theme
+    snapper-rollback
     terraform-ls
 )
 AUR_PACKAGES=(
-    brave-bin
     btrfs-assistant
     oh-my-zsh-git
     sddm-astronaut-theme
+    snapper-rollback
 )
 
 # set locale, timezone, NTP
@@ -246,6 +247,7 @@ echo
 # Create BTRFS subvolumes...
 cd "${ROOT_MNT}"
 btrfs subvolume create "@"
+btrfs subvolume create "@snapshots"
 btrfs subvolume create "@home"
 btrfs subvolume create "@opt"
 btrfs subvolume create "@srv"
@@ -258,21 +260,29 @@ cd -
 umount "${ROOT_MNT}"
 echo
 # Mounting BTRFS subvolumes...
-function mountBtrfsSubvolume() {
+function mountBtrfsSubvolumeById() {
+    mkdir -p "$2"
+    mount --options "noatime,ssd,compress=zstd:1,space_cache=v2,discard=async,subvolid=$1" \
+        "/dev/mapper/root" \
+        "$2"
+}
+function mountBtrfsSubvolumeByName() {
     mkdir -p "$2"
     mount --options "noatime,ssd,compress=zstd:1,space_cache=v2,discard=async,subvol=$1" \
         "/dev/mapper/root" \
         "$2"
 }
-mountBtrfsSubvolume "@"       "${ROOT_MNT}/"
-mountBtrfsSubvolume "@home"   "${ROOT_MNT}/home"
-mountBtrfsSubvolume "@opt"    "${ROOT_MNT}/opt"
-mountBtrfsSubvolume "@srv"    "${ROOT_MNT}/srv"
-mountBtrfsSubvolume "@cache"  "${ROOT_MNT}/var/cache"
-mountBtrfsSubvolume "@images" "${ROOT_MNT}/var/lib/libvirt/images"
-mountBtrfsSubvolume "@log"    "${ROOT_MNT}/var/log"
-mountBtrfsSubvolume "@spool"  "${ROOT_MNT}/var/spool"
-mountBtrfsSubvolume "@tmp"    "${ROOT_MNT}/var/tmp"
+mountBtrfsSubvolumeById   "256"        "${ROOT_MNT}/"
+mountBtrfsSubvolumeById   "5"          "${ROOT_MNT}/btrfsroot"
+mountBtrfsSubvolumeByName "@snapshots" "${ROOT_MNT}/.snapshots"
+mountBtrfsSubvolumeByName "@home"      "${ROOT_MNT}/home"
+mountBtrfsSubvolumeByName "@opt"       "${ROOT_MNT}/opt"
+mountBtrfsSubvolumeByName "@srv"       "${ROOT_MNT}/srv"
+mountBtrfsSubvolumeByName "@cache"     "${ROOT_MNT}/var/cache"
+mountBtrfsSubvolumeByName "@images"    "${ROOT_MNT}/var/lib/libvirt/images"
+mountBtrfsSubvolumeByName "@log"       "${ROOT_MNT}/var/log"
+mountBtrfsSubvolumeByName "@spool"     "${ROOT_MNT}/var/spool"
+mountBtrfsSubvolumeByName "@tmp"       "${ROOT_MNT}/var/tmp"
 echo
 # Mounting EFI partition...
 mkdir -p "${ROOT_MNT}/efi"
@@ -320,14 +330,20 @@ USER_PASSWORD_HASH=$( mkpasswd --method=sha-512 "${USER_PASSWORD}" )
 # add the local user
 arch-chroot "${ROOT_MNT}" useradd -G wheel -m -p "${USER_PASSWORD_HASH}" "${USER_NAME}"
 # uncomment the wheel group in the sudoers file
-sed -i -e '/^# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/s/^# //' "${ROOT_MNT}/etc/sudoers"
+sed -i -e '/^# %wheel ALL=(ALL:ALL) ALL/s/^# //' "${ROOT_MNT}/etc/sudoers"
+#sed -i -e '/^# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/s/^# //' "${ROOT_MNT}/etc/sudoers"
+
 # create /etc/kernel/cmdline (if the file doesn't exist, mkinitcpio will complain)
 export LINUX_LUKS_UUID=$( blkid --match-tag UUID --output value "/dev/disk/by-partlabel/${LINUX_PARTITION_LABEL}" )
 # TODO: full options: rd.luks.name=${LINUX_LUKS_UUID}=root root=/dev/mapper/root rootflags=subvol=@ rd.luks.options=discard rw mem_sleep_default=deep
 echo "quiet rw rd.luks.name=${LINUX_LUKS_UUID}=root root=/dev/mapper/root rootflags=subvol=@" > "${ROOT_MNT}/etc/kernel/cmdline"
-echo
 cat "${ROOT_MNT}/etc/kernel/cmdline"
 echo
+# create /etc/kernel/cmdline-tty
+echo "quiet rw rd.luks.name=${LINUX_LUKS_UUID}=root root=/dev/mapper/root rootflags=subvol=@ systemd.unit=multi-user.target" > "${ROOT_MNT}/etc/kernel/cmdline-tty"
+cat "${ROOT_MNT}/etc/kernel/cmdline-tty"
+echo
+
 # update /etc/mkinitcpio.conf
 # - add the i2c-dev module for the ddcutil (external monitor brightness/contrast control)
 # - change the HOOKS in mkinitcpio.conf to use systemd hooks (udev -> systemd, keymap consolefont -> sd-vconsole sd-encrypt)
@@ -355,7 +371,7 @@ default_uki="/efi/EFI/Linux/arch-linux.efi"
 #fallback_config="/etc/mkinitcpio.conf"
 #fallback_image="/boot/initramfs-linux-fallback.img"
 fallback_uki="/efi/EFI/Linux/arch-linux-fallback.efi"
-fallback_options="-S autodetect"
+fallback_options="--skiphooks autodetect"
 EOF
 echo
 cat <<EOF > "${ROOT_MNT}/etc/mkinitcpio.d/linux-lts.preset"
@@ -374,7 +390,7 @@ default_uki="/efi/EFI/Linux/arch-linux-lts.efi"
 #fallback_config="/etc/mkinitcpio.conf"
 #fallback_image="/boot/initramfs-linux-lts-fallback.img"
 fallback_uki="/efi/EFI/Linux/arch-linux-lts-fallback.efi"
-fallback_options="-S autodetect"
+fallback_options="--skiphooks autodetect --cmdline /etc/kernel/cmdline-tty"
 EOF
 echo
 
@@ -522,10 +538,15 @@ arch-chroot "${ROOT_MNT}" chsh --shell=/usr/bin/zsh "${USER_NAME}"
 echo
 
 # snapper setup...
+## un-mount existing /.snapshots subvolume folder
+arch-chroot "${ROOT_MNT}" umount "/.snapshots"
+arch-chroot "${ROOT_MNT}" rm -r "/.snapshots"
 ## create snapper config for / (`--no-dbus` used because in arch-chroot environment)
 arch-chroot "${ROOT_MNT}" snapper --no-dbus --config root create-config /
 arch-chroot "${ROOT_MNT}" snapper --no-dbus list-configs
 echo
+## re-mount newly created /.snaphots subvolume folder
+arch-chroot "${ROOT_MNT}" mount --all
 ## allow the user to manage root snapshots
 arch-chroot "${ROOT_MNT}" snapper --no-dbus --config root set-config ALLOW_USERS="${USER_NAME}" SYNC_ACL=yes
 arch-chroot "${ROOT_MNT}" ls -lahd /.snapshots/
