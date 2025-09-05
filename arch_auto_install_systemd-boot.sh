@@ -296,19 +296,16 @@ echo
 blkid
 echo
 
-# Update pacman mirrors and then pacstrap base install
-reflector --country GB --age 24 --protocol http,https --sort rate --save "/etc/pacman.d/mirrorlist"
 # Customize /etc/pacman.conf...
 sed -i \
-    -e '/#\[multilib\]/,+1s/^#//' \
-    -e '/^#Color/s/^#//' \
-    -e '/^#CheckSpace/s/^#//' \
     -e '/^#ParallelDownloads.*/s/^#//' \
     -e '/^ParallelDownloads.*/c\ParallelDownloads = 10' \
     -e '/^#VerbosePkgLists/s/^#//' \
     "/etc/pacman.conf"
 echo
-# Pacstrapping (both /etc/pacman.conf and /etc/pacman.d/mirrorlist are going to be copied to pacman's config)...
+# Update pacman mirrors and then pacstrap base install
+reflector --country GB --age 24 --protocol http,https --sort rate --save "/etc/pacman.d/mirrorlist"
+# Pacstrapping (/etc/pacman.d/mirrorlist is going to be copied to pacman's config)...
 pacstrap -K "${ROOT_MNT}" "${PACSTRAP_PACKAGES[@]}"
 echo
 
@@ -422,6 +419,17 @@ arch-chroot "${ROOT_MNT}" echo "default_lts_uki: ${default_lts_uki}"
 arch-chroot "${ROOT_MNT}" echo "fallback_lts_uki: ${fallback_lts_uki}"
 arch-chroot "${ROOT_MNT}" echo "default_lts_uki_dirname: ${default_lts_uki_dirname}"
 arch-chroot "${ROOT_MNT}" mkdir -p "${default_lts_uki_dirname}"
+echo
+
+# Customize ${ROOT_MNT}/etc/pacman.conf...
+sed -i \
+    -e '/#\[multilib\]/,+1s/^#//' \
+    -e '/^#Color/s/^#//' \
+    -e '/^#CheckSpace/s/^#//' \
+    -e '/^#ParallelDownloads.*/s/^#//' \
+    -e '/^ParallelDownloads.*/c\ParallelDownloads = 10' \
+    -e '/^#VerbosePkgLists/s/^#//' \
+    "${ROOT_MNT}/etc/pacman.conf"
 echo
 
 # Installing base packages...
