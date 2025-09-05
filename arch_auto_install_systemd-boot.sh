@@ -10,7 +10,7 @@ USER_NAME="user"
 LOCALE="en_GB.UTF-8"
 KEYMAP="uk"
 TIMEZONE="Europe/London"
-EFI_PARTITION_SIZE="600M"
+EFI_PARTITION_SIZE="800M"
 LINUX_PARTITION_LABEL="LINUX"
 MAKE_PARALLEL_JOBS_LOGICAL_CORES_PERCENTAGE="0.95"
 
@@ -245,41 +245,42 @@ echo
 mount "/dev/mapper/root" "${ROOT_MNT}"
 echo
 # Create BTRFS subvolumes...
-cd "${ROOT_MNT}"
-btrfs subvolume create "@"
-btrfs subvolume create "@snapshots"
-btrfs subvolume create "@home"
-btrfs subvolume create "@opt"
-btrfs subvolume create "@srv"
-btrfs subvolume create "@cache"
-btrfs subvolume create "@images"
-btrfs subvolume create "@log"
-btrfs subvolume create "@spool"
-btrfs subvolume create "@tmp"
-cd -
+#cd "${ROOT_MNT}" # TODO: cleanup! 🔥🔥🔥
+btrfs subvolume create "${ROOT_MNT}/@"
+btrfs subvolume create "${ROOT_MNT}/@snapshots"
+btrfs subvolume create "${ROOT_MNT}/@home"
+btrfs subvolume create "${ROOT_MNT}/@opt"
+btrfs subvolume create "${ROOT_MNT}/@srv"
+btrfs subvolume create "${ROOT_MNT}/@cache"
+btrfs subvolume create "${ROOT_MNT}/@images"
+btrfs subvolume create "${ROOT_MNT}/@machines"
+#btrfs subvolume create "${ROOT_MNT}/@docker"
+btrfs subvolume create "${ROOT_MNT}/@log"
+btrfs subvolume create "${ROOT_MNT}/@spool"
+btrfs subvolume create "${ROOT_MNT}/@tmp"
+#cd - # TODO: cleanup! 🔥🔥🔥
 umount "${ROOT_MNT}"
 echo
 # Mounting BTRFS subvolumes...
+BTRFS_SUBVOLUME_MOUNT_OPTIONS="noatime,ssd,compress=zstd:1,space_cache=v2,discard=async"
 function mountBtrfsSubvolumeById() {
     mkdir -p "$2"
-    mount --options "noatime,ssd,compress=zstd:1,space_cache=v2,discard=async,subvolid=$1" \
-        "/dev/mapper/root" \
-        "$2"
+    mount --options "${BTRFS_SUBVOLUME_MOUNT_OPTIONS},subvolid=$1" "/dev/mapper/root" "$2"
 }
 function mountBtrfsSubvolumeByName() {
     mkdir -p "$2"
-    mount --options "noatime,ssd,compress=zstd:1,space_cache=v2,discard=async,subvol=$1" \
-        "/dev/mapper/root" \
-        "$2"
+    mount --options "${BTRFS_SUBVOLUME_MOUNT_OPTIONS},subvol=$1" "/dev/mapper/root" "$2"
 }
-mountBtrfsSubvolumeById   "256"        "${ROOT_MNT}/"
-mountBtrfsSubvolumeById   "5"          "${ROOT_MNT}/btrfsroot"
+mountBtrfsSubvolumeByName "@"          "${ROOT_MNT}/"
+mountBtrfsSubvolumeById   5            "${ROOT_MNT}/btrfsroot"
 mountBtrfsSubvolumeByName "@snapshots" "${ROOT_MNT}/.snapshots"
 mountBtrfsSubvolumeByName "@home"      "${ROOT_MNT}/home"
 mountBtrfsSubvolumeByName "@opt"       "${ROOT_MNT}/opt"
 mountBtrfsSubvolumeByName "@srv"       "${ROOT_MNT}/srv"
 mountBtrfsSubvolumeByName "@cache"     "${ROOT_MNT}/var/cache"
 mountBtrfsSubvolumeByName "@images"    "${ROOT_MNT}/var/lib/libvirt/images"
+mountBtrfsSubvolumeByName "@machines"  "${ROOT_MNT}/var/lib/machines"
+#mountBtrfsSubvolumeByName "@docker"    "${ROOT_MNT}/var/lib/docker"
 mountBtrfsSubvolumeByName "@log"       "${ROOT_MNT}/var/log"
 mountBtrfsSubvolumeByName "@spool"     "${ROOT_MNT}/var/spool"
 mountBtrfsSubvolumeByName "@tmp"       "${ROOT_MNT}/var/tmp"
@@ -295,9 +296,19 @@ echo
 blkid
 echo
 
-# update pacman mirrors and then pacstrap base install
-# Pacstrapping...
+# Update pacman mirrors and then pacstrap base install
 reflector --country GB --age 24 --protocol http,https --sort rate --save "/etc/pacman.d/mirrorlist"
+# Customize /etc/pacman.conf...
+sed -i \
+    -e '/#\[multilib\]/,+1s/^#//' \
+    -e '/^#Color/s/^#//' \
+    -e '/^#CheckSpace/s/^#//' \
+    -e '/^#ParallelDownloads.*/s/^#//' \
+    -e '/^ParallelDownloads.*/c\ParallelDownloads = 10' \
+    -e '/^#VerbosePkgLists/s/^#//' \
+    "/etc/pacman.conf"
+echo
+# Pacstrapping (both /etc/pacman.conf and /etc/pacman.d/mirrorlist are going to be copied to pacman's config)...
 pacstrap -K "${ROOT_MNT}" "${PACSTRAP_PACKAGES[@]}"
 echo
 
@@ -330,12 +341,11 @@ USER_PASSWORD_HASH=$( mkpasswd --method=sha-512 "${USER_PASSWORD}" )
 # add the local user
 arch-chroot "${ROOT_MNT}" useradd -G wheel -m -p "${USER_PASSWORD_HASH}" "${USER_NAME}"
 # uncomment the wheel group in the sudoers file
-sed -i -e '/^# %wheel ALL=(ALL:ALL) ALL/s/^# //' "${ROOT_MNT}/etc/sudoers"
-#sed -i -e '/^# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/s/^# //' "${ROOT_MNT}/etc/sudoers"
+sed -i -e '/^# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/s/^# //' "${ROOT_MNT}/etc/sudoers"
 
 # create /etc/kernel/cmdline (if the file doesn't exist, mkinitcpio will complain)
 export LINUX_LUKS_UUID=$( blkid --match-tag UUID --output value "/dev/disk/by-partlabel/${LINUX_PARTITION_LABEL}" )
-# TODO: full options: rd.luks.name=${LINUX_LUKS_UUID}=root root=/dev/mapper/root rootflags=subvol=@ rd.luks.options=discard rw mem_sleep_default=deep
+# full options: rd.luks.name=${LINUX_LUKS_UUID}=root root=/dev/mapper/root rootflags=subvol=@ rd.luks.options=discard rw mem_sleep_default=deep
 echo "quiet rw rd.luks.name=${LINUX_LUKS_UUID}=root root=/dev/mapper/root rootflags=subvol=@" > "${ROOT_MNT}/etc/kernel/cmdline"
 cat "${ROOT_MNT}/etc/kernel/cmdline"
 echo
@@ -412,17 +422,6 @@ arch-chroot "${ROOT_MNT}" echo "default_lts_uki: ${default_lts_uki}"
 arch-chroot "${ROOT_MNT}" echo "fallback_lts_uki: ${fallback_lts_uki}"
 arch-chroot "${ROOT_MNT}" echo "default_lts_uki_dirname: ${default_lts_uki_dirname}"
 arch-chroot "${ROOT_MNT}" mkdir -p "${default_lts_uki_dirname}"
-echo
-
-# Customize pacman.conf...
-sed -i \
-    -e '/#\[multilib\]/,+1s/^#//' \
-    -e '/^#Color/s/^#//' \
-    -e '/^#CheckSpace/s/^#//' \
-    -e '/^#ParallelDownloads.*/s/^#//' \
-    -e '/^ParallelDownloads.*/c\ParallelDownloads = 10' \
-    -e '/^#VerbosePkgLists/s/^#//' \
-    "${ROOT_MNT}/etc/pacman.conf"
 echo
 
 # Installing base packages...
@@ -510,10 +509,6 @@ else
 fi
 echo
 
-# Optimize mirror list
-arch-chroot "${ROOT_MNT}" reflector --country GB --age 24 --protocol http,https --sort rate --save "/etc/pacman.d/mirrorlist"
-echo
-
 # Enable parallel compilation...
 LOGICAL_CORES=$( grep '^processor' /proc/cpuinfo | sort -u | wc -l )
 MAKE_PARALLEL_JOBS_NUMBER=$( echo "(${MAKE_PARALLEL_JOBS_LOGICAL_CORES_PERCENTAGE} * ${LOGICAL_CORES}) / 1" | bc )
@@ -563,9 +558,6 @@ systemctl --root "${ROOT_MNT}" disable snapper-timeline.timer snapper-cleanup.ti
 # we shouldn't have any snapshots yet
 arch-chroot "${ROOT_MNT}" snapper --no-dbus list
 
-# TODO: setup bootloader snapshots auto-updater 🔥🔥🔥
-# ...
-
 # create first snapshot
 arch-chroot "${ROOT_MNT}" snapper --no-dbus --config root create --description "*** BEGINNING OF TIME ***"
 arch-chroot "${ROOT_MNT}" snapper --no-dbus list
@@ -575,6 +567,7 @@ systemctl --root "${ROOT_MNT}" enable snapper-timeline.timer snapper-cleanup.tim
 
 
 # SDDM theme...
+SDDM_THEME_CONF_FILE="purple_leaves.conf"
 cat <<EOF > "${ROOT_MNT}/etc/sddm.conf"
 [Theme]
 Current=sddm-astronaut-theme
@@ -586,22 +579,30 @@ InputMethod=qtvirtualkeyboard
 EOF
 cat "${ROOT_MNT}/etc/sddm.conf.d/virtualkbd.conf"
 echo
-sed -i "s/^ConfigFile=.*/ConfigFile=Themes\/purple_leaves.conf/g" "${ROOT_MNT}/usr/share/sddm/themes/sddm-astronaut-theme/metadata.desktop"
+sed -i \
+    "s/^ConfigFile=.*/ConfigFile=Themes\/"${SDDM_THEME_CONF_FILE}"/g" \
+    "${ROOT_MNT}/usr/share/sddm/themes/sddm-astronaut-theme/metadata.desktop"
 sed -i \
     -e '/^ScreenWidth=.*/c\ScreenWidth="2560"' \
     -e '/^ScreenHeight=.*/c\ScreenHeight="1440"' \
     -e '/^DateFormat=.*/c\DateFormat="ddd, dd MMMM"' \
     -e '/^TranslateVirtualKeyboardButtonOn=.*/c\TranslateVirtualKeyboardButtonOn=" "' \
     -e '/^TranslateVirtualKeyboardButtonOff=.*/c\TranslateVirtualKeyboardButtonOff=" "' \
-    "${ROOT_MNT}/usr/share/sddm/themes/sddm-astronaut-theme/Themes/purple_leaves.conf"
+    "${ROOT_MNT}/usr/share/sddm/themes/sddm-astronaut-theme/Themes/${SDDM_THEME_CONF_FILE}"
 echo
 
 # lock the root account
 arch-chroot "${ROOT_MNT}" usermod --lock root
 echo
 
-# ZRAM / Swap setup
-# TODO: consider for hibernation (suspend-to-disk)...
+# ZRAM / Swap setup...
+# TODO: consider for hibernation (suspend-to-disk)... 🔥🔥🔥
+
+# require password for users in the wheel group
+sed -i \
+    -e '/^# %wheel ALL=(ALL:ALL) ALL/s/^# //' \
+    -e '/^%wheel ALL=(ALL:ALL) NOPASSWD: ALL/s/^/# /' \
+    "${ROOT_MNT}/etc/sudoers"
 
 #-----------------------------------
 #- Install complete. Please reboot -
