@@ -611,6 +611,8 @@ sed -i \
     -e '/^# %wheel ALL=(ALL:ALL) ALL/s/^# //' \
     -e '/^%wheel ALL=(ALL:ALL) NOPASSWD: ALL/s/^/# /' \
     "${ROOT_MNT}/etc/sudoers"
+# disable sudo lecture message
+echo "Default        lecture = never" > "${ROOT_MNT}/etc/sudoers.d/privacy"
 
 #-----------------------------------
 #- Install complete. Please reboot -
