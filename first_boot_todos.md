@@ -76,3 +76,40 @@ stow --no-folding --verbose --target ~ vim
 stow --no-folding --verbose --target ~ waybar-<HOST_NAME>-<OS>
 stow --no-folding --verbose --target ~ zsh-<HOST_NAME>-<OS>
 ```
+
+## 🔒 GNU pass
+
+Follow the password store private notes.
+
+## Hypridle setup (TBD)
+
+...
+
+## KDE Wallet (required by Brave browser)
+
+Follow [this guide](https://wiki.archlinux.org/title/KDE_Wallet#Unlocking_KWallet_automatically_in_a_window_manager)
+to setup a default KDE Wallet named `kdewallet` with same password of your user and automatically unlocked at startup
+(currently defined in hyprland autostart).
+
+> TBC: it might be necessary to let Brave create its own KDE Wallet (named `Default keyring`) at first startup, then to remove it.
+
+## Brave browser
+
+Launch it, set `brave://flags/#ozone-platform-hint` to "Wayland" (to fix fractional scaling font issues) and restart.
+
+Set `brave://flags/#scrollable-tabstrip` to "Enabled" to actually disable the feature.
+
+## IntelliJ Idea IDE
+
+Install IntelliJ Idea Community Edition via the JetBrains Toolbox. Set VM options with
+
+- `-Xmx16384m`
+- `-Dawt.toolkit.name=WLToolkit` (enable Wayland [blog](https://blog.jetbrains.com/platform/2024/07/wayland-support-preview-in-2024-2/))
+
+## NeoVim
+
+Install the `vim-plug` plugin manager ([guide](https://github.com/junegunn/vim-plug#neovim)), then install `nvim` plugins with
+
+```bash
+nvim -c "PlugInstall|qa" ; nvim
+```

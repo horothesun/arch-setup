@@ -93,6 +93,8 @@ PACMAN_PACKAGES=(
     bluez
     bluez-utils
     bluez-deprecated-tools
+    browserpass
+    browserpass-chromium
     pavucontrol
     btop
     cmatrix
@@ -115,6 +117,7 @@ PACMAN_PACKAGES=(
     neovim
     noto-fonts-emoji
     openssh
+    pass
     pavucontrol
     plocate
     pipewire
