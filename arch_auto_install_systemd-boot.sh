@@ -33,7 +33,7 @@ echo
 ROOT_MNT="/mnt"
 
 # packages to pacstrap
-PACSTRAP_PACKAGES_SMALL=(
+PACSTRAP_PACKAGES=(
     amd-ucode
     base
     base-devel
@@ -50,6 +50,37 @@ PACSTRAP_PACKAGES_SMALL=(
     util-linux
 )
 
+#PACMAN_PACKAGES_SHORT=(
+#    alsa-utils
+#    bash-completion
+#    bluez
+#    bluez-utils
+#    bluez-deprecated-tools
+#    btop
+#    fastfetch
+#    git
+#    htop
+#    jq
+#    keyd
+#    man-db
+#    man-pages
+#    mtools
+#    ncdu
+#    neovim
+#    noto-fonts-emoji
+#    openssh
+#    plocate
+#    reflector
+#    snapper
+#    snap-pac
+#    stow
+#    tree
+#    ttf-jetbrains-mono-nerd
+#    ttf-firacode-nerd
+#    ufw
+#    wget
+#    zsh
+#)
 PACMAN_PACKAGES=(
     alacritty
     alsa-utils
@@ -110,37 +141,6 @@ PACMAN_PACKAGES=(
     wtype
     zsh
 )
-PACMAN_PACKAGES=(
-    alsa-utils
-    bash-completion
-    bluez
-    bluez-utils
-    bluez-deprecated-tools
-    btop
-    fastfetch
-    git
-    htop
-    jq
-    keyd
-    man-db
-    man-pages
-    mtools
-    ncdu
-    neovim
-    noto-fonts-emoji
-    openssh
-    plocate
-    reflector
-    snapper
-    snap-pac
-    stow
-    tree
-    ttf-jetbrains-mono-nerd
-    ttf-firacode-nerd
-    ufw
-    wget
-    zsh
-)
 
 ### Desktop packages
 HYPRLAND_PACKAGES=(
@@ -164,23 +164,7 @@ HYPRLAND_PACKAGES=(
     waybar
     xdg-desktop-portal-hyprland
 )
-HYPRLAND_PACKAGES_SMALL=(
-    dolphin
-    hypridle
-    hyprland
-    hyprpolkitagent
-    kitty
-    kwalletmanager
-    kwallet-pam
-    polkit-kde-agent
-    qt5-wayland
-    qt6-wayland
-    rofi
-    sddm
-    swaync
-    uwsm
-    xdg-desktop-portal-hyprland
-)
+
 PLASMA_PACKAGES=(
     plasma
     sddm
@@ -188,6 +172,7 @@ PLASMA_PACKAGES=(
     nm-connection-editor
     mousepad
 )
+
 XFCE_PACKAGES=(
     xfce4
     xfce4-terminal
@@ -197,6 +182,12 @@ XFCE_PACKAGES=(
     mousepad
 )
 
+#AUR_PACKAGES_SHORT=(
+#    btrfs-assistant
+#    oh-my-zsh-git
+#    sddm-astronaut-theme
+#    snapper-rollback
+#)
 AUR_PACKAGES=(
     brave-bin
     btrfs-assistant
@@ -207,12 +198,6 @@ AUR_PACKAGES=(
     sddm-astronaut-theme
     snapper-rollback
     terraform-ls
-)
-AUR_PACKAGES_SMALL=(
-    btrfs-assistant
-    oh-my-zsh-git
-    sddm-astronaut-theme
-    snapper-rollback
 )
 
 # set locale, timezone, NTP
@@ -299,14 +284,11 @@ echo
 
 # Customize /etc/pacman.conf...
 sed -i \
-    -e '/#\[core-testing\]/,+1s/^#//' \
     -e '/^#Color/s/^#//' \
     -e '/^#ParallelDownloads.*/s/^#//' \
     -e '/^ParallelDownloads.*/c\ParallelDownloads = 10' \
     -e '/^#VerbosePkgLists/s/^#//' \
     "/etc/pacman.conf"
-# enable core-testing packages in /etc/pacman.conf
-#sed -i -e '/#\[core-testing\]/,+1s/^#//' "/etc/pacman.conf"
 echo
 # Update pacman mirrors and then pacstrap base install
 reflector --country GB --age 24 --protocol http,https --sort rate --save "/etc/pacman.d/mirrorlist"
