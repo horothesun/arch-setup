@@ -142,7 +142,25 @@ PACMAN_PACKAGES=(
     zsh
 )
 
-### Desktop packages
+#AUR_PACKAGES_SHORT=(
+#    btrfs-assistant
+#    oh-my-zsh-git
+#    sddm-astronaut-theme
+#    snapper-rollback
+#)
+AUR_PACKAGES=(
+    brave-bin
+    btrfs-assistant
+    informant
+    jetbrains-toolbox
+    oh-my-zsh-git
+    scala-cli
+    sddm-astronaut-theme
+    snapper-rollback
+    terraform-ls
+)
+
+# Desktop packages
 HYPRLAND_PACKAGES=(
     dolphin
     hypridle
@@ -165,40 +183,24 @@ HYPRLAND_PACKAGES=(
     xdg-desktop-portal-hyprland
 )
 
-PLASMA_PACKAGES=(
-    plasma
-    sddm
-    kitty
-    nm-connection-editor
-    mousepad
-)
-
-XFCE_PACKAGES=(
-    xfce4
-    xfce4-terminal
-    xfce4-goodies
-    sddm
-    nm-connection-editor
-    mousepad
-)
-
-#AUR_PACKAGES_SHORT=(
-#    btrfs-assistant
-#    oh-my-zsh-git
-#    sddm-astronaut-theme
-#    snapper-rollback
+#PLASMA_PACKAGES=(
+#    plasma
+#    sddm
+#    kitty
+#    nm-connection-editor
+#    mousepad
 #)
-AUR_PACKAGES=(
-    brave-bin
-    btrfs-assistant
-    informant
-    jetbrains-toolbox
-    oh-my-zsh-git
-    scala-cli
-    sddm-astronaut-theme
-    snapper-rollback
-    terraform-ls
-)
+
+#XFCE_PACKAGES=(
+#    xfce4
+#    xfce4-terminal
+#    xfce4-goodies
+#    sddm
+#    nm-connection-editor
+#    mousepad
+#)
+
+### Start!
 
 # set locale, timezone, NTP
 loadkeys "${KEYMAP}"
