@@ -521,5 +521,4 @@ yay -S jetbrains-toolbox
 then install IntelliJ Idea Community Edition via the JetBrains Toolbox. Set VM options with
 
 - `-Xmx16384m`
-- `-Dawt.toolkit.name=WLToolkit` (enable Wayland [blog](https://blog.jetbrains.com/platform/2024/07/wayland-support-preview-in-2024-2/)) and
-
+- `-Dawt.toolkit.name=WLToolkit` (enable Wayland [blog](https://blog.jetbrains.com/platform/2024/07/wayland-support-preview-in-2024-2/))
