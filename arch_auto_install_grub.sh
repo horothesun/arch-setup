@@ -7,7 +7,7 @@ TARGET="/dev/sda"
 LOCALE="en_GB.UTF-8"
 KEYMAP="uk"
 TIMEZONE="Europe/London"
-HOSTNAME="archlinux01"
+HOST_NAME="archlinux01"
 USER_NAME="user"
 
 # check if we're root
@@ -247,7 +247,7 @@ systemd-firstboot \
     --locale="${LOCALE}" \
     --locale-messages="${LOCALE}" \
     --timezone="${TIMEZONE}" \
-    --hostname="${HOSTNAME}" \
+    --hostname="${HOST_NAME}" \
     --setup-machine-id \
     --welcome=false
 arch-chroot "${ROOT_MNT}" locale-gen

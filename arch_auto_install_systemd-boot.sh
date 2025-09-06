@@ -5,7 +5,7 @@ set -xeuo pipefail
 
 # config options
 TARGET="/dev/sda"
-HOSTNAME="archlinux01"
+HOST_NAME="archlinux01"
 USER_NAME="user"
 LOCALE="en_GB.UTF-8"
 KEYMAP="uk"
@@ -314,7 +314,7 @@ systemd-firstboot \
     --locale="${LOCALE}" \
     --locale-messages="${LOCALE}" \
     --timezone="${TIMEZONE}" \
-    --hostname="${HOSTNAME}" \
+    --hostname="${HOST_NAME}" \
     --setup-machine-id \
     --welcome=false
 arch-chroot "${ROOT_MNT}" locale-gen
