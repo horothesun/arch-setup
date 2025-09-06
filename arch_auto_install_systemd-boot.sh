@@ -20,6 +20,10 @@ if [[ "$UID" -ne 0 ]]; then
     exit 3
 fi
 
+echo
+lsblk
+echo
+
 read -s -p "Provide the disk encryption password: " CRYPT_PASSWORD
 echo
 
@@ -29,7 +33,7 @@ echo
 ROOT_MNT="/mnt"
 
 # packages to pacstrap
-PACSTRAP_PACKAGES=(
+PACSTRAP_PACKAGES_SMALL=(
     amd-ucode
     base
     base-devel
@@ -46,7 +50,7 @@ PACSTRAP_PACKAGES=(
     util-linux
 )
 
-PACMAN_PACKAGES_ALL=(
+PACMAN_PACKAGES=(
     alacritty
     alsa-utils
     amdgpu_top
@@ -139,7 +143,7 @@ PACMAN_PACKAGES=(
 )
 
 ### Desktop packages
-HYPRLAND_PACKAGES_ALL=(
+HYPRLAND_PACKAGES=(
     dolphin
     hypridle
     hyprland
@@ -160,7 +164,7 @@ HYPRLAND_PACKAGES_ALL=(
     waybar
     xdg-desktop-portal-hyprland
 )
-HYPRLAND_PACKAGES=(
+HYPRLAND_PACKAGES_SMALL=(
     dolphin
     hypridle
     hyprland
@@ -193,7 +197,7 @@ XFCE_PACKAGES=(
     mousepad
 )
 
-AUR_PACKAGES_ALL=(
+AUR_PACKAGES=(
     brave-bin
     btrfs-assistant
     informant
@@ -204,7 +208,7 @@ AUR_PACKAGES_ALL=(
     snapper-rollback
     terraform-ls
 )
-AUR_PACKAGES=(
+AUR_PACKAGES_SMALL=(
     btrfs-assistant
     oh-my-zsh-git
     sddm-astronaut-theme
