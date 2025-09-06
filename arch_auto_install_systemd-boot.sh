@@ -306,7 +306,7 @@ sed -i \
     -e '/^#VerbosePkgLists/s/^#//' \
     "/etc/pacman.conf"
 # enable core-testing packages in /etc/pacman.conf
-sed -i -e '/#\[core-testing\]/,+1s/^#//' "/etc/pacman.conf"
+#sed -i -e '/#\[core-testing\]/,+1s/^#//' "/etc/pacman.conf"
 echo
 # Update pacman mirrors and then pacstrap base install
 reflector --country GB --age 24 --protocol http,https --sort rate --save "/etc/pacman.d/mirrorlist"
