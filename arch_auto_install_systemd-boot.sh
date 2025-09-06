@@ -68,6 +68,7 @@ PACMAN_PACKAGES_ALL=(
     git
     github-cli
     git-filter-repo
+    guvcview
     htop
     jq
     kdeconnect
