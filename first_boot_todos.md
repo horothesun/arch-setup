@@ -133,9 +133,9 @@ Launch it, set `brave://flags/#ozone-platform-hint` to "Wayland" (to fix fractio
 
 Set `brave://flags/#scrollable-tabstrip` to "Enabled" to actually disable the feature.
 
-## 🔒 GNU pass
+## 🔒 Password Store
 
-Follow the password store private notes.
+Follow private notes.
 
 ## NeoVim
 
