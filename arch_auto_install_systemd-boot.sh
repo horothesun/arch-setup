@@ -520,6 +520,7 @@ echo
 # Enable parallel compilation...
 LOGICAL_CORES=$( grep '^processor' /proc/cpuinfo | sort -u | wc -l )
 MAKE_PARALLEL_JOBS_NUMBER=$( echo "(${MAKE_PARALLEL_JOBS_LOGICAL_CORES_PERCENTAGE} * ${LOGICAL_CORES}) / 1" | bc )
+sed -i -e '/^#MAKEFLAGS=.*/c\MAKEFLAGS="-j'"${MAKE_PARALLEL_JOBS_NUMBER}"'"' "/etc/makepkg.conf"
 sed -i -e '/^#MAKEFLAGS=.*/c\MAKEFLAGS="-j'"${MAKE_PARALLEL_JOBS_NUMBER}"'"' "${ROOT_MNT}/etc/makepkg.conf"
 cat "${ROOT_MNT}/etc/makepkg.conf" | grep "MAKEFLAGS="
 echo
@@ -599,10 +600,6 @@ sed -i \
     "${ROOT_MNT}/usr/share/sddm/themes/sddm-astronaut-theme/Themes/${SDDM_THEME_CONF_FILE}"
 echo
 
-# lock the root account
-arch-chroot "${ROOT_MNT}" usermod --lock root
-echo
-
 # ZRAM / Swap setup...
 # TODO: consider for hibernation (suspend-to-disk)... 🔥🔥🔥
 
@@ -613,6 +610,10 @@ sed -i \
     "${ROOT_MNT}/etc/sudoers"
 # disable sudo lecture message
 echo "Default        lecture = never" > "${ROOT_MNT}/etc/sudoers.d/privacy"
+
+# lock the root account
+arch-chroot "${ROOT_MNT}" usermod --lock root
+echo
 
 #-----------------------------------
 #- Install complete. Please reboot -
