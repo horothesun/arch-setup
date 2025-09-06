@@ -618,7 +618,7 @@ echo
 #-----------------------------------
 #- Install complete. Please reboot -
 #-----------------------------------
-sleep 10
+sleep 3
 sync
 echo
 # reboot
