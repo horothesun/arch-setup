@@ -152,8 +152,8 @@ HYPRLAND_PACKAGES_ALL=(
     polkit-kde-agent
     qt5-wayland
     qt6-wayland
+    rofi
     rofi-emoji
-    rofi-wayland
     sddm
     swaync
     uwsm
@@ -171,7 +171,7 @@ HYPRLAND_PACKAGES=(
     polkit-kde-agent
     qt5-wayland
     qt6-wayland
-    rofi-wayland
+    rofi
     sddm
     swaync
     uwsm
