@@ -245,7 +245,6 @@ echo
 mount "/dev/mapper/root" "${ROOT_MNT}"
 echo
 # Create BTRFS subvolumes...
-#cd "${ROOT_MNT}" # TODO: cleanup! 🔥🔥🔥
 btrfs subvolume create "${ROOT_MNT}/@"
 btrfs subvolume create "${ROOT_MNT}/@snapshots"
 btrfs subvolume create "${ROOT_MNT}/@home"
@@ -258,7 +257,6 @@ btrfs subvolume create "${ROOT_MNT}/@machines"
 btrfs subvolume create "${ROOT_MNT}/@log"
 btrfs subvolume create "${ROOT_MNT}/@spool"
 btrfs subvolume create "${ROOT_MNT}/@tmp"
-#cd - # TODO: cleanup! 🔥🔥🔥
 umount "${ROOT_MNT}"
 echo
 # Mounting BTRFS subvolumes...
@@ -541,16 +539,19 @@ arch-chroot "${ROOT_MNT}" chsh --list-shells
 arch-chroot "${ROOT_MNT}" chsh --shell=/usr/bin/zsh "${USER_NAME}"
 echo
 
-# snapper setup...
+# snapper setup ( https://wiki.archlinux.org/title/Snapper#Suggested_filesystem_layout )...
 ## un-mount existing /.snapshots subvolume folder
-arch-chroot "${ROOT_MNT}" umount "/.snapshots"
-arch-chroot "${ROOT_MNT}" rm -r "/.snapshots"
+arch-chroot "${ROOT_MNT}" umount /.snapshots
+arch-chroot "${ROOT_MNT}" rm -r /.snapshots
 ## create snapper config for / (`--no-dbus` used because in arch-chroot environment)
 arch-chroot "${ROOT_MNT}" snapper --no-dbus --config root create-config /
+btrfs subvolume delete "${ROOT_MNT}/.snapshots"
+mkdir "${ROOT_MNT}/.snapshots"
+## re-mount newly created @snaphots subvolume's folder
+arch-chroot "${ROOT_MNT}" mount --all
+# check snapper configs
 arch-chroot "${ROOT_MNT}" snapper --no-dbus list-configs
 echo
-## re-mount newly created /.snaphots subvolume folder
-arch-chroot "${ROOT_MNT}" mount --all
 ## allow the user to manage root snapshots
 arch-chroot "${ROOT_MNT}" snapper --no-dbus --config root set-config ALLOW_USERS="${USER_NAME}" SYNC_ACL=yes
 arch-chroot "${ROOT_MNT}" ls -lahd /.snapshots/
