@@ -609,7 +609,7 @@ sed -i \
     -e '/^%wheel ALL=(ALL:ALL) NOPASSWD: ALL/s/^/# /' \
     "${ROOT_MNT}/etc/sudoers"
 # disable sudo lecture message
-echo "Default        lecture = never" > "${ROOT_MNT}/etc/sudoers.d/privacy"
+echo "Defaults        lecture = never" > "${ROOT_MNT}/etc/sudoers.d/privacy"
 
 # lock the root account
 arch-chroot "${ROOT_MNT}" usermod --lock root
