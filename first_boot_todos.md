@@ -137,13 +137,6 @@ Set `brave://flags/#scrollable-tabstrip` to "Enabled" to actually disable the fe
 
 Follow the password store private notes.
 
-## IntelliJ Idea IDE
-
-Install IntelliJ Idea Community Edition via the JetBrains Toolbox. Set VM options with
-
-- `-Xmx16384m`
-- `-Dawt.toolkit.name=WLToolkit` (enable Wayland [blog](https://blog.jetbrains.com/platform/2024/07/wayland-support-preview-in-2024-2/))
-
 ## NeoVim
 
 Install the `vim-plug` plugin manager ([guide](https://github.com/junegunn/vim-plug#neovim)), then install `nvim` plugins with
@@ -151,3 +144,10 @@ Install the `vim-plug` plugin manager ([guide](https://github.com/junegunn/vim-p
 ```bash
 nvim -c "PlugInstall|qa" ; nvim
 ```
+
+## IntelliJ Idea IDE
+
+Install IntelliJ Idea Community Edition via the JetBrains Toolbox. Set VM options with
+
+- `-Xmx16384m`
+- `-Dawt.toolkit.name=WLToolkit` (enable Wayland [blog](https://blog.jetbrains.com/platform/2024/07/wayland-support-preview-in-2024-2/))
