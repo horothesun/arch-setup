@@ -100,7 +100,7 @@ Control your Bluetooth audio devices with the `pavucontrol` GUI app.
 
 ### Apple Keyboard
 
-Swap `\`` / `~` with `§`/`±` keys using the `keyd` remapping daemon.
+Swap `````/`~` with `§`/`±` keys using the `keyd` remapping daemon.
 
 Here's the `/etc/keyd/default.conf` (`sudo keyd reload` after updating the config file)
 
