@@ -26,6 +26,53 @@ cat ~/.ssh/<HOST_NAME>_ed25519.pub | wl-copy
 
 Login into your GitHub account and go to [github.com/settings/keys](https://github.com/settings/keys).
 
+### Passphrase from script
+
+```bash
+touch "${HOME}/.ssh/askpass.sh"
+chmod u+x "${HOME}/.ssh/askpass.sh"
+```
+
+Paste the following content in the newly created `$HOME/.ssh/askpass.sh`
+
+```bash
+#!/bin/sh
+
+# pass "<HOST_NAME> SSH key"
+echo "<PUT_YOUR_SSH_KEY_HERE>"
+```
+
+Add the SSH key by running (encoded in `bash` config)
+
+```bash
+SSH_ASKPASS_REQUIRE="force" SSH_ASKPASS="${HOME}/.ssh/askpass.sh" ssh-add "${HOME}/.ssh/<HOST_NAME>_ed25519 " &> /dev/null
+```
+
+### Set default editor
+
+```bash
+git config --global core.editor "nvim"
+```
+
 ## Dot-files
 
-...
+```bash
+cd
+git clone git@github.com:horothesun/dotfiles.git
+cd dotfiles
+stow --no-folding --verbose --target ~ alacritty-<HOST_NAME>-<OS>
+stow --no-folding --verbose --target ~ bash-<HOST_NAME>-<OS>
+stow --no-folding --verbose --target ~ btop
+stow --no-folding --verbose --target ~ fastfetch
+stow --no-folding --verbose --target ~ gh
+stow --no-folding --verbose --target ~ hypridle-<HOST_NAME>-<OS>
+stow --no-folding --verbose --target ~ hyprland-<HOST_NAME>-<OS>
+stow --no-folding --verbose --target ~ hyprlock-<HOST_NAME>-<OS>
+stow --no-folding --verbose --target ~ mime-<HOST_NAME>-<OS>
+stow --no-folding --verbose --target ~ nvim
+stow --no-folding --verbose --target ~ rofi-<HOST_NAME>-<OS>
+stow --no-folding --verbose --target ~ starship
+stow --no-folding --verbose --target ~ vim
+stow --no-folding --verbose --target ~ waybar-<HOST_NAME>-<OS>
+stow --no-folding --verbose --target ~ zsh-<HOST_NAME>-<OS>
+```
