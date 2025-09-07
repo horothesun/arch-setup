@@ -22,14 +22,6 @@
 ./setup_dotfiles.sh
 ```
 
-## 👷‍♂️ Hypridle service
-
-Check if hypridle service starts correctly once config file is present with
-
-```bash
-systemctl --user status hypridle
-```
-
 ## Bluetooth
 
 ```bash
@@ -100,6 +92,25 @@ Install IntelliJ Idea Community Edition via the JetBrains Toolbox. Set VM option
 
 - `-Xmx16384m`
 - `-Dawt.toolkit.name=WLToolkit` (enable Wayland [blog](https://blog.jetbrains.com/platform/2024/07/wayland-support-preview-in-2024-2/))
+
+## 👷‍♂️ Firewall
+
+```bash
+ufw default deny incoming
+ufw default allow outgoing
+ufw limit SSH
+ufw allow Transmission
+sudo systemctl enable ufw
+
+reboot
+```
+
+After rebooting, run
+
+```bash
+ufw --force enable
+ufw status verbose
+```
 
 ## ToDos
 

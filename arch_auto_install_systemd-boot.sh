@@ -455,22 +455,10 @@ echo
 # mask systemd-networkd as we will use NetworkManager instead
 systemctl --root "${ROOT_MNT}" mask systemd-networkd
 echo
-# TODO: check if it's needed or we're spinning up hypridle on hyprland startup 🔥🔥🔥
+# since we're going to use hyprland+uwsm, hypridle will run as a systemd user service
+# NOTE: ~/.config/hypr/hypridle.conf must be present for the service to start properly
 arch-chroot "${ROOT_MNT}" su - "${USER_NAME}" --command "sudo systemctl --user enable hypridle.service"
 echo
-
-# Firewall configuration...
-# TODO: fix 🔥🔥🔥
-#arch-chroot "${ROOT_MNT}" /bin/bash -c "
-#    ufw default deny incoming &&
-#    ufw default allow outgoing &&
-#    ufw limit SSH &&
-#    ufw allow Transmission
-#"
-#systemctl --root "${ROOT_MNT}" enable ufw
-#echo
-#echo "⚠️⚠️⚠️ TODO: After rebooting, run: ufw --force enable && ufw status verbose"
-#echo
 
 # Generating UKIs and installing Boot Loader...
 arch-chroot "${ROOT_MNT}" mkinitcpio --preset linux
