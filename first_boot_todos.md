@@ -1,22 +1,14 @@
 # First boot ToDos
 
-## GitHub SSH key
+## Wi-Fi
 
-Run
+...
+
+## GitHub SSH key
 
 ```bash
 ./setup_ssh_key.sh
 ```
-
-and follow the manual steps.
-
-### Set default editor
-
-```bash
-git config --global core.editor "nvim"
-```
-
-... https://github.com/horothesun/macos-setup/blob/master/git_global_configs.sh ...
 
 ## Dot-files
 
