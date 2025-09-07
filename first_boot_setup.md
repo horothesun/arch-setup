@@ -88,6 +88,22 @@ nvim -c "PlugInstall|qa" ; nvim
 
 ## IntelliJ Idea CE IDE
 
+Set JetBrains Toolbox `~/.local/share/JetBrains/Toolbox/.settings.json`
+
+```json
+{
+    "autostart": false,
+    "shell_scripts": {
+        "location": "/home/<USER_NAME>/.local/share/JetBrains/Toolbox/scripts"
+    },
+    "ui": {
+        "theme": "dark",
+        "backgroundEffects": "false",
+        "scale": 1.25
+    }
+}
+```
+
 Install IntelliJ Idea Community Edition via the JetBrains Toolbox. Set VM options with
 
 - `-Xmx16384m`
