@@ -10,6 +10,12 @@
 ./setup_ssh_key.sh
 ```
 
+## Git global configuration
+
+```bash
+./git_global_configs.sh
+```
+
 ## Dot-files
 
 ```bash
