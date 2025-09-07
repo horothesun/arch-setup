@@ -1,4 +1,4 @@
-# First boot ToDos
+# First boot setup
 
 ## 👷‍♂️ Wi-Fi
 
@@ -100,3 +100,7 @@ Install IntelliJ Idea Community Edition via the JetBrains Toolbox. Set VM option
 
 - `-Xmx16384m`
 - `-Dawt.toolkit.name=WLToolkit` (enable Wayland [blog](https://blog.jetbrains.com/platform/2024/07/wayland-support-preview-in-2024-2/))
+
+## ToDos
+
+- IntelliJ Idea CE IDE: evaluate installing directly via [intellij-idea-community-edition](https://archlinux.org/packages/extra/x86_64/intellij-idea-community-edition/) or [intellij-idea-community-edition-bin](https://aur.archlinux.org/packages/intellij-idea-community-edition-bin)<sup>AUR</sup>.
