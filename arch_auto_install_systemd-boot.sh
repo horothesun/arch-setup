@@ -355,7 +355,6 @@ sed -i -e '/^# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/s/^# //' "${ROOT_MNT}/etc/sudo
 
 # create /etc/kernel/cmdline (if the file doesn't exist, mkinitcpio will complain)
 export LINUX_LUKS_UUID=$( blkid --match-tag UUID --output value "/dev/disk/by-partlabel/${LINUX_PARTITION_LABEL}" )
-# full options: rd.luks.name=${LINUX_LUKS_UUID}=root root=/dev/mapper/root rootflags=subvol=@ rd.luks.options=discard rw mem_sleep_default=deep
 echo "quiet rw rd.luks.name=${LINUX_LUKS_UUID}=root root=/dev/mapper/root rootflags=subvol=@" > "${ROOT_MNT}/etc/kernel/cmdline"
 cat "${ROOT_MNT}/etc/kernel/cmdline"
 echo
@@ -367,7 +366,6 @@ echo
 # update /etc/mkinitcpio.conf
 # - add the i2c-dev module for the ddcutil (external monitor brightness/contrast control)
 # - change the HOOKS in mkinitcpio.conf to use systemd hooks (udev -> systemd, keymap consolefont -> sd-vconsole sd-encrypt)
-# Note: original HOOKS=(base udev autodetect microcode modconf kms keyboard keymap consolefont block filesystems fsck grub-btrfs-overlayfs)
 sed -i \
     -e '/^MODULES=(.*/c\MODULES=(btrfs i2c-dev)' \
     -e '/^BINARIES=(.*/c\BINARIES=(/usr/bin/btrfs)' \
@@ -414,7 +412,7 @@ fallback_options="--skiphooks autodetect --cmdline /etc/kernel/cmdline-tty"
 EOF
 echo
 
-# read the linux UKI setting and create the folder structure otherwise mkinitcpio will crash
+# read the linux UKI settings and create the folder structure otherwise mkinitcpio will crash
 declare $(grep default_uki "${ROOT_MNT}/etc/mkinitcpio.d/linux.preset")
 declare $(grep fallback_uki "${ROOT_MNT}/etc/mkinitcpio.d/linux.preset")
 declare default_uki_dirname=$(dirname "${default_uki//\"}")
@@ -424,7 +422,7 @@ arch-chroot "${ROOT_MNT}" echo "default_uki_dirname: ${default_uki_dirname}"
 arch-chroot "${ROOT_MNT}" mkdir -p "${default_uki_dirname}"
 echo
 
-# read the linux-lts UKI setting and create the folder structure otherwise mkinitcpio will crash
+# read the linux-lts UKI settings and create the folder structure otherwise mkinitcpio will crash
 declare $(grep default_uki "${ROOT_MNT}/etc/mkinitcpio.d/linux-lts.preset" | sed 's/default_uki=/default_lts_uki=/g')
 declare $(grep fallback_uki "${ROOT_MNT}/etc/mkinitcpio.d/linux-lts.preset" | sed 's/fallback_uki=/fallback_lts_uki=/g')
 declare default_lts_uki_dirname=$(dirname "${default_lts_uki//\"}")
@@ -533,12 +531,12 @@ arch-chroot "${ROOT_MNT}" su - "${USER_NAME}" --command "yay -S --noconfirm --no
 echo
 
 
-## ZSH set as default...
+# ZSH set as default...
 arch-chroot "${ROOT_MNT}" chsh --list-shells
 arch-chroot "${ROOT_MNT}" chsh --shell=/usr/bin/zsh "${USER_NAME}"
 echo
 
-# snapper setup ( https://wiki.archlinux.org/title/Snapper#Suggested_filesystem_layout )...
+# Snapper setup ( https://wiki.archlinux.org/title/Snapper#Suggested_filesystem_layout )...
 ## un-mount existing /.snapshots subvolume folder
 arch-chroot "${ROOT_MNT}" umount /.snapshots
 arch-chroot "${ROOT_MNT}" rm -r /.snapshots
@@ -548,30 +546,25 @@ btrfs subvolume delete "${ROOT_MNT}/.snapshots"
 mkdir "${ROOT_MNT}/.snapshots"
 ## re-mount newly created @snaphots subvolume's folder
 arch-chroot "${ROOT_MNT}" mount --all
-# check snapper configs
+## check snapper configs
 arch-chroot "${ROOT_MNT}" snapper --no-dbus list-configs
 echo
 ## allow the user to manage root snapshots
 arch-chroot "${ROOT_MNT}" snapper --no-dbus --config root set-config ALLOW_USERS="${USER_NAME}" SYNC_ACL=yes
 arch-chroot "${ROOT_MNT}" ls -lahd /.snapshots/
-
 ## APPEND '.snapshots' to /etc/updatedb.conf in the 'PRUNENAMES' space-separated list,
 ## to avoid slowing down the system when there're lots of snapshots
 sed -i -e '/^PRUNENAMES.*/c\PRUNENAMES = ".git .hg .svn .snapshots"' "${ROOT_MNT}/etc/updatedb.conf"
 cat "${ROOT_MNT}/etc/updatedb.conf"
 echo
-
-# disable automatic timeline snapshots (temporarily, to avoid snapshots to be created while setting up snapper)
+## disable automatic timeline snapshots (temporarily, to avoid snapshots to be created while setting up snapper)
 systemctl --root "${ROOT_MNT}" disable snapper-timeline.timer snapper-cleanup.timer
-
-# we shouldn't have any snapshots yet
+## we shouldn't have any snapshots yet
 arch-chroot "${ROOT_MNT}" snapper --no-dbus list
-
-# create first snapshot
+## create first snapshot
 arch-chroot "${ROOT_MNT}" snapper --no-dbus --config root create --description "*** BEGINNING OF TIME ***"
 arch-chroot "${ROOT_MNT}" snapper --no-dbus list
-
-# enable automatic timeline snapshots (JUST FOR root CONFIG)
+## enable automatic timeline snapshots (JUST FOR root CONFIG)
 systemctl --root "${ROOT_MNT}" enable snapper-timeline.timer snapper-cleanup.timer
 
 
@@ -600,7 +593,7 @@ sed -i \
     "${ROOT_MNT}/usr/share/sddm/themes/sddm-astronaut-theme/Themes/${SDDM_THEME_CONF_FILE}"
 echo
 
-# ZRAM / Swap setup...
+# Swap/swapfile setup...
 # TODO: consider for hibernation (suspend-to-disk)... 🔥🔥🔥
 
 # require password for users in the wheel group
