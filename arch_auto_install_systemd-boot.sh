@@ -211,7 +211,6 @@ echo -n "${CRYPT_PASSWORD}" | cryptsetup luksFormat --type luks2 "/dev/disk/by-p
 echo -n "${CRYPT_PASSWORD}" | cryptsetup luksOpen "/dev/disk/by-partlabel/${LINUX_PARTITION_LABEL}" root -
 echo
 
-# Making the File Systems...
 # Create file systems
 mkfs.vfat -F32 -n EFI "/dev/disk/by-partlabel/EFI"
 mkfs.btrfs -f -L "${LINUX_PARTITION_LABEL}" /dev/mapper/root
@@ -454,9 +453,10 @@ echo
 arch-chroot "${ROOT_MNT}" rm -fr /efi/EFI/systemd
 arch-chroot "${ROOT_MNT}" ls -lahR /efi/EFI
 echo
+# TODO: check if it's needed! 🔥🔥🔥
 # check the boot entry for Arch Linux has been created and its index is the first in the boot order
-arch-chroot "${ROOT_MNT}" efibootmgr
-echo
+#arch-chroot "${ROOT_MNT}" efibootmgr
+#echo
 
 # Secure Boot...
 arch-chroot "${ROOT_MNT}" sbctl status
@@ -499,7 +499,7 @@ arch-chroot "${ROOT_MNT}" chsh --list-shells
 arch-chroot "${ROOT_MNT}" chsh --shell=/usr/bin/zsh "${USER_NAME}"
 echo
 
-# Snapper setup ( https://wiki.archlinux.org/title/Snapper#Suggested_filesystem_layout )...
+# Snapper ( https://wiki.archlinux.org/title/Snapper#Suggested_filesystem_layout )...
 ## un-mount existing /.snapshots subvolume folder
 arch-chroot "${ROOT_MNT}" umount /.snapshots
 arch-chroot "${ROOT_MNT}" rm -r /.snapshots
