@@ -112,6 +112,6 @@ ufw --force enable
 ufw status verbose
 ```
 
-## ToDos
+## Improvements
 
 - IntelliJ Idea CE IDE: evaluate installing directly via [intellij-idea-community-edition](https://archlinux.org/packages/extra/x86_64/intellij-idea-community-edition/) or [intellij-idea-community-edition-bin](https://aur.archlinux.org/packages/intellij-idea-community-edition-bin)<sup>AUR</sup>.
