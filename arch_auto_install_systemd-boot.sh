@@ -117,11 +117,14 @@ AUR_PACKAGES=(
 )
 
 # Desktop packages
+
+# enable cosmic-greeter.service
 COSMIC_PACKAGES=(
     cosmic
     sddm
 )
 
+# enable gdm.service
 GNOME_PACKAGES=(
     gnome
     gnome-circle
