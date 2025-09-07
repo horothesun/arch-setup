@@ -11,42 +11,16 @@ LOCALE="en_GB.UTF-8"
 KEYMAP="uk"
 TIMEZONE="Europe/London"
 EFI_PARTITION_SIZE="800M"
-LINUX_PARTITION_LABEL="LINUX"
 MAKE_PARALLEL_JOBS_LOGICAL_CORES_PERCENTAGE="0.95"
+LINUX_PARTITION_LABEL="LINUX"
+ROOT_MNT="/mnt"
 
 # check if we're root
 if [[ "$UID" -ne 0 ]]; then
     echo "This script needs to be run as root!" >&2
     exit 3
 fi
-
 echo
-lsblk
-echo
-
-read -s -r -p "Provide the disk encryption password: " CRYPT_PASSWORD
-echo
-read -s -r -p "Enter same disk encryption password again: " CRYPT_PASSWORD_2
-echo
-if [[ "$CRYPT_PASSWORD" = "$CRYPT_PASSWORD_2" ]]; then
-    echo
-else
-    echo "Mismatching disk encryption password!"
-    exit 123
-fi
-
-read -s -r -p "Provide the \"${USER_NAME}\" user's password: " USER_PASSWORD
-echo
-read -s -r -p "Enter same user's password again: " USER_PASSWORD_2
-echo
-if [[ "$USER_PASSWORD" = "$USER_PASSWORD_2" ]]; then
-    echo
-else
-    echo "Mismatching user's password!"
-    exit 124
-fi
-
-ROOT_MNT="/mnt"
 
 # packages to pacstrap
 PACSTRAP_PACKAGES=(
@@ -221,10 +195,37 @@ HYPRLAND_PACKAGES=(
 
 ### Start!
 
+lsblk
+echo
+
 # set locale, timezone, NTP
 loadkeys "${KEYMAP}"
 timedatectl set-timezone "${TIMEZONE}"
 timedatectl set-ntp true
+
+# read disk encryption password
+read -s -r -p "Provide the disk encryption password: " CRYPT_PASSWORD
+echo
+read -s -r -p "Enter same disk encryption password again: " CRYPT_PASSWORD_2
+echo
+if [[ "$CRYPT_PASSWORD" = "$CRYPT_PASSWORD_2" ]]; then
+    echo
+else
+    echo "Mismatching disk encryption password!"
+    exit 123
+fi
+
+# read user's password
+read -s -r -p "Provide the \"${USER_NAME}\" user's password: " USER_PASSWORD
+echo
+read -s -r -p "Enter same user's password again: " USER_PASSWORD_2
+echo
+if [[ "$USER_PASSWORD" = "$USER_PASSWORD_2" ]]; then
+    echo
+else
+    echo "Mismatching user's password!"
+    exit 124
+fi
 
 # Creating partitions...
 sgdisk -Z "${TARGET}"

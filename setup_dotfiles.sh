@@ -1,7 +1,7 @@
 #!/bin/bash
 
 OS="arch"
-HOST_NAME=$( uname --nodename )
+HOST_NAME="$( uname --nodename )"
 
 cd
 git clone git@github.com:horothesun/dotfiles.git

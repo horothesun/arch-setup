@@ -1,20 +1,12 @@
 #!/bin/bash
 
-HOST_NAME=$( uname --nodename )
+HOST_NAME="$( uname --nodename )"
 
 read -p "Provide the SSH key email: " SSH_KEY_EMAIL
 echo
 
-read -s -r -p "Provide the SSH key passphrase (pass \"${HOST_NAME} SSH key\"): " SSH_KEY_PASSPHRASE
+read -r -p "Provide the SSH key passphrase (pass \"${HOST_NAME} SSH key\"): " SSH_KEY_PASSPHRASE
 echo
-read -s -r -p "Enter same passphrase again: " SSH_KEY_PASSPHRASE_2
-echo
-if [[ "$SSH_KEY_PASSPHRASE" = "$SSH_KEY_PASSPHRASE_2" ]]; then
-    echo
-else
-    echo "Mismatching passphrase!"
-    exit 123
-fi
 
 # generate SSH key
 ssh-keygen \
