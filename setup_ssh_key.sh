@@ -1,9 +1,11 @@
 #!/bin/bash
 
+HOST_NAME=$( uname --nodename )
+
 read -p "Provide the SSH key email: " SSH_KEY_EMAIL
 echo
 
-read -s -r -p "Provide the SSH key passphrase: " SSH_KEY_PASSPHRASE
+read -s -r -p "Provide the SSH key passphrase (pass \"${HOST_NAME} SSH key\"): " SSH_KEY_PASSPHRASE
 echo
 read -s -r -p "Enter same passphrase again: " SSH_KEY_PASSPHRASE_2
 echo
@@ -14,8 +16,7 @@ else
     exit 123
 fi
 
-HOST_NAME=$( uname --nodename )
-
+# generate SSH key
 ssh-keygen \
     -t ed25519 \
     -C "${SSH_KEY_EMAIL}" \
@@ -23,6 +24,7 @@ ssh-keygen \
     -N "${SSH_KEY_PASSPHRASE}"
 echo
 
+# passphrase from script
 cat <<EOF > "${HOME}/.ssh/askpass.sh"
 #!/bin/sh
 
@@ -31,6 +33,7 @@ echo "${SSH_KEY_PASSPHRASE}"
 EOF
 chmod u+x "${HOME}/.ssh/askpass.sh"
 
+# manual steps
 cat << EOF
 ========================
 === ⚠️ MANUAL STEPS ⚠️ ===

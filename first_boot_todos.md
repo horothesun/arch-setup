@@ -2,57 +2,21 @@
 
 ## GitHub SSH key
 
-[Generating a new SSH key and adding it to the ssh-agent.](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent?platform=linux)
+Run
 
 ```bash
-ssh-keygen -t ed25519 -C "your_email@example.com"
-# Enter a file in which to save the key: /home/<USER_NAME>/.ssh/<HOST_NAME>_ed25519 
-# Enter passphrase: set passphrase stored in your password manager as "<HOST_NAME> SSH key"
+./setup_ssh_key.sh
 ```
 
-Adding your SSH key to the ssh-agent
-
-```bash
-# it will be included into your .bashrc file
-eval "$(ssh-agent -s)"
-ssh-add ~/.ssh/<HOST_NAME>_ed25519 
-```
-
-[Adding a new SSH key to your GitHub account](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account?platform=linux)
-
-```bash
-cat ~/.ssh/<HOST_NAME>_ed25519.pub | wl-copy
-```
-
-Login into your GitHub account and go to [github.com/settings/keys](https://github.com/settings/keys).
-
-### Passphrase from script
-
-```bash
-touch "${HOME}/.ssh/askpass.sh"
-chmod u+x "${HOME}/.ssh/askpass.sh"
-```
-
-Paste the following content in the newly created `$HOME/.ssh/askpass.sh`
-
-```bash
-#!/bin/sh
-
-# pass "<HOST_NAME> SSH key"
-echo "<PUT_YOUR_SSH_KEY_HERE>"
-```
-
-Add the SSH key by running (encoded in `bash` config)
-
-```bash
-SSH_ASKPASS_REQUIRE="force" SSH_ASKPASS="${HOME}/.ssh/askpass.sh" ssh-add "${HOME}/.ssh/<HOST_NAME>_ed25519 " &> /dev/null
-```
+and follow the manual steps.
 
 ### Set default editor
 
 ```bash
 git config --global core.editor "nvim"
 ```
+
+... https://github.com/horothesun/macos-setup/blob/master/git_global_configs.sh ...
 
 ## Dot-files
 
