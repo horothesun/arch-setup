@@ -117,6 +117,17 @@ AUR_PACKAGES=(
 )
 
 # Desktop packages
+COSMIC_PACKAGES=(
+    cosmic
+    sddm
+)
+
+GNOME_PACKAGES=(
+    gnome
+    gnome-circle
+    gnome-extra
+)
+
 HYPRLAND_PACKAGES=(
     dolphin
     hypridle
@@ -139,22 +150,23 @@ HYPRLAND_PACKAGES=(
     xdg-desktop-portal-hyprland
 )
 
-#PLASMA_PACKAGES=(
-#    plasma
-#    sddm
-#    kitty
-#    nm-connection-editor
-#    mousepad
-#)
+PLASMA_PACKAGES=(
+    plasma
+    sddm
+    kitty
+    nm-connection-editor
+)
 
-#XFCE_PACKAGES=(
-#    xfce4
-#    xfce4-terminal
-#    xfce4-goodies
-#    sddm
-#    nm-connection-editor
-#    mousepad
-#)
+XFCE_PACKAGES=(
+    xfce4
+    xfce4-terminal
+    xfce4-goodies
+    sddm
+    nm-connection-editor
+    mousepad
+)
+
+DESKTOP_PACKAGES=( ${HYPRLAND_PACKAGES[@]} )
 
 ### Start!
 
@@ -406,7 +418,7 @@ sed -i \
 echo
 
 # Installing base and GUI packages...
-arch-chroot "${ROOT_MNT}" pacman -Sy "${PACMAN_PACKAGES[@]}" "${HYPRLAND_PACKAGES[@]}" --noconfirm --quiet
+arch-chroot "${ROOT_MNT}" pacman -Sy "${PACMAN_PACKAGES[@]}" "${DESKTOP_PACKAGES[@]}" --noconfirm --quiet
 echo
 
 # Enable services...
