@@ -339,6 +339,10 @@ systemd-firstboot \
 arch-chroot "${ROOT_MNT}" locale-gen
 echo
 
+# Disable Copy-on-Write for virtlib images folder
+arch-chroot "${ROOT_MNT}" lsattr -d /var/lib/libvirt/images/
+arch-chroot "${ROOT_MNT}" chattr -VR +C /var/lib/libvirt/images/
+
 # Configuring for first boot...
 # install the 'whois' package to get the mkpasswd tool
 pacman -Sy whois --noconfirm --quiet
