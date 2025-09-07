@@ -22,9 +22,13 @@
 ./setup_dotfiles.sh
 ```
 
-## Hypridle setup (TBD)
+## 👷‍♂️  Hypridle service
 
-...
+Check if hypridle service starts correctly once config file is present with
+
+```bash
+systemctl --user status hypridle
+```
 
 ## Bluetooth
 
