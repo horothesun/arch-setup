@@ -40,37 +40,6 @@ PACSTRAP_PACKAGES=(
     util-linux
 )
 
-#PACMAN_PACKAGES_SHORT=(
-#    alsa-utils
-#    bash-completion
-#    bluez
-#    bluez-utils
-#    bluez-deprecated-tools
-#    btop
-#    fastfetch
-#    git
-#    htop
-#    jq
-#    keyd
-#    man-db
-#    man-pages
-#    mtools
-#    ncdu
-#    neovim
-#    noto-fonts-emoji
-#    openssh
-#    plocate
-#    reflector
-#    snapper
-#    snap-pac
-#    stow
-#    tree
-#    ttf-jetbrains-mono-nerd
-#    ttf-firacode-nerd
-#    ufw
-#    wget
-#    zsh
-#)
 PACMAN_PACKAGES=(
     alacritty
     alsa-utils
@@ -135,12 +104,6 @@ PACMAN_PACKAGES=(
     zsh
 )
 
-#AUR_PACKAGES_SHORT=(
-#    btrfs-assistant
-#    oh-my-zsh-git
-#    sddm-astronaut-theme
-#    snapper-rollback
-#)
 AUR_PACKAGES=(
     brave-bin
     btrfs-assistant
@@ -608,10 +571,7 @@ echo "Defaults        lecture = never" > "${ROOT_MNT}/etc/sudoers.d/privacy"
 arch-chroot "${ROOT_MNT}" usermod --lock root
 echo
 
-#-----------------------------------
-#- Install complete. Please reboot -
-#-----------------------------------
 sleep 3
 sync
+echo "Install complete. Please reboot"
 echo
-# reboot
