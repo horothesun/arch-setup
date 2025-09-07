@@ -444,12 +444,8 @@ sed -i \
     "${ROOT_MNT}/etc/pacman.conf"
 echo
 
-# Installing base packages...
-arch-chroot "${ROOT_MNT}" pacman -Sy "${PACMAN_PACKAGES[@]}" --noconfirm --quiet
-echo
-
-# Installing GUI packages...
-arch-chroot "${ROOT_MNT}" pacman -Sy "${HYPRLAND_PACKAGES[@]}" --noconfirm --quiet
+# Installing base and GUI packages...
+arch-chroot "${ROOT_MNT}" pacman -Sy "${PACMAN_PACKAGES[@]}" "${HYPRLAND_PACKAGES[@]}" --noconfirm --quiet
 echo
 
 # Enable services...
