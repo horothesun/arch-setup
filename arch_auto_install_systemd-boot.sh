@@ -509,6 +509,7 @@ btrfs subvolume delete "${ROOT_MNT}/.snapshots"
 mkdir "${ROOT_MNT}/.snapshots"
 ## re-mount newly created @snaphots subvolume's folder
 arch-chroot "${ROOT_MNT}" mount --all
+chmod 750 "${ROOT_MNT}/.snapshots"
 ## check snapper configs
 arch-chroot "${ROOT_MNT}" snapper --no-dbus list-configs
 echo
