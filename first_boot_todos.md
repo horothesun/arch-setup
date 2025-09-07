@@ -13,7 +13,7 @@
 ## Dot-files
 
 ```bash
-./dotfiles.sh
+./setup_dotfiles.sh
 ```
 
 ## Hypridle setup (TBD)
