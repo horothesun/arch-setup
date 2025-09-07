@@ -1,6 +1,6 @@
 # First boot ToDos
 
-## Wi-Fi
+## 👷‍♂️ Wi-Fi
 
 ...
 
@@ -22,7 +22,7 @@
 ./setup_dotfiles.sh
 ```
 
-## 👷‍♂️  Hypridle service
+## 👷‍♂️ Hypridle service
 
 Check if hypridle service starts correctly once config file is present with
 
@@ -94,7 +94,7 @@ Install the `vim-plug` plugin manager ([guide](https://github.com/junegunn/vim-p
 nvim -c "PlugInstall|qa" ; nvim
 ```
 
-## IntelliJ Idea IDE
+## IntelliJ Idea CE IDE
 
 Install IntelliJ Idea Community Edition via the JetBrains Toolbox. Set VM options with
 

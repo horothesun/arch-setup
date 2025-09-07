@@ -510,7 +510,7 @@ launch it, set `brave://flags/#ozone-platform-hint` to "Wayland" (to fix fractio
 
 Set `brave://flags/#scrollable-tabstrip` to "Enabled" to actually disable the feature.
 
-### IntelliJ Idea IDE
+### IntelliJ Idea CE IDE
 
 Install with
 
