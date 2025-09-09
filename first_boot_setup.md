@@ -22,44 +22,6 @@
 ./setup_dotfiles.sh
 ```
 
-## Bluetooth
-
-```bash
-systemctl status bluetooth
-
-# pair->connect->trust devices with bluetoothctl
-bluetoothctl scan on
-bluetoothctl devices
-bluetoothctl pair <MAC-ADDRESS>
-bluetoothctl connect <MAC-ADDRESS>
-bluetoothctl trust <MAC-ADDRESS>
-bluetoothctl devices Connected
-bluetoothctl scan off
-```
-
-Control your Bluetooth audio devices with the `pavucontrol` GUI app.
-
-### Apple Keyboard
-
-Swap `` ` `` / `~` with `§` / `±` keys using the `keyd` remapping daemon.
-
-Here's the `/etc/keyd/default.conf` (`sudo keyd reload` after updating the config file)
-
-```
-[ids]
-
-# Apple Magic Keyboard (acquire this by running `sudo keyd monitor`)
-004c:0267:9cc234d0
-
-[main]
-
-# swap ` and §
-` = 102nd
-102nd = `
-```
-
-Check for config loading errors by running `sudo journalctl -eu keyd`.
-
 ## KDE Wallet (required by Brave browser)
 
 Follow [this guide](https://wiki.archlinux.org/title/KDE_Wallet#Unlocking_KWallet_automatically_in_a_window_manager)
@@ -108,6 +70,44 @@ Install IntelliJ Idea Community Edition via the JetBrains Toolbox. Set VM option
 
 - `-Xmx16384m`
 - `-Dawt.toolkit.name=WLToolkit` (enable Wayland [blog](https://blog.jetbrains.com/platform/2024/07/wayland-support-preview-in-2024-2/))
+
+## Bluetooth
+
+```bash
+systemctl status bluetooth
+
+# pair->connect->trust devices with bluetoothctl
+bluetoothctl scan on
+bluetoothctl devices
+bluetoothctl pair <MAC-ADDRESS>
+bluetoothctl connect <MAC-ADDRESS>
+bluetoothctl trust <MAC-ADDRESS>
+bluetoothctl devices Connected
+bluetoothctl scan off
+```
+
+Control your Bluetooth audio devices with the `pavucontrol` GUI app.
+
+### Apple Keyboard
+
+Swap `` ` `` / `~` with `§` / `±` keys using the `keyd` remapping daemon.
+
+Here's the `/etc/keyd/default.conf` (`sudo keyd reload` after updating the config file)
+
+```
+[ids]
+
+# Apple Magic Keyboard (acquire this by running `sudo keyd monitor`)
+004c:0267:9cc234d0
+
+[main]
+
+# swap ` and §
+` = 102nd
+102nd = `
+```
+
+Check for config loading errors by running `sudo journalctl -eu keyd`.
 
 ## 👷‍♂️ Firewall
 
