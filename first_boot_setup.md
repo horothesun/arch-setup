@@ -36,6 +36,14 @@ Launch it, set `brave://flags/#ozone-platform-hint` to "Wayland" (to fix fractio
 
 Set `brave://flags/#scrollable-tabstrip` to "Enabled" to actually disable the feature.
 
+### Extensions
+
+- [Dark Reader](https://chromewebstore.google.com/detail/dark-reader/eimadpbcbfnmbkopoojfekhnkhdbieeh)
+- [Browserpass](https://chromewebstore.google.com/detail/browserpass/naepdomgkenhinolocfifgehidddafch)
+- [Keepa](https://chromewebstore.google.com/detail/keepa-amazon-price-tracke/neebplgakaahbhdphmkckjjcegoiijjo)
+- [I still don't care about cookies](https://chromewebstore.google.com/detail/i-still-dont-care-about-c/edibdbjcniadpccecjdfdjjppcpchdlm)
+- [AdBlock](https://chromewebstore.google.com/detail/adblock-%E2%80%94-block-ads-acros/gighmmpiobklfepjocnamgkkbiglidom)
+
 ## 🔒 Password Store
 
 Follow private notes.
