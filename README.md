@@ -9,6 +9,7 @@
 
 ## Features
 
+- Fully testable on virtual machines
 - EFI and Linux partitions (no swap)
 - LUKS2 disk encryption
 - Secure Boot (optional, if "Setup mode" is on)
