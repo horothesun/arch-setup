@@ -1,4 +1,4 @@
-# Arch Linux setup
+# Arch Linux auto-install script
 
 ## Target machine
 
