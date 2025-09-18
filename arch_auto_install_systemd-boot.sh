@@ -499,7 +499,7 @@ cat "${ROOT_MNT}/etc/makepkg.conf" | grep "MAKEFLAGS="
 echo
 
 # YAY install...
-arch-chroot "${ROOT_MNT}" su - "${USER_NAME}" --command "git clone https://aur.archlinux.org/yay-git.git ; cd yay-git ; makepkg --syncdeps --install --noconfirm ; cd .. ; rm -rf yay-git"
+arch-chroot "${ROOT_MNT}" su - "${USER_NAME}" --command "git clone https://aur.archlinux.org/yay.git ; cd yay ; makepkg --syncdeps --install --noconfirm ; cd .. ; rm -rf yay"
 echo
 
 # YAY update and setup packages...
