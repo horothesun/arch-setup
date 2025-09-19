@@ -13,7 +13,10 @@
 - EFI and Linux partitions (no swap, so no hibernate)
 - LUKS2 disk encryption
 - Secure Boot (optional, if "Setup mode" is on)
-- BTRFS file system with Snapper `/` snapshots (and [snapper-rollback](https://aur.archlinux.org/packages/snapper-rollback)<sup>AUR</sup>)
+- BTRFS file system
+  - [snapper](https://archlinux.org/packages/extra/x86_64/snapper) `/` snapshots,
+  - [snap-pac](https://archlinux.org/packages/extra/any/snap-pac) pacman hooks and
+  - [snapper-rollback](https://aur.archlinux.org/packages/snapper-rollback)<sup>AUR</sup>
 - [linux](https://archlinux.org/packages/core/x86_64/linux) and [linux-lts](https://archlinux.org/packages/core/x86_64/linux-lts) kernels
 - Unified Kernel Images (via `mkinitcpio`)
 - Systemd-boot bootloader
