@@ -5,7 +5,7 @@
 - Desktop PC
 - AMD CPU with iGPU
 - Lots of RAM
-- Full Linux-dedicated disk
+- SSD fully dedicated to Linux
 
 ## Features
 
