@@ -23,6 +23,6 @@
   - "recovery" boot: the [linux-lts](https://archlinux.org/packages/core/x86_64/linux-lts) fallback entry is configured for terminal login to perform BTRFS snapshot rollbacks
 - `make` configured for parallel compilation (using 95% of available logical cores)
 - [yay](https://aur.archlinux.org/packages/yay)<sup>AUR</sup> AUR helper
-- ZSH shell with [oh-my-zsh-git](https://aur.archlinux.org/packages/oh-my-zsh-git)<sup>AUR</sup> configuration framework
+- [zsh](https://archlinux.org/packages/extra/x86_64/zsh) shell with [oh-my-zsh-git](https://aur.archlinux.org/packages/oh-my-zsh-git)<sup>AUR</sup> configuration framework
 - SDDM login manager with [sddm-astronaut-theme](https://aur.archlinux.org/packages/sddm-astronaut-theme)<sup>AUR</sup> theme
 - Hyprland (Wayland) window manager
