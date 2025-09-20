@@ -26,3 +26,59 @@
 - [zsh](https://archlinux.org/packages/extra/x86_64/zsh) shell with [oh-my-zsh-git](https://aur.archlinux.org/packages/oh-my-zsh-git)<sup>AUR</sup> configuration framework
 - SDDM login manager with [sddm-astronaut-theme](https://aur.archlinux.org/packages/sddm-astronaut-theme)<sup>AUR</sup> theme
 - Hyprland (Wayland) window manager
+
+## Let's go!
+
+- (optional) enable UEFI Secure Boot's "Setup mode" and reset keys
+- boot into Arch live USB
+- increase font size: `setfont ter-120f`
+- connect to Wi-Fi
+
+```bash
+iwctl
+iwctl device list
+iwctl station <DEVICE_NAME> get-networks
+iwctl station list
+iwctl station <DEVICE_NAME> connect <NETWORK_NAME>
+<NETWORK_PASSWORD>
+iwctl station list
+
+# test connection
+ping -c 5 archlinux.org
+```
+
+- enable SSH daemon to continue Arch setup from another PC via SSH
+
+```bash
+systemctl status sshd
+systemctl start sshd
+
+# create a password for root user (on the live USB install)
+passwd
+New password: 123
+Retype new password: 123
+
+# get IP address
+ip a
+```
+
+- (from another PC) SSH into live USB install
+
+```bash
+ssh root@<LIVE_USB_IP_ADDRESS>
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+root@<LIVE_USB_IP_ADDRESS>'s password: 123
+```
+
+- copy auto-install script to the live USB install
+
+```bash
+scp ~/path/to/arch_auto_install.sh "root@<LIVE_USB_INSTALL_IP>:/root/arch_auto_install.sh"
+```
+
+- edit script's config parameters (e.g. `TARGET`, `HOST_NAME` and `USER_NAME`) and run the script
+
+```bash
+chmod +x arch_auto_install.sh
+./arch_auto_install.sh
+```

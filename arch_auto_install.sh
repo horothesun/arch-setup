@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # uncomment to view debugging information
-#set -xeuo pipefail
+set -xeuo pipefail
 
 # config options
 TARGET="/dev/sda"
