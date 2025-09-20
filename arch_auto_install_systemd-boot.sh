@@ -23,8 +23,9 @@ fi
 echo
 
 # packages to pacstrap
+UCODE_PACKAGE=$( if lscpu | grep -q "AuthenticAMD"; then echo "amd-ucode"; else echo "intel-ucode"; fi )
 PACSTRAP_PACKAGES=(
-    amd-ucode
+    $UCODE_PACKAGE
     base
     base-devel
     btrfs-progs

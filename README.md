@@ -3,7 +3,7 @@
 ## Target machine
 
 - Desktop PC
-- AMD CPU with iGPU
+- AMD or Intel CPU with iGPU
 - Lots of RAM
 - SSD fully dedicated to Linux
 
