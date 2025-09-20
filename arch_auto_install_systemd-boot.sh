@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # uncomment to view debugging information
-set -xeuo pipefail
+#set -xeuo pipefail
 
 # config options
 TARGET="/dev/sda"
@@ -23,9 +23,9 @@ fi
 echo
 
 # packages to pacstrap
-UCODE_PACKAGE=$( if lscpu | grep -q "AuthenticAMD"; then echo "amd-ucode"; else echo "intel-ucode"; fi )
+MICROCODE_PACKAGE=$( if lscpu | grep -q "AuthenticAMD"; then echo "amd-ucode"; else echo "intel-ucode"; fi )
 PACSTRAP_PACKAGES=(
-    $UCODE_PACKAGE
+    $MICROCODE_PACKAGE
     base
     base-devel
     btrfs-progs
@@ -137,8 +137,8 @@ HYPRLAND_PACKAGES=(
     hypridle
     hyprland
     hyprlock
-    hyprshot
     hyprpolkitagent
+    hyprshot
     kitty
     kwalletmanager
     kwallet-pam
@@ -155,19 +155,19 @@ HYPRLAND_PACKAGES=(
 )
 
 PLASMA_PACKAGES=(
-    plasma
-    sddm
     kitty
     nm-connection-editor
+    plasma
+    sddm
 )
 
 XFCE_PACKAGES=(
+    mousepad
+    nm-connection-editor
+    sddm
     xfce4
     xfce4-terminal
     xfce4-goodies
-    sddm
-    nm-connection-editor
-    mousepad
 )
 
 DESKTOP_PACKAGES=( ${HYPRLAND_PACKAGES[@]} )
