@@ -82,3 +82,12 @@ scp ~/path/to/arch_auto_install.sh "root@<LIVE_USB_INSTALL_IP>:/root/arch_auto_i
 chmod +x arch_auto_install.sh
 ./arch_auto_install.sh
 ```
+
+- reboot
+- (from the other PC) reset ssh key
+
+```bash
+ssh-keygen -R <LIVE_USB_INSTALL_IP>
+```
+
+- follow `first_boot_setup.md`
