@@ -1,8 +1,12 @@
 # First boot setup
 
-## 👷‍♂️ Wi-Fi
+## Wi-Fi
 
-...
+```bash
+nmcli connection show
+nmcli device wifi list
+nmcli device wifi connect "<SSID>" --ask
+```
 
 ## GitHub SSH key
 
