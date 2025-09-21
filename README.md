@@ -76,7 +76,7 @@ root@<LIVE_USB_IP_ADDRESS>'s password: 123
 scp ~/path/to/arch_auto_install.sh "root@<LIVE_USB_INSTALL_IP>:/root/arch_auto_install.sh"
 ```
 
-- edit script's config parameters (e.g. `TARGET`, `HOST_NAME` and `USER_NAME`) and run the script
+- edit script's config parameters (e.g. `TARGET`, `HOST_NAME` and `USER_NAME`) and run it with
 
 ```bash
 chmod +x arch_auto_install.sh
