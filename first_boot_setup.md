@@ -8,12 +8,12 @@ nmcli device wifi list
 nmcli device wifi connect <SSID> --ask
 ```
 
-- Clone this public repo
+- Clone (HTTPS) this public repo 
 
 ```bash
 mkdir ~/src
 cd ~/src
-git clone git@github.com:horothesun/archinstall-config.git
+git clone https://github.com/horothesun/archinstall-config.git
 cd archinstall-config
 ```
 
@@ -44,6 +44,7 @@ nvim -c "PlugInstall|qa" ; nvim
 ```
 
 ## KDE Wallet (required by Brave browser)
+
 Follow [this guide](https://wiki.archlinux.org/title/KDE_Wallet#Unlocking_KWallet_automatically_in_a_window_manager)
 to setup a default KDE Wallet named `kdewallet` with same password of your user and automatically unlocked at startup
 (currently defined in hyprland autostart).
