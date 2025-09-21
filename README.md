@@ -2,7 +2,7 @@
 
 ## Target machine
 
-- Desktop PC
+- Desktop PC (no power-management tools)
 - AMD or Intel CPU with iGPU
 - Lots of RAM
 - SSD fully dedicated to Linux
