@@ -43,7 +43,7 @@ cd archinstall-config
 nvim -c "PlugInstall|qa" ; nvim
 ```
 
-## KDE Wallet (required by Brave browser):
+## KDE Wallet (required by Brave browser)
 Follow [this guide](https://wiki.archlinux.org/title/KDE_Wallet#Unlocking_KWallet_automatically_in_a_window_manager)
 to setup a default KDE Wallet named `kdewallet` with same password of your user and automatically unlocked at startup
 (currently defined in hyprland autostart).
