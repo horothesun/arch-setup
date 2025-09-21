@@ -8,7 +8,7 @@ nmcli device wifi list
 nmcli device wifi connect <SSID> --ask
 ```
 
-- Clone (HTTPS) this public repo 
+- Clone this public repo (HTTPS)
 
 ```bash
 mkdir ~/src
