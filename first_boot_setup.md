@@ -8,10 +8,20 @@ nmcli device wifi list
 nmcli device wifi connect <SSID> --ask
 ```
 
-- GitHub SSH key
+
+- (from another PC) SSH into the newly formatted machine, then `scp` and run the following script
 
 ```bash
 ./setup_ssh_key.sh
+```
+
+- Clone this repo
+
+```bash
+mkdir src
+cd src
+git clone git@github.com:horothesun/archinstall-config.git
+cd archinstall-config
 ```
 
 - Git global configuration
