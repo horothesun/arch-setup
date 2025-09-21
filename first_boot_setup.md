@@ -60,7 +60,7 @@ Install the `vim-plug` plugin manager ([guide](https://github.com/junegunn/vim-p
 nvim -c "PlugInstall|qa" ; nvim
 ```
 
-## IntelliJ Idea CE IDE
+## IntelliJ Idea CE
 
 Set JetBrains Toolbox `~/.local/share/JetBrains/Toolbox/.settings.json`
 
@@ -142,4 +142,4 @@ ufw status verbose
 
 ## Improvements
 
-- IntelliJ Idea CE IDE: evaluate installing directly via [intellij-idea-community-edition](https://archlinux.org/packages/extra/x86_64/intellij-idea-community-edition/) or [intellij-idea-community-edition-bin](https://aur.archlinux.org/packages/intellij-idea-community-edition-bin)<sup>AUR</sup>.
+- IntelliJ Idea CE: evaluate installing directly via [intellij-idea-community-edition](https://archlinux.org/packages/extra/x86_64/intellij-idea-community-edition/) or [intellij-idea-community-edition-bin](https://aur.archlinux.org/packages/intellij-idea-community-edition-bin)<sup>AUR</sup>.
