@@ -90,4 +90,4 @@ chmod +x arch_auto_install.sh
 ssh-keygen -R <LIVE_USB_INSTALL_IP>
 ```
 
-- follow `first_boot_setup.md`
+- follow [`first_boot_setup.md`](first_boot_setup.md)
