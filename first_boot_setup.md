@@ -28,6 +28,12 @@ nmcli device wifi connect <SSID> --ask
 
 - 🔒 Password Store: follow private notes.
 
+- NeoVim: install the `vim-plug` plugin manager ([guide](https://github.com/junegunn/vim-plug#neovim)), then install `nvim` plugins with
+
+```bash
+nvim -c "PlugInstall|qa" ; nvim
+```
+
 ## KDE Wallet (required by Brave browser):
 Follow [this guide](https://wiki.archlinux.org/title/KDE_Wallet#Unlocking_KWallet_automatically_in_a_window_manager)
 to setup a default KDE Wallet named `kdewallet` with same password of your user and automatically unlocked at startup
@@ -48,14 +54,6 @@ Set `brave://flags/#scrollable-tabstrip` to "Enabled" to actually disable the fe
 - [Keepa](https://chromewebstore.google.com/detail/keepa-amazon-price-tracke/neebplgakaahbhdphmkckjjcegoiijjo)
 - [I still don't care about cookies](https://chromewebstore.google.com/detail/i-still-dont-care-about-c/edibdbjcniadpccecjdfdjjppcpchdlm)
 - [AdBlock](https://chromewebstore.google.com/detail/adblock-%E2%80%94-block-ads-acros/gighmmpiobklfepjocnamgkkbiglidom)
-
-## NeoVim
-
-Install the `vim-plug` plugin manager ([guide](https://github.com/junegunn/vim-plug#neovim)), then install `nvim` plugins with
-
-```bash
-nvim -c "PlugInstall|qa" ; nvim
-```
 
 ## IntelliJ Idea Community Edition
 
