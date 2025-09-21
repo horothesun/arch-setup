@@ -1,6 +1,6 @@
 # First boot setup
 
-## Wi-Fi
+- Connect to Wi-Fi
 
 ```bash
 nmcli connection show
@@ -8,26 +8,27 @@ nmcli device wifi list
 nmcli device wifi connect <SSID> --ask
 ```
 
-## GitHub SSH key
+- GitHub SSH key
 
 ```bash
 ./setup_ssh_key.sh
 ```
 
-## Git global configuration
+- Git global configuration
 
 ```bash
 ./git_global_configs.sh
 ```
 
-## Dot-files
+- Dot-files
 
 ```bash
 ./setup_dotfiles.sh
 ```
 
-## KDE Wallet (required by Brave browser)
+- 🔒 Password Store: follow private notes.
 
+## KDE Wallet (required by Brave browser):
 Follow [this guide](https://wiki.archlinux.org/title/KDE_Wallet#Unlocking_KWallet_automatically_in_a_window_manager)
 to setup a default KDE Wallet named `kdewallet` with same password of your user and automatically unlocked at startup
 (currently defined in hyprland autostart).
@@ -47,10 +48,6 @@ Set `brave://flags/#scrollable-tabstrip` to "Enabled" to actually disable the fe
 - [Keepa](https://chromewebstore.google.com/detail/keepa-amazon-price-tracke/neebplgakaahbhdphmkckjjcegoiijjo)
 - [I still don't care about cookies](https://chromewebstore.google.com/detail/i-still-dont-care-about-c/edibdbjcniadpccecjdfdjjppcpchdlm)
 - [AdBlock](https://chromewebstore.google.com/detail/adblock-%E2%80%94-block-ads-acros/gighmmpiobklfepjocnamgkkbiglidom)
-
-## 🔒 Password Store
-
-Follow private notes.
 
 ## NeoVim
 
