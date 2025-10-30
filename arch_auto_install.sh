@@ -67,6 +67,7 @@ PACMAN_PACKAGES=(
     git-filter-repo
     guvcview
     htop
+    jami-qt
     jq
     kdeconnect
     keyd
