@@ -82,6 +82,8 @@ PACMAN_PACKAGES=(
     pavucontrol
     plocate
     pipewire
+    pipewire-alsa
+    pipewire-audio
     pipewire-jack
     pipewire-pulse
     python-cookiecutter
@@ -101,6 +103,7 @@ PACMAN_PACKAGES=(
     ufw
     yq
     wget
+    wireplumber
     wl-clipboard
     wtype
     zsh
