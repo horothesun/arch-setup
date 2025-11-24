@@ -88,6 +88,14 @@ Install IntelliJ Idea CE via the JetBrains Toolbox. Edit/add the following VM op
 - `-Xmx16384m`
 - `-Dawt.toolkit.name=WLToolkit` (enable Wayland [blog](https://blog.jetbrains.com/platform/2024/07/wayland-support-preview-in-2024-2/))
 
+## Microphone gain fix
+
+```bash
+export name='USB Audio Line Input'
+export id=$( pw-dump -N | jq --arg n "$name" '..|objects|select(.["node.description"]==$n)|.["object.id"]' )
+pw-cli set-param $id Props "{ volume: 30000 }"
+```
+
 ## Bluetooth
 
 ```bash
