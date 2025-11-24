@@ -57,6 +57,8 @@ Launch it, set `brave://flags/#ozone-platform-hint` to "Wayland" (to fix fractio
 
 Set `brave://flags/#scrollable-tabstrip` to "Enabled" to actually disable the feature.
 
+Set all desired languages in `brave://settings/languages` (add them to "Preferred languages", then enable them in "Spell check").
+
 ### Extensions
 
 - [Dark Reader](https://chromewebstore.google.com/detail/dark-reader/eimadpbcbfnmbkopoojfekhnkhdbieeh)
@@ -89,6 +91,8 @@ Install IntelliJ Idea CE via the JetBrains Toolbox. Edit/add the following VM op
 - `-Dawt.toolkit.name=WLToolkit` (enable Wayland [blog](https://blog.jetbrains.com/platform/2024/07/wayland-support-preview-in-2024-2/))
 
 ## Microphone gain fix
+
+From [here](https://bugzilla.kernel.org/show_bug.cgi?id=217786#c1):
 
 ```bash
 export name='USB Audio Line Input'
