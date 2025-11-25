@@ -447,7 +447,7 @@ echo "UKI images in ${default_uki_dirname}"
 arch-chroot "${ROOT_MNT}" ls -lah "${default_uki_dirname}"
 echo
 # Remove any leftover initramfs-*.img images...
-arch-chroot "${ROOT_MNT}" rm /boot/initramfs-linux.img /boot/initramfs-linux-fallback.img
+arch-chroot "${ROOT_MNT}" rm /boot/initramfs-linux.img
 echo
 arch-chroot "${ROOT_MNT}" mkinitcpio --preset linux-lts
 echo
@@ -455,7 +455,7 @@ echo "UKI images in ${default_lts_uki_dirname}"
 arch-chroot "${ROOT_MNT}" ls -lah "${default_lts_uki_dirname}"
 echo
 # Remove any leftover initramfs-*.img images...
-arch-chroot "${ROOT_MNT}" rm /boot/initramfs-linux-lts.img /boot/initramfs-linux-lts-fallback.img
+arch-chroot "${ROOT_MNT}" rm /boot/initramfs-linux-lts.img
 echo
 
 # systemd-boot setup...
