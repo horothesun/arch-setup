@@ -50,6 +50,7 @@ PACMAN_PACKAGES=(
     bash-language-server
     bat
     bc
+    bluetui
     bluez
     bluez-utils
     bluez-deprecated-tools
