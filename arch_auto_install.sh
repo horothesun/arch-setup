@@ -102,6 +102,8 @@ PACMAN_PACKAGES=(
     ttf-jetbrains-mono-nerd
     ttf-firacode-nerd
     ufw
+    vlc
+    vlc-plugin-ffmpeg
     yq
     wget
     wireplumber
