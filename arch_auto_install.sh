@@ -115,6 +115,7 @@ PACMAN_PACKAGES=(
 AUR_PACKAGES=(
     brave-bin
     btrfs-assistant
+    coursier
     informant
     jetbrains-toolbox
     oh-my-zsh-git
