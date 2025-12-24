@@ -37,6 +37,12 @@ cd archinstall-config
 
 - 🔒 Password Store: follow private notes.
 
+- Haskell development
+
+```bash
+./setup_haskell.sh
+```
+
 - NeoVim: install the `vim-plug` plugin manager ([guide](https://github.com/junegunn/vim-plug#neovim)), then install `nvim` plugins with
 
 ```bash

@@ -116,6 +116,7 @@ AUR_PACKAGES=(
     brave-bin
     btrfs-assistant
     coursier
+    ghcup-hs-bin
     informant
     jetbrains-toolbox
     oh-my-zsh-git
