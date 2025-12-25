@@ -508,6 +508,9 @@ sed -i -e '/^#MAKEFLAGS=.*/c\MAKEFLAGS="-j'"${MAKE_PARALLEL_JOBS_NUMBER}"'"' "${
 cat "${ROOT_MNT}/etc/makepkg.conf" | grep "MAKEFLAGS="
 echo
 
+# bluez config
+sed -i -e '/^#AutoEnable=.*/c\AutoEnable=false' "${ROOT_MNT}/etc/bluetooth/main.conf"
+
 # YAY install...
 arch-chroot "${ROOT_MNT}" su - "${USER_NAME}" --command "git clone https://aur.archlinux.org/yay.git ; cd yay ; makepkg --syncdeps --install --noconfirm ; cd .. ; rm -rf yay"
 echo
