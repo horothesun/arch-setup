@@ -62,6 +62,7 @@ PACMAN_PACKAGES=(
     cliphist
     dive
     fastfetch
+    fd
     fzf
     git
     github-cli
