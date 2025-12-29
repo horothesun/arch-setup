@@ -88,6 +88,7 @@ PACMAN_PACKAGES=(
     pipewire-audio
     pipewire-jack
     pipewire-pulse
+    pyright
     python-cookiecutter
     reflector
     sbt
