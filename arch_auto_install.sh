@@ -90,7 +90,9 @@ PACMAN_PACKAGES=(
     pipewire-pulse
     pyright
     python-cookiecutter
+    python-lsp-server
     reflector
+    ruff
     sbt
     snapper
     snap-pac
@@ -115,6 +117,7 @@ PACMAN_PACKAGES=(
 )
 
 AUR_PACKAGES=(
+    basedpyright
     brave-bin
     btrfs-assistant
     coursier
