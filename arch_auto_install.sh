@@ -73,6 +73,7 @@ PACMAN_PACKAGES=(
     jq
     kdeconnect
     keyd
+    lua-language-server
     man-db
     man-pages
     mtools
