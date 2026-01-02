@@ -2,7 +2,7 @@
 
 HOST_NAME="$( uname --nodename )"
 
-read -p "Provide the SSH key email: " SSH_KEY_EMAIL
+read -r -p "Provide the SSH key email: " SSH_KEY_EMAIL
 echo
 
 read -r -p "Provide the SSH key passphrase (pass \"${HOST_NAME} SSH key\"): " SSH_KEY_PASSPHRASE
