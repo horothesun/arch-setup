@@ -104,6 +104,7 @@ PACMAN_PACKAGES=(
     tldr
     translate-shell
     tree
+    ttf-iosevkaterm-nerd
     ttf-jetbrains-mono-nerd
     ttf-firacode-nerd
     ufw
