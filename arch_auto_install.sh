@@ -104,9 +104,9 @@ PACMAN_PACKAGES=(
     tldr
     translate-shell
     tree
+    ttf-firacode-nerd
     ttf-iosevkaterm-nerd
     ttf-jetbrains-mono-nerd
-    ttf-firacode-nerd
     ufw
     vlc
     vlc-plugin-ffmpeg
