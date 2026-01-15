@@ -56,7 +56,6 @@ PACMAN_PACKAGES=(
     bluez-deprecated-tools
     browserpass
     browserpass-chromium
-    pavucontrol
     btop
     cmatrix
     cliphist
