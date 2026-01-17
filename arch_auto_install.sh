@@ -25,7 +25,7 @@ echo
 # packages to pacstrap
 MICROCODE_PACKAGE=$( if lscpu | grep -q "AuthenticAMD"; then echo "amd-ucode"; else echo "intel-ucode"; fi )
 PACSTRAP_PACKAGES=(
-    $MICROCODE_PACKAGE
+    "${MICROCODE_PACKAGE}"
     base
     base-devel
     btrfs-progs
@@ -42,94 +42,93 @@ PACSTRAP_PACKAGES=(
 )
 
 PACMAN_PACKAGES=(
-    alacritty
-    alsa-utils
-    amdgpu_top
+    alacritty # A cross-platform, GPU-accelerated terminal emulator
+    alsa-utils # Advanced Linux Sound Architecture - Utilities
+    amdgpu_top # Tool that shows AMD GPU utilization
     asciiquarium
     bash-completion
     bash-language-server
-    bat
-    bc
-    bluetui
+    bat # Cat clone with syntax highlighting and git integration
+    bc # An arbitrary precision calculator language
+    bluetui # TUI for managing bluetooth devices
     bluez
     bluez-utils
     bluez-deprecated-tools
     browserpass
     browserpass-chromium
-    btop
+    btop # A monitor of system resources, bpytop ported to C++
     cmatrix
-    cliphist
-    dive
+    cliphist # wayland clipboard manager
+    dive # A tool for exploring layers in a docker image
     fastfetch
-    fd
-    fzf
+    fd # Simple, fast and user-friendly alternative to find
+    fzf # Command-line fuzzy finder
     git
     github-cli
-    git-filter-repo
-    guvcview
+    git-filter-repo # Quickly rewrite git repository history (filter-branch replacement)
+    guvcview # Simple GTK+ interface for capturing and viewing video from v4l2 devices
     htop
-    jami-qt
+    jami-qt # Free and universal communication platform which preserves the users’ privacy and freedoms
     jq
-    kdeconnect
-    keyd
+    kdeconnect # Adds communication between KDE and your smartphone
+    keyd # A key remapping daemon for linux
     lua-language-server
-    man-db
-    man-pages
-    mtools
-    ncdu
+    man-db # A utility for reading man pages
+    man-pages # Linux man pages
+    ncdu # Disk usage analyzer with an ncurses interface
     neovim
     noto-fonts-emoji
     openssh
-    pass
-    pavucontrol
-    plocate
-    pipewire
-    pipewire-alsa
-    pipewire-audio
-    pipewire-jack
-    pipewire-pulse
-    pyright
-    python-cookiecutter
-    python-lsp-server
-    reflector
-    ruff
-    sbt
-    snapper
-    snap-pac
-    speedtest-cli
-    starship
-    stow
+    pass # Stores, retrieves, generates, and synchronizes passwords securely
+    pavucontrol # PulseAudio Volume Control
+    plocate # Alternative to locate, faster and compatible with mlocate's database
+    pipewire # Low-latency audio/video router and processor
+    pipewire-alsa # Low-latency audio/video router and processor - ALSA configuration
+    pipewire-audio # Low-latency audio/video router and processor - Audio support
+    pipewire-jack # Low-latency audio/video router and processor - JACK replacement
+    pipewire-pulse # Low-latency audio/video router and processor - PulseAudio replacement
+    pyright # Type checker for the Python language
+    python-cookiecutter # A command-line utility that creates projects from project templates
+    python-lsp-server # Fork of the python-language-server project, maintained by the Spyder IDE team and the community
+    reflector # A Python 3 module and script to retrieve and filter the latest Pacman mirror list
+    ruff # An extremely fast Python linter, written in Rust
+    sbt # The interactive build tool
+    snapper # A tool for managing BTRFS and LVM snapshots
+    snap-pac # Pacman hooks that use snapper to create pre/post btrfs snapshots like openSUSE's YaST
+    speedtest-cli # Command line interface for testing internet bandwidth using speedtest.net
+    starship # The cross-shell prompt for astronauts
+    stow # Manage installation of multiple softwares in the same directory tree
     telegram-desktop
-    tldr
-    translate-shell
+    tldr # Command line client for tldr, a collection of simplified man pages
+    translate-shell # A command-line interface and interactive shell for Google Translate
     tree
     ttf-firacode-nerd
     ttf-iosevkaterm-nerd
     ttf-jetbrains-mono-nerd
-    ufw
+    ufw # Uncomplicated and easy to use CLI tool for managing a netfilter firewall
     vlc
     vlc-plugin-ffmpeg
-    yq
+    yq # Command-line YAML, XML, TOML processor - jq wrapper for YAML/XML/TOML documents
     wget
-    wireplumber
-    wl-clipboard
-    wtype
+    wireplumber # Session / policy manager implementation for PipeWire
+    wl-clipboard # Command-line copy/paste utilities for Wayland
+    wtype # xdotool type for wayland
     zsh
 )
 
 AUR_PACKAGES=(
-    basedpyright
-    brave-bin
-    btrfs-assistant
-    coursier
-    ghcup-hs-bin
-    informant
+    basedpyright # pyright fork with various improvements and pylance features
+    brave-bin # Web browser that blocks ads and trackers by default (binary release)
+    btrfs-assistant # An application for managing BTRFS subvolumes and Snapper snapshots
+    coursier # Pure Scala Artifact Fetching
+    ghcup-hs-bin # an installer for the general purpose language Haskell
+    informant # An Arch Linux News reader and pacman hook
     jetbrains-toolbox
     oh-my-zsh-git
     scala-cli
     sddm-astronaut-theme
-    snapper-rollback
-    terraform-ls
+    snapper-rollback # Script to rollback snapper snapshots as described here https://wiki.archlinux.org/index.php/Snapper#Suggested_filesystem_layout
+    terraform-ls # Terraform Language Server
 )
 
 # Desktop packages
@@ -148,25 +147,25 @@ GNOME_PACKAGES=(
 )
 
 HYPRLAND_PACKAGES=(
-    dolphin
-    hypridle
+    dolphin # KDE File Manager
+    hypridle # hyprland’s idle daemon
     hyprland
-    hyprlock
-    hyprpolkitagent
-    hyprshot
-    kitty
-    kwalletmanager
-    kwallet-pam
-    polkit-kde-agent
-    qt5-wayland
-    qt6-wayland
-    rofi
-    rofi-emoji
-    sddm
-    swaync
-    uwsm
-    waybar
-    xdg-desktop-portal-hyprland
+    hyprlock # hyprland’s GPU-accelerated screen locking utility
+    hyprpolkitagent # Simple polkit authentication agent for Hyprland, written in QT/QML
+    hyprshot # Hyprland screenshot utility
+    kitty # Default hyprland's terminal emulator
+    kwalletmanager # Wallet management tool
+    kwallet-pam # KWallet PAM integration
+    polkit-kde-agent # Daemon providing a polkit authentication UI for KDE
+    qt5-wayland # Provides APIs for Wayland
+    qt6-wayland # Provides APIs for Wayland
+    rofi # A window switcher, application launcher and dmenu replacement
+    rofi-emoji # A Rofi plugin for selecting emojis
+    sddm # QML based X11 and Wayland display manager
+    swaync # A simple GTK based notification daemon for Sway
+    uwsm # A standalone Wayland session manager
+    waybar # Highly customizable Wayland bar for Sway and Wlroots based compositors
+    xdg-desktop-portal-hyprland # xdg-desktop-portal backend for hyprland
 )
 
 PLASMA_PACKAGES=(
@@ -185,7 +184,7 @@ XFCE_PACKAGES=(
     xfce4-goodies
 )
 
-DESKTOP_PACKAGES=( ${HYPRLAND_PACKAGES[@]} )
+DESKTOP_PACKAGES=( "${HYPRLAND_PACKAGES[@]}" )
 
 ### Start!
 
@@ -318,7 +317,7 @@ echo
 
 # Setting up environment...
 # set up locale/env: add our locale to locale.gen
-sed -i -e "/^#"${LOCALE}"/s/^#//" "${ROOT_MNT}/etc/locale.gen"
+sed -i -e "/^#""${LOCALE}""/s/^#//" "${ROOT_MNT}/etc/locale.gen"
 # remove any existing config files that may have been pacstrapped, systemd-firstboot will then regenerate them
 rm "${ROOT_MNT}"/etc/{machine-id,localtime,hostname,shadow,locale.conf} ||
 systemd-firstboot \
@@ -406,8 +405,8 @@ EOF
 echo
 
 # read the linux UKI settings and create the folder structure otherwise mkinitcpio will crash
-declare $(grep default_uki "${ROOT_MNT}/etc/mkinitcpio.d/linux.preset")
-declare $(grep fallback_uki "${ROOT_MNT}/etc/mkinitcpio.d/linux.preset")
+declare "$(grep default_uki "${ROOT_MNT}/etc/mkinitcpio.d/linux.preset")"
+declare "$(grep fallback_uki "${ROOT_MNT}/etc/mkinitcpio.d/linux.preset")"
 declare default_uki_dirname=$(dirname "${default_uki//\"}")
 arch-chroot "${ROOT_MNT}" echo "default_uki: ${default_uki}"
 arch-chroot "${ROOT_MNT}" echo "fallback_uki: ${fallback_uki}"
@@ -416,8 +415,8 @@ arch-chroot "${ROOT_MNT}" mkdir -p "${default_uki_dirname}"
 echo
 
 # read the linux-lts UKI settings and create the folder structure otherwise mkinitcpio will crash
-declare $(grep default_uki "${ROOT_MNT}/etc/mkinitcpio.d/linux-lts.preset" | sed 's/default_uki=/default_lts_uki=/g')
-declare $(grep fallback_uki "${ROOT_MNT}/etc/mkinitcpio.d/linux-lts.preset" | sed 's/fallback_uki=/fallback_lts_uki=/g')
+declare "$(grep default_uki "${ROOT_MNT}/etc/mkinitcpio.d/linux-lts.preset" | sed 's/default_uki=/default_lts_uki=/g')"
+declare "$(grep fallback_uki "${ROOT_MNT}/etc/mkinitcpio.d/linux-lts.preset" | sed 's/fallback_uki=/fallback_lts_uki=/g')"
 declare default_lts_uki_dirname=$(dirname "${default_lts_uki//\"}")
 arch-chroot "${ROOT_MNT}" echo "default_lts_uki: ${default_lts_uki}"
 arch-chroot "${ROOT_MNT}" echo "fallback_lts_uki: ${fallback_lts_uki}"
@@ -523,7 +522,7 @@ echo
 
 # YAY update and setup packages...
 arch-chroot "${ROOT_MNT}" su - "${USER_NAME}" --command "yay -Syu --noconfirm --norebuild --answerdiff=None --answeredit=None"
-export AUR_PACKAGES_SAME_LINE="${AUR_PACKAGES[@]}"
+export AUR_PACKAGES_SAME_LINE="${AUR_PACKAGES[*]}"
 arch-chroot "${ROOT_MNT}" su - "${USER_NAME}" --command "yay -S --noconfirm --norebuild --answerdiff=None --answeredit=None ${AUR_PACKAGES_SAME_LINE}"
 echo
 
@@ -580,7 +579,7 @@ EOF
 cat "${ROOT_MNT}/etc/sddm.conf.d/virtualkbd.conf"
 echo
 sed -i \
-    "s/^ConfigFile=.*/ConfigFile=Themes\/"${SDDM_THEME_CONF_FILE}"/g" \
+    "s/^ConfigFile=.*/ConfigFile=Themes\/""${SDDM_THEME_CONF_FILE}""/g" \
     "${ROOT_MNT}/usr/share/sddm/themes/sddm-astronaut-theme/metadata.desktop"
 sed -i \
     -e '/^ScreenWidth=.*/c\ScreenWidth="2560"' \
