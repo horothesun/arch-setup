@@ -131,6 +131,26 @@ AUR_PACKAGES=(
     terraform-ls # Terraform Language Server
 )
 
+# GPU packages
+
+AMD_GPU_PACKAGES=(
+    lib32-mesa # Open-source OpenGL drivers - 32-bit
+    lib32-vulkan-icd-loader # Vulkan Installable Client Driver (ICD) Loader (32-bit)
+    lib32-vulkan-radeon # Open-source Vulkan driver for AMD GPUs - 32-bit
+    mesa # Open-source OpenGL drivers
+    vulkan-icd-loader # Vulkan Installable Client Driver (ICD) Loader
+    vulkan-radeon # Open-source Vulkan driver for AMD GPUs
+    vulkan-tools # Vulkan tools and utilities
+)
+
+# TODO: fill packages list 🔥🔥🔥
+INTEL_GPU_PACKAGES=()
+
+# TODO: fill packages list 🔥🔥🔥
+NVIDIA_GPU_PACKAGES=()
+
+GPU_PACKAGES=( "${AMD_GPU_PACKAGES[@]}" )
+
 # Desktop packages
 
 # enable cosmic-greeter.service
@@ -436,7 +456,7 @@ sed -i \
 echo
 
 # Installing base and GUI packages...
-arch-chroot "${ROOT_MNT}" pacman -Sy "${PACMAN_PACKAGES[@]}" "${DESKTOP_PACKAGES[@]}" --noconfirm --quiet
+arch-chroot "${ROOT_MNT}" pacman -Sy "${PACMAN_PACKAGES[@]}" "${GPU_PACKAGES[@]}" "${DESKTOP_PACKAGES[@]}" --noconfirm --quiet
 echo
 
 # Enable services...
