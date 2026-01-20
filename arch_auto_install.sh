@@ -78,6 +78,7 @@ PACMAN_PACKAGES=(
     ncdu # Disk usage analyzer with an ncurses interface
     neovim
     noto-fonts-emoji
+    obs-studio # Free, open source software for live streaming and recording
     openssh
     pass # Stores, retrieves, generates, and synchronizes passwords securely
     pavucontrol # PulseAudio Volume Control
