@@ -107,8 +107,8 @@ PACMAN_PACKAGES=(
     ttf-iosevkaterm-nerd
     ttf-jetbrains-mono-nerd
     ufw # Uncomplicated and easy to use CLI tool for managing a netfilter firewall
-    vlc
-    vlc-plugin-ffmpeg
+    vlc # Free and open source cross-platform multimedia player and framework
+    vlc-plugins-all
     yq # Command-line YAML, XML, TOML processor - jq wrapper for YAML/XML/TOML documents
     wget
     wireplumber # Session / policy manager implementation for PipeWire
