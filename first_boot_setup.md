@@ -106,6 +106,12 @@ export id=$( pw-dump -N | jq --arg n "$name" '..|objects|select(.["node.descript
 pw-cli set-param $id Props "{ volume: 30000 }"
 ```
 
+## VLC small UI scale fix
+
+```bash
+sudo sed -i -e 's#^Exec=.*#Exec=env QT_SCALE_FACTOR=1.5 /usr/bin/vlc --started-from-file %U#g' /usr/share/applications/vlc.desktop
+```
+
 ## Bluetooth
 
 ```bash
