@@ -168,7 +168,7 @@ GNOME_PACKAGES=(
 )
 
 HYPRLAND_PACKAGES=(
-    dolphin # KDE File Manager
+    thunar # Xfce File Manager
     hypridle # hyprland’s idle daemon
     hyprland
     hyprlock # hyprland’s GPU-accelerated screen locking utility
