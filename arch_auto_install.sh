@@ -107,6 +107,9 @@ PACMAN_PACKAGES=(
     ttf-iosevkaterm-nerd
     ttf-jetbrains-mono-nerd
     ufw # Uncomplicated and easy to use CLI tool for managing a netfilter firewall
+    v4l2loopback-dkms # v4l2-loopback device – module sources
+    v4l2loopback-utils # v4l2-loopback device – utilities only
+    v4l-utils # Userspace tools and conversion library for Video 4 Linux
     vlc # Free and open source cross-platform multimedia player and framework
     vlc-plugins-all
     yq # Command-line YAML, XML, TOML processor - jq wrapper for YAML/XML/TOML documents
@@ -125,6 +128,7 @@ AUR_PACKAGES=(
     ghcup-hs-bin # an installer for the general purpose language Haskell
     informant # An Arch Linux News reader and pacman hook
     jetbrains-toolbox
+    obs-backgroundremoval # Background removal plugin for OBS studio
     oh-my-zsh-git
     scala-cli
     sddm-astronaut-theme
