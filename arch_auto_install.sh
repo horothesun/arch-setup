@@ -79,6 +79,7 @@ PACMAN_PACKAGES=(
     neovim
     noto-fonts-emoji
     obs-studio # Free, open source software for live streaming and recording
+    onnxruntime-opt-rocm # Cross-platform, high performance scoring engine for ML models (with ROCm and AVX2 CPU optimizations)
     openssh
     pass # Stores, retrieves, generates, and synchronizes passwords securely
     pavucontrol # PulseAudio Volume Control
