@@ -616,6 +616,21 @@ sed -i \
     "${ROOT_MNT}/usr/share/sddm/themes/sddm-astronaut-theme/Themes/${SDDM_THEME_CONF_FILE}"
 echo
 
+# guvcview.desktop file
+mkdir -p "${ROOT_MNT}/home/${USER_NAME}/.local/share/applications"
+cat <<EOF > "${ROOT_MNT}/home/${USER_NAME}/.local/share/applications/guvcview.desktop"
+[Desktop Entry]
+Version=1.0
+Name=guvcview - GTK+ base UVC Viewer
+Comment=
+Exec=/usr/bin/guvcview
+Icon=guvcview
+Terminal=false
+Type=Application
+Categories=AudioVideo;Recorder;
+EOF
+echo
+
 # Swap/swapfile setup...
 # TODO: consider for hibernation (suspend-to-disk)... 🔥🔥🔥
 
