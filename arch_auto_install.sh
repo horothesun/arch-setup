@@ -210,6 +210,26 @@ XFCE_PACKAGES=(
     xfce4-goodies
 )
 
+# TODO: (apt: volumeicon-alsa? | archived repo) https://archlinux.org/packages/extra/x86_64/volumeicon/ 🔥🔥🔥
+XMONAD_PACKAGES=(
+    brightnessctl # Lightweight brightness control tool
+    demu # Generic menu for X
+    maim # Utility to take a screenshot using imlib2
+    xdotool # Command-line X11 automation tool
+    xmobar # Minimalistic Text Based Status Bar
+    xmonad
+    xmonad-contrib # Community-maintained extensions for xmonad
+    xmonad-extras # Third party extensions for xmonad with wacky dependencies
+    xmonad-utils # Small collection of X utilities
+    xterm # X Terminal Emulator
+    sxhkd # Simple X hotkey daemon
+    sddm
+)
+# TODO: extend AUR_PACKAGES with this 🔥🔥🔥
+XMONAD_AUR_PACKAGES=(
+    trayer # lightweight GTK2-based systray for UNIX desktop
+)
+
 DESKTOP_PACKAGES=( "${HYPRLAND_PACKAGES[@]}" )
 
 ### Start!
