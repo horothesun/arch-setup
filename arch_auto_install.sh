@@ -214,7 +214,7 @@ XFCE_PACKAGES=(
 XMONAD_PACKAGES=(
     brightnessctl # Lightweight brightness control tool
     copyq # Clipboard manager with searchable and editable history
-    demu # Generic menu for X
+    dmenu # Generic menu for X
     maim # Utility to take a screenshot using imlib2
     xdotool # Command-line X11 automation tool
     xmobar # Minimalistic Text Based Status Bar
