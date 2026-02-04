@@ -213,6 +213,7 @@ XFCE_PACKAGES=(
 # TODO: (apt: volumeicon-alsa? | archived repo) https://archlinux.org/packages/extra/x86_64/volumeicon/ 🔥🔥🔥
 XMONAD_PACKAGES=(
     brightnessctl # Lightweight brightness control tool
+    copyq # Clipboard manager with searchable and editable history
     demu # Generic menu for X
     maim # Utility to take a screenshot using imlib2
     xdotool # Command-line X11 automation tool
@@ -227,6 +228,7 @@ XMONAD_PACKAGES=(
 )
 # TODO: extend AUR_PACKAGES with this 🔥🔥🔥
 XMONAD_AUR_PACKAGES=(
+    auto-cpufreq # Automatic CPU speed & power optimizer
     trayer # lightweight GTK2-based systray for UNIX desktop
 )
 
