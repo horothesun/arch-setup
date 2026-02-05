@@ -132,7 +132,7 @@ AUR_PACKAGES=(
     obs-backgroundremoval # Background removal plugin for OBS studio
     oh-my-zsh-git
     scala-cli
-    sddm-astronaut-theme
+    sddm-astronaut-theme # Modern looking sddm qt6 theme
     snapper-rollback # Script to rollback snapper snapshots as described here https://wiki.archlinux.org/index.php/Snapper#Suggested_filesystem_layout
     terraform-ls # Terraform Language Server
 )
@@ -162,7 +162,7 @@ GPU_PACKAGES=( "${AMD_GPU_PACKAGES[@]}" )
 # enable cosmic-greeter.service
 COSMIC_PACKAGES=(
     cosmic
-    sddm
+    sddm # QML based X11 and Wayland display manager
 )
 
 # enable gdm.service
@@ -198,13 +198,13 @@ PLASMA_PACKAGES=(
     kitty
     nm-connection-editor
     plasma
-    sddm
+    sddm # QML based X11 and Wayland display manager
 )
 
 XFCE_PACKAGES=(
     mousepad
     nm-connection-editor
-    sddm
+    sddm # QML based X11 and Wayland display manager
     xfce4
     xfce4-terminal
     xfce4-goodies
@@ -216,6 +216,9 @@ XMONAD_PACKAGES=(
     copyq # Clipboard manager with searchable and editable history
     dmenu # Generic menu for X
     maim # Utility to take a screenshot using imlib2
+    sddm # QML based X11 and Wayland display manager
+    stalonetray # STAnd-aLONE sysTRAY. It has minimal build and run-time dependencies: the Xlib only
+    sxhkd # Simple X hotkey daemon
     xdotool # Command-line X11 automation tool
     xmobar # Minimalistic Text Based Status Bar
     xmonad
@@ -223,13 +226,10 @@ XMONAD_PACKAGES=(
     xmonad-extras # Third party extensions for xmonad with wacky dependencies
     xmonad-utils # Small collection of X utilities
     xterm # X Terminal Emulator
-    sxhkd # Simple X hotkey daemon
-    sddm
 )
 # TODO: extend AUR_PACKAGES with this 🔥🔥🔥
 XMONAD_AUR_PACKAGES=(
     auto-cpufreq # Automatic CPU speed & power optimizer
-    trayer # lightweight GTK2-based systray for UNIX desktop
 )
 
 DESKTOP_PACKAGES=( "${HYPRLAND_PACKAGES[@]}" )
