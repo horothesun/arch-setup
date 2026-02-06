@@ -378,6 +378,19 @@ snapper -c root create --description "*** BEGINNING OF TIME ***"
 snapper list
 ```
 
+### Cleanup `timeline` snapshots
+
+```bash
+snapper --machine-readable json list |\
+  jq --compact-output --monochrome-output '
+      .root[]
+    | select((.type == "single") and (.cleanup == "timeline") and (.description == "timeline"))
+    | .number
+  ' |\
+  xargs snapper --config "root" delete ;\
+  sudo grub-mkconfig -o /boot/grub/grub.cfg
+```
+
 ## KDE Wallet (required by Brave)
 
 Follow [this guide](https://wiki.archlinux.org/title/KDE_Wallet#Unlocking_KWallet_automatically_in_a_window_manager)
