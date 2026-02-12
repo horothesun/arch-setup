@@ -216,6 +216,7 @@ XMONAD_PACKAGES=(
     copyq # Clipboard manager with searchable and editable history
     dmenu # Generic menu for X
     maim # Utility to take a screenshot using imlib2
+    network-manager-applet # Applet for managing network connections
     sddm # QML based X11 and Wayland display manager
     stalonetray # STAnd-aLONE sysTRAY. It has minimal build and run-time dependencies: the Xlib only
     sxhkd # Simple X hotkey daemon
@@ -641,6 +642,27 @@ sed -i \
     -e '/^TranslateVirtualKeyboardButtonOff=.*/c\TranslateVirtualKeyboardButtonOff=" "' \
     "${ROOT_MNT}/usr/share/sddm/themes/sddm-astronaut-theme/Themes/${SDDM_THEME_CONF_FILE}"
 echo
+
+
+# XMonad basic setup
+XMONAD_PACKAGE=xmonad
+if [[ " ${DESKTOP_PACKAGES[*]} " =~ [[:space:]]${XMONAD_PACKAGE}[[:space:]] ]]; then
+
+mkdir -p "${ROOT_MNT}/home/${USER_NAME}/.xmonad"
+cat <<EOF > "${ROOT_MNT}/home/${USER_NAME}/.xmonad/xmonad.hs"
+import XMonad
+
+main = xmonad def
+    { terminal    = "kitty"
+    , modMask     = mod4Mask
+    , borderWidth = 1
+    }
+EOF
+# TODO: do we need to run `xmonad --recompile` as su ? 🔥🔥🔥
+echo
+
+fi
+
 
 # guvcview.desktop file
 mkdir -p "${ROOT_MNT}/home/${USER_NAME}/.local/share/applications"
