@@ -210,13 +210,13 @@ XFCE_PACKAGES=(
     xfce4-goodies
 )
 
-# TODO: (apt: volumeicon-alsa? | archived repo) https://archlinux.org/packages/extra/x86_64/volumeicon/ 🔥🔥🔥
 XMONAD_PACKAGES=(
     brightnessctl # Lightweight brightness control tool
     copyq # Clipboard manager with searchable and editable history
     dmenu # Generic menu for X
     maim # Utility to take a screenshot using imlib2
     network-manager-applet # Applet for managing network connections
+    pasystray # PulseAudio system tray (a replacement for padevchooser)
     sddm # QML based X11 and Wayland display manager
     stalonetray # STAnd-aLONE sysTRAY. It has minimal build and run-time dependencies: the Xlib only
     sxhkd # Simple X hotkey daemon
