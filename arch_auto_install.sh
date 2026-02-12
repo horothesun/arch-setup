@@ -219,6 +219,7 @@ XMONAD_PACKAGES=(
     sddm # QML based X11 and Wayland display manager
     stalonetray # STAnd-aLONE sysTRAY. It has minimal build and run-time dependencies: the Xlib only
     sxhkd # Simple X hotkey daemon
+    thunar # Xfce File Manager
     xdotool # Command-line X11 automation tool
     xmobar # Minimalistic Text Based Status Bar
     xmonad
@@ -495,8 +496,11 @@ systemctl --root "${ROOT_MNT}" mask systemd-networkd
 echo
 # since we're going to use hyprland+uwsm, hypridle will run as a systemd user service
 # NOTE: ~/.config/hypr/hypridle.conf must be present for the service to start properly
-arch-chroot "${ROOT_MNT}" su - "${USER_NAME}" --command "sudo systemctl --user enable hypridle.service"
-echo
+HYPRIDLE_PACKAGE=hypridle
+if [[ " ${DESKTOP_PACKAGES[*]} " =~ [[:space:]]${HYPRIDLE_PACKAGE}[[:space:]] ]]; then
+    arch-chroot "${ROOT_MNT}" su - "${USER_NAME}" --command "sudo systemctl --user enable hypridle.service"
+    echo
+fi
 
 # Generating UKIs and installing Boot Loader...
 arch-chroot "${ROOT_MNT}" mkinitcpio --preset linux
