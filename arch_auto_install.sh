@@ -46,6 +46,7 @@ PACMAN_PACKAGES=(
     alsa-utils # Advanced Linux Sound Architecture - Utilities
     amdgpu_top # Tool that shows AMD GPU utilization
     asciiquarium
+    aws-cli-v2 # Universal Command Line Interface for Amazon Web Services (version 2)
     bash-completion
     bash-language-server
     bat # Cat clone with syntax highlighting and git integration
@@ -65,6 +66,7 @@ PACMAN_PACKAGES=(
     fzf # Command-line fuzzy finder
     git
     github-cli
+    gitu # A TUI Git client inspired by Magit
     git-filter-repo # Quickly rewrite git repository history (filter-branch replacement)
     guvcview # Simple GTK+ interface for capturing and viewing video from v4l2 devices
     htop
