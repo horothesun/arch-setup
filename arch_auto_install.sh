@@ -655,9 +655,11 @@ cat <<EOF > "${ROOT_MNT}/home/${USER_NAME}/.xmonad/xmonad.hs"
 import XMonad
 
 main = xmonad def
-    { terminal    = "xterm"
-    , modMask     = mod4Mask
-    , borderWidth = 1
+    { terminal           = "alacritty"
+    , modMask            = mod4Mask
+    , borderWidth        = 1
+    , normalBorderColor  = "#363636"
+    , focusedBorderColor = "darkGreen"
     }
 EOF
 arch-chroot "${ROOT_MNT}" chown --recursive "${USER_NAME}:${USER_NAME}" "/home/${USER_NAME}/.xmonad"
