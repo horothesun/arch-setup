@@ -655,7 +655,7 @@ cat <<EOF > "${ROOT_MNT}/home/${USER_NAME}/.xmonad/xmonad.hs"
 import XMonad
 
 main = xmonad def
-    { terminal    = "kitty"
+    { terminal    = "xterm"
     , modMask     = mod4Mask
     , borderWidth = 1
     }
