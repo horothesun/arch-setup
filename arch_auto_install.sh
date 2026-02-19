@@ -45,33 +45,33 @@ PACMAN_PACKAGES=(
     alacritty # A cross-platform, GPU-accelerated terminal emulator
     alsa-utils # Advanced Linux Sound Architecture - Utilities
     amdgpu_top # Tool that shows AMD GPU utilization
-    asciiquarium
+    asciiquarium # An aquarium/sea animation in ASCII art
     aws-cli-v2 # Universal Command Line Interface for Amazon Web Services (version 2)
-    bash-completion
+    bash-completion # Programmable completion for the bash shell
     bash-language-server
     bat # Cat clone with syntax highlighting and git integration
     bc # An arbitrary precision calculator language
     bluetui # TUI for managing bluetooth devices
-    bluez
-    bluez-utils
-    bluez-deprecated-tools
-    browserpass
-    browserpass-chromium
+    bluez # Daemons for the bluetooth protocol stack
+    bluez-utils # Development and debugging utilities for the bluetooth protocol stack
+    bluez-deprecated-tools # Deprecated tools that are no longer maintained
+    browserpass # Native host app for Browserpass, browser extension for zx2c4's pass (password manager)
+    browserpass-chromium # Chromium extension for Browserpass, browser extension for zx2c4's pass (password manager)
     btop # A monitor of system resources, bpytop ported to C++
-    cmatrix
+    cmatrix # A curses-based scrolling 'Matrix'-like screen
     cliphist # wayland clipboard manager
     dive # A tool for exploring layers in a docker image
-    fastfetch
+    fastfetch # A feature-rich and performance oriented neofetch like system information tool
     fd # Simple, fast and user-friendly alternative to find
     fzf # Command-line fuzzy finder
-    git
-    github-cli
+    git # the fast distributed version control system
+    github-cli # The GitHub CLI
     gitu # A TUI Git client inspired by Magit
     git-filter-repo # Quickly rewrite git repository history (filter-branch replacement)
     guvcview # Simple GTK+ interface for capturing and viewing video from v4l2 devices
-    htop
+    htop # Interactive process viewer
     jami-qt # Free and universal communication platform which preserves the users’ privacy and freedoms
-    jq
+    jq # Command-line JSON processor
     kdeconnect # Adds communication between KDE and your smartphone
     keyd # A key remapping daemon for linux
     lua-language-server
@@ -79,10 +79,10 @@ PACMAN_PACKAGES=(
     man-pages # Linux man pages
     ncdu # Disk usage analyzer with an ncurses interface
     neovim
-    noto-fonts-emoji
+    noto-fonts-emoji # Google Noto Color Emoji font
     obs-studio # Free, open source software for live streaming and recording
     onnxruntime-opt-rocm # Cross-platform, high performance scoring engine for ML models (with ROCm and AVX2 CPU optimizations)
-    openssh
+    openssh # SSH protocol implementation for remote login, command execution and file transfer
     pass # Stores, retrieves, generates, and synchronizes passwords securely
     pavucontrol # PulseAudio Volume Control
     plocate # Alternative to locate, faster and compatible with mlocate's database
@@ -105,7 +105,7 @@ PACMAN_PACKAGES=(
     telegram-desktop
     tldr # Command line client for tldr, a collection of simplified man pages
     translate-shell # A command-line interface and interactive shell for Google Translate
-    tree
+    tree # A directory listing program displaying a depth indented list of files
     ttf-firacode-nerd
     ttf-iosevkaterm-nerd
     ttf-jetbrains-mono-nerd
@@ -114,13 +114,13 @@ PACMAN_PACKAGES=(
     v4l2loopback-utils # v4l2-loopback device – utilities only
     v4l-utils # Userspace tools and conversion library for Video 4 Linux
     vlc # Free and open source cross-platform multimedia player and framework
-    vlc-plugins-all
+    vlc-plugins-all # Free and open source cross-platform multimedia player and framework - all plugins
     yq # Command-line YAML, XML, TOML processor - jq wrapper for YAML/XML/TOML documents
-    wget
+    wget # Network utility to retrieve files from the web
     wireplumber # Session / policy manager implementation for PipeWire
     wl-clipboard # Command-line copy/paste utilities for Wayland
     wtype # xdotool type for wayland
-    zsh
+    zsh # A very advanced and programmable command interpreter (shell) for UNIX
 )
 
 AUR_PACKAGES=(
@@ -130,10 +130,10 @@ AUR_PACKAGES=(
     coursier # Pure Scala Artifact Fetching
     ghcup-hs-bin # an installer for the general purpose language Haskell
     informant # An Arch Linux News reader and pacman hook
-    jetbrains-toolbox
+    jetbrains-toolbox # Manage all your JetBrains Projects and Tools
     obs-backgroundremoval # Background removal plugin for OBS studio
-    oh-my-zsh-git
-    scala-cli
+    oh-my-zsh-git # A community-driven framework for managing your zsh configuration
+    scala-cli # A command-line tool to interact with the Scala language
     sddm-astronaut-theme # Modern looking sddm qt6 theme
     snapper-rollback # Script to rollback snapper snapshots as described here https://wiki.archlinux.org/index.php/Snapper#Suggested_filesystem_layout
     terraform-ls # Terraform Language Server
@@ -197,15 +197,15 @@ HYPRLAND_PACKAGES=(
 )
 
 PLASMA_PACKAGES=(
-    kitty
-    nm-connection-editor
+    kitty # Default hyprland's terminal emulator
+    nm-connection-editor # NetworkManager GUI connection editor and widgets
     plasma
     sddm # QML based X11 and Wayland display manager
 )
 
 XFCE_PACKAGES=(
-    mousepad
-    nm-connection-editor
+    mousepad # Simple text editor for Xfce
+    nm-connection-editor # NetworkManager GUI connection editor and widgets
     sddm # QML based X11 and Wayland display manager
     xfce4
     xfce4-terminal
@@ -660,6 +660,7 @@ main = xmonad def
     , borderWidth = 1
     }
 EOF
+chown --recursive "${USER_NAME}:${USER_NAME}" "${ROOT_MNT}/home/${USER_NAME}/.xmonad"
 # TODO: do we need to run `xmonad --recompile` as su ? 🔥🔥🔥
 echo
 
@@ -679,6 +680,7 @@ Terminal=false
 Type=Application
 Categories=AudioVideo;Recorder;
 EOF
+chown --recursive "${USER_NAME}:${USER_NAME}" "${ROOT_MNT}/home/${USER_NAME}/.local"
 echo
 
 # Swap/swapfile setup...
