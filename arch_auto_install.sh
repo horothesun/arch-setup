@@ -660,7 +660,7 @@ main = xmonad def
     , borderWidth = 1
     }
 EOF
-arch-chroot "${ROOT_MNT}" chown --recursive "${USER_NAME}:${USER_NAME}" "${ROOT_MNT}/home/${USER_NAME}/.xmonad"
+arch-chroot "${ROOT_MNT}" chown --recursive "${USER_NAME}:${USER_NAME}" "/home/${USER_NAME}/.xmonad"
 # TODO: do we need to run `xmonad --recompile` as su ? 🔥🔥🔥
 echo
 
@@ -680,7 +680,7 @@ Terminal=false
 Type=Application
 Categories=AudioVideo;Recorder;
 EOF
-arch-chroot "${ROOT_MNT}" chown --recursive "${USER_NAME}:${USER_NAME}" "${ROOT_MNT}/home/${USER_NAME}/.local"
+arch-chroot "${ROOT_MNT}" chown --recursive "${USER_NAME}:${USER_NAME}" "/home/${USER_NAME}/.local"
 echo
 
 # Swap/swapfile setup...
