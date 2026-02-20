@@ -44,7 +44,6 @@ PACSTRAP_PACKAGES=(
 PACMAN_PACKAGES=(
     alacritty # A cross-platform, GPU-accelerated terminal emulator
     alsa-utils # Advanced Linux Sound Architecture - Utilities
-    amdgpu_top # Tool that shows AMD GPU utilization
     asciiquarium # An aquarium/sea animation in ASCII art
     aws-cli-v2 # Universal Command Line Interface for Amazon Web Services (version 2)
     bash-completion # Programmable completion for the bash shell
@@ -59,7 +58,6 @@ PACMAN_PACKAGES=(
     browserpass-chromium # Chromium extension for Browserpass, browser extension for zx2c4's pass (password manager)
     btop # A monitor of system resources, bpytop ported to C++
     cmatrix # A curses-based scrolling 'Matrix'-like screen
-    cliphist # wayland clipboard manager
     dive # A tool for exploring layers in a docker image
     fastfetch # A feature-rich and performance oriented neofetch like system information tool
     fd # Simple, fast and user-friendly alternative to find
@@ -78,7 +76,7 @@ PACMAN_PACKAGES=(
     man-db # A utility for reading man pages
     man-pages # Linux man pages
     ncdu # Disk usage analyzer with an ncurses interface
-    neovim
+    neovim # Fork of Vim aiming to improve user experience, plugins, and GUIs
     noto-fonts-emoji # Google Noto Color Emoji font
     obs-studio # Free, open source software for live streaming and recording
     onnxruntime-opt-rocm # Cross-platform, high performance scoring engine for ML models (with ROCm and AVX2 CPU optimizations)
@@ -102,7 +100,7 @@ PACMAN_PACKAGES=(
     speedtest-cli # Command line interface for testing internet bandwidth using speedtest.net
     starship # The cross-shell prompt for astronauts
     stow # Manage installation of multiple softwares in the same directory tree
-    telegram-desktop
+    telegram-desktop # Official Telegram Desktop client
     tldr # Command line client for tldr, a collection of simplified man pages
     translate-shell # A command-line interface and interactive shell for Google Translate
     tree # A directory listing program displaying a depth indented list of files
@@ -118,8 +116,6 @@ PACMAN_PACKAGES=(
     yq # Command-line YAML, XML, TOML processor - jq wrapper for YAML/XML/TOML documents
     wget # Network utility to retrieve files from the web
     wireplumber # Session / policy manager implementation for PipeWire
-    wl-clipboard # Command-line copy/paste utilities for Wayland
-    wtype # xdotool type for wayland
     zsh # A very advanced and programmable command interpreter (shell) for UNIX
 )
 
@@ -142,6 +138,7 @@ AUR_PACKAGES=(
 # GPU packages
 
 AMD_GPU_PACKAGES=(
+    amdgpu_top # Tool that shows AMD GPU utilization
     lib32-mesa # Open-source OpenGL drivers - 32-bit
     lib32-vulkan-icd-loader # Vulkan Installable Client Driver (ICD) Loader (32-bit)
     lib32-vulkan-radeon # Open-source Vulkan driver for AMD GPUs - 32-bit
@@ -151,8 +148,13 @@ AMD_GPU_PACKAGES=(
     vulkan-tools # Vulkan tools and utilities
 )
 
-# TODO: fill packages list 🔥🔥🔥
-INTEL_GPU_PACKAGES=()
+INTEL_GPU_PACKAGES=(
+    lib32-mesa # Open-source OpenGL drivers - 32-bit
+    lib32-vulkan-intel # Open-source Vulkan driver for Intel GPUs - 32-bit
+    mesa # Open-source OpenGL drivers
+    nvtop # GPUs process monitoring for AMD, Intel and NVIDIA
+    vulkan-intel # Open-source Vulkan driver for Intel GPUs
+)
 
 # TODO: fill packages list 🔥🔥🔥
 NVIDIA_GPU_PACKAGES=()
@@ -175,7 +177,7 @@ GNOME_PACKAGES=(
 )
 
 HYPRLAND_PACKAGES=(
-    thunar # Xfce File Manager
+    cliphist # wayland clipboard manager
     hypridle # hyprland’s idle daemon
     hyprland
     hyprlock # hyprland’s GPU-accelerated screen locking utility
@@ -191,8 +193,11 @@ HYPRLAND_PACKAGES=(
     rofi-emoji # A Rofi plugin for selecting emojis
     sddm # QML based X11 and Wayland display manager
     swaync # A simple GTK based notification daemon for Sway
+    thunar # Xfce File Manager
     uwsm # A standalone Wayland session manager
     waybar # Highly customizable Wayland bar for Sway and Wlroots based compositors
+    wl-clipboard # Command-line copy/paste utilities for Wayland
+    wtype # xdotool type for wayland
     xdg-desktop-portal-hyprland # xdg-desktop-portal backend for hyprland
 )
 
@@ -219,16 +224,20 @@ XMONAD_PACKAGES=(
     maim # Utility to take a screenshot using imlib2
     network-manager-applet # Applet for managing network connections
     pasystray # PulseAudio system tray (a replacement for padevchooser)
+    rofi # A window switcher, application launcher and dmenu replacement
+    rofi-emoji # A Rofi plugin for selecting emojis
     sddm # QML based X11 and Wayland display manager
     stalonetray # STAnd-aLONE sysTRAY. It has minimal build and run-time dependencies: the Xlib only
     sxhkd # Simple X hotkey daemon
     thunar # Xfce File Manager
+    xclip # Command line interface to the X11 clipboard
     xdotool # Command-line X11 automation tool
     xmobar # Minimalistic Text Based Status Bar
     xmonad
     xmonad-contrib # Community-maintained extensions for xmonad
     xmonad-extras # Third party extensions for xmonad with wacky dependencies
     xmonad-utils # Small collection of X utilities
+    xsel # Command-line program for getting and setting the contents of the X selection
     xterm # X Terminal Emulator
 )
 # TODO: extend AUR_PACKAGES with this 🔥🔥🔥
@@ -663,7 +672,6 @@ main = xmonad def
     }
 EOF
 arch-chroot "${ROOT_MNT}" chown --recursive "${USER_NAME}:${USER_NAME}" "/home/${USER_NAME}/.xmonad"
-# TODO: do we need to run `xmonad --recompile` as su ? 🔥🔥🔥
 echo
 
 fi
