@@ -58,6 +58,7 @@ PACMAN_PACKAGES=(
     browserpass-chromium # Chromium extension for Browserpass, browser extension for zx2c4's pass (password manager)
     btop # A monitor of system resources, bpytop ported to C++
     cmatrix # A curses-based scrolling 'Matrix'-like screen
+    ddcutil # Query and change Linux monitor settings using DDC/CI and USB
     dive # A tool for exploring layers in a docker image
     fastfetch # A feature-rich and performance oriented neofetch like system information tool
     fd # Simple, fast and user-friendly alternative to find
@@ -68,6 +69,7 @@ PACMAN_PACKAGES=(
     git-filter-repo # Quickly rewrite git repository history (filter-branch replacement)
     guvcview # Simple GTK+ interface for capturing and viewing video from v4l2 devices
     htop # Interactive process viewer
+    i2c-tools # Heterogeneous set of I2C tools for Linux that used to be part of lm-sensors
     jami-qt # Free and universal communication platform which preserves the users’ privacy and freedoms
     jq # Command-line JSON processor
     kdeconnect # Adds communication between KDE and your smartphone
@@ -243,8 +245,9 @@ XMONAD_PACKAGES=(
     xterm # X Terminal Emulator
 )
 # TODO: extend AUR_PACKAGES with this 🔥🔥🔥
-XMONAD_AUR_PACKAGES=(
+XMONAD_LAPTOP_AUR_PACKAGES=(
     auto-cpufreq # Automatic CPU speed & power optimizer
+    mbpfan-git # A simple daemon to control fan speed on all MacBook/MacBook Pros
 )
 
 DESKTOP_PACKAGES=( "${HYPRLAND_PACKAGES[@]}" )
