@@ -235,6 +235,7 @@ XMONAD_PACKAGES=(
     thunar # Xfce File Manager
     xclip # Command line interface to the X11 clipboard
     xdotool # Command-line X11 automation tool
+    xf86-input-synaptics # Synaptics driver for notebook touchpads 💻
     xmobar # Minimalistic Text Based Status Bar
     xmonad
     xmonad-contrib # Community-maintained extensions for xmonad
@@ -246,8 +247,8 @@ XMONAD_PACKAGES=(
 )
 # TODO: extend AUR_PACKAGES with this 🔥🔥🔥
 XMONAD_LAPTOP_AUR_PACKAGES=(
-    auto-cpufreq # Automatic CPU speed & power optimizer
-    mbpfan-git # A simple daemon to control fan speed on all MacBook/MacBook Pros
+    auto-cpufreq # Automatic CPU speed & power optimizer 💻
+    mbpfan-git # A simple daemon to control fan speed on all MacBook/MacBook Pros 💻
 )
 
 DESKTOP_PACKAGES=( "${HYPRLAND_PACKAGES[@]}" )
