@@ -7,6 +7,7 @@ set -xeuo pipefail
 TARGET="/dev/sda"
 HOST_NAME="archlinux01"
 USER_NAME="user"
+GPU_TYPE="amd" # one of: "amd", "intel", "nvidia"
 LOCALE="en_GB.UTF-8"
 KEYMAP="uk"
 TIMEZONE="Europe/London"
@@ -161,7 +162,12 @@ INTEL_GPU_PACKAGES=(
 # TODO: fill packages list 🔥🔥🔥
 NVIDIA_GPU_PACKAGES=()
 
-GPU_PACKAGES=( "${AMD_GPU_PACKAGES[@]}" )
+case "${GPU_TYPE}" in
+    amd)    GPU_PACKAGES=( "${AMD_GPU_PACKAGES[@]}" ) ;;
+    intel)  GPU_PACKAGES=( "${INTEL_GPU_PACKAGES[@]}" ) ;;
+    nvidia) GPU_PACKAGES=( "${NVIDIA_GPU_PACKAGES[@]}" ) ;;
+    *)      GPU_PACKAGES=() ;;
+esac
 
 # Desktop packages
 
@@ -245,7 +251,8 @@ XMONAD_PACKAGES=(
     xsel # Command-line program for getting and setting the contents of the X selection
     xterm # X Terminal Emulator
 )
-# TODO: extend AUR_PACKAGES with this 🔥🔥🔥
+
+# TODO: currently unused - extend AUR_PACKAGES with this 🔥🔥🔥
 XMONAD_LAPTOP_AUR_PACKAGES=(
     auto-cpufreq # Automatic CPU speed & power optimizer 💻
     mbpfan-git # A simple daemon to control fan speed on all MacBook/MacBook Pros 💻
