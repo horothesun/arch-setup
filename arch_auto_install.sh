@@ -681,7 +681,7 @@ cat <<EOF > "${ROOT_MNT}/usr/share/sddm/themes/sddm-astronaut-theme/Themes/${SDD
 [General]
 ScreenWidth="2560"
 ScreenHeight="1440"
-DateFormat="ddd, MMM dd"
+DateFormat="ddd dd MMM"
 TranslateVirtualKeyboardButtonOn=" "
 TranslateVirtualKeyboardButtonOff=" "
 EOF
