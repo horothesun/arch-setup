@@ -95,6 +95,7 @@ PACMAN_PACKAGES=(
     pyright # Type checker for the Python language
     python-cookiecutter # A command-line utility that creates projects from project templates
     python-lsp-server # Fork of the python-language-server project, maintained by the Spyder IDE team and the community
+    qt6-virtualkeyboard # Virtual keyboard framework (used on sddm)
     reflector # A Python 3 module and script to retrieve and filter the latest Pacman mirror list
     ruff # An extremely fast Python linter, written in Rust
     sbt # The interactive build tool
@@ -644,27 +645,49 @@ systemctl --root "${ROOT_MNT}" enable snapper-timeline.timer snapper-cleanup.tim
 
 # SDDM theme...
 SDDM_THEME_CONF_FILE="purple_leaves.conf"
-cat <<EOF > "${ROOT_MNT}/etc/sddm.conf"
-[Theme]
-Current=sddm-astronaut-theme
-EOF
+# https://wiki.archlinux.org/title/SDDM#Configuration
 mkdir -p "${ROOT_MNT}/etc/sddm.conf.d"
+cat <<EOF > "${ROOT_MNT}/etc/sddm.conf.d/default.conf"
+[Theme]
+# Current theme name
+Current=sddm-astronaut-theme
+
+[Users]
+# Remember the session of the last successfully logged in user
+RememberLastSession=true
+
+# Remember the last successfully logged in user
+RememberLastUser=true
+
+# When logging in as the same user twice, restore the original session, rather than create a new one
+ReuseSession=true
+
+[Wayland]
+# Enable Qt's automatic high-DPI scaling
+EnableHiDPI=true
+
+[X11]
+# Enable Qt's automatic high-DPI scaling
+EnableHiDPI=true
+EOF
 cat <<EOF > "${ROOT_MNT}/etc/sddm.conf.d/virtualkbd.conf"
 [General]
 InputMethod=qtvirtualkeyboard
 EOF
 cat "${ROOT_MNT}/etc/sddm.conf.d/virtualkbd.conf"
 echo
+# https://wiki.archlinux.org/title/SDDM#Customizing_a_theme
+cat <<EOF > "${ROOT_MNT}/usr/share/sddm/themes/sddm-astronaut-theme/Themes/${SDDM_THEME_CONF_FILE}.user"
+[General]
+ScreenWidth="2560"
+ScreenHeight="1440"
+DateFormat="ddd, MMM dd"
+TranslateVirtualKeyboardButtonOn=" "
+TranslateVirtualKeyboardButtonOff=" "
+EOF
 sed -i \
     "s/^ConfigFile=.*/ConfigFile=Themes\/""${SDDM_THEME_CONF_FILE}""/g" \
     "${ROOT_MNT}/usr/share/sddm/themes/sddm-astronaut-theme/metadata.desktop"
-sed -i \
-    -e '/^ScreenWidth=.*/c\ScreenWidth="2560"' \
-    -e '/^ScreenHeight=.*/c\ScreenHeight="1440"' \
-    -e '/^DateFormat=.*/c\DateFormat="ddd, dd MMMM"' \
-    -e '/^TranslateVirtualKeyboardButtonOn=.*/c\TranslateVirtualKeyboardButtonOn=" "' \
-    -e '/^TranslateVirtualKeyboardButtonOff=.*/c\TranslateVirtualKeyboardButtonOff=" "' \
-    "${ROOT_MNT}/usr/share/sddm/themes/sddm-astronaut-theme/Themes/${SDDM_THEME_CONF_FILE}"
 echo
 
 
