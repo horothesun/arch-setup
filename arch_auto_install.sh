@@ -46,6 +46,7 @@ PACMAN_PACKAGES=(
     alacritty # A cross-platform, GPU-accelerated terminal emulator
     alsa-utils # Advanced Linux Sound Architecture - Utilities
     asciiquarium # An aquarium/sea animation in ASCII art
+    astroterm # A planetarium for your terminal
     aws-cli-v2 # Universal Command Line Interface for Amazon Web Services (version 2)
     bash-completion # Programmable completion for the bash shell
     bash-language-server
