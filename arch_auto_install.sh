@@ -118,6 +118,7 @@ PACMAN_PACKAGES=(
     v4l-utils # Userspace tools and conversion library for Video 4 Linux
     vlc # Free and open source cross-platform multimedia player and framework
     vlc-plugins-all # Free and open source cross-platform multimedia player and framework - all plugins
+    xorg-xrandr # Primitive command line interface to RandR extension
     yq # Command-line YAML, XML, TOML processor - jq wrapper for YAML/XML/TOML documents
     wget # Network utility to retrieve files from the web
     wireplumber # Session / policy manager implementation for PipeWire
@@ -649,6 +650,11 @@ SDDM_THEME_CONF_FILE="purple_leaves.conf"
 # https://wiki.archlinux.org/title/SDDM#Configuration
 mkdir -p "${ROOT_MNT}/etc/sddm.conf.d"
 cat <<EOF > "${ROOT_MNT}/etc/sddm.conf.d/default.conf"
+[General]
+# Which display server should be used.
+# Valid values are: x11, x11-user, wayland. Wayland support is experimental
+DisplayServer=x11
+
 [Theme]
 # Current theme name
 Current=sddm-astronaut-theme
@@ -663,13 +669,12 @@ RememberLastUser=true
 # When logging in as the same user twice, restore the original session, rather than create a new one
 ReuseSession=true
 
-[Wayland]
-# Enable Qt's automatic high-DPI scaling
-EnableHiDPI=true
-
 [X11]
 # Enable Qt's automatic high-DPI scaling
 EnableHiDPI=true
+
+# Path to a script to execute when starting the display server
+DisplayCommand=/usr/share/sddm/scripts/Xsetup
 EOF
 cat <<EOF > "${ROOT_MNT}/etc/sddm.conf.d/virtualkbd.conf"
 [General]

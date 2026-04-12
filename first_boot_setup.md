@@ -96,6 +96,31 @@ Install IntelliJ Idea CE via the JetBrains Toolbox. Edit/add the following VM op
 - `-Xmx16384m`
 - `-Dawt.toolkit.name=WLToolkit` (enable Wayland [blog](https://blog.jetbrains.com/platform/2024/07/wayland-support-preview-in-2024-2/))
 
+## SDDM - keep only primary screen
+
+Run `xrandr` FROM AN x11 SESSION to get your primary monitor name,
+then customise (`PRIMARY_MONITOR="..."`) in the following and
+replace the content of `/usr/share/sddm/scripts/Xsetup` with it
+
+```bash
+#!/bin/sh
+# Xsetup - run as root before the login dialog appears
+
+# Disable all secondary monitors
+# IMPORTANT: get the primary monitor name by running xrandr FROM AN X11 SESSION (the names are different in Wayland)
+PRIMARY_MONITOR="HDMI-A-1"
+
+if xrandr | grep -q "^$PRIMARY_MONITOR connected"; then
+  OTHER_MONITORS=$(
+    xrandr | grep ' connected' |\
+      awk -v p="$PRIMARY_MONITOR" '$1 != p {printf "--output %s --off ", $1}'
+  )
+  eval xrandr $OTHER_MONITORS
+else
+  echo "ERROR: primary screen '$PRIMARY_MONITOR' not found!"
+fi
+```
+
 ## Microphone gain fix
 
 From [here](https://bugzilla.kernel.org/show_bug.cgi?id=217786#c1):
