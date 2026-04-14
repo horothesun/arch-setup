@@ -108,7 +108,7 @@ replace the content of `/usr/share/sddm/scripts/Xsetup` with it
 
 # Disable all secondary monitors
 # IMPORTANT: get the primary monitor name by running xrandr FROM AN X11 SESSION (the names are different in Wayland)
-PRIMARY_MONITOR="HDMI-A-1"
+PRIMARY_MONITOR="DisplayPort-0"
 
 if xrandr | grep -q "^$PRIMARY_MONITOR connected"; then
   OTHER_MONITORS=$(
