@@ -106,7 +106,7 @@ replace the content of `/usr/share/sddm/scripts/Xsetup` with it
 #!/bin/sh
 # Xsetup - run as root before the login dialog appears
 
-# Disable all secondary monitors
+# Disable all non-primary monitors
 # IMPORTANT: get the primary monitor name by running xrandr FROM AN X11 SESSION (the names are different in Wayland)
 PRIMARY_MONITOR="DisplayPort-0"
 
