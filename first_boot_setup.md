@@ -43,11 +43,7 @@ cd archinstall-config
 ./setup_haskell.sh
 ```
 
-- NeoVim: install the `vim-plug` plugin manager ([guide](https://github.com/junegunn/vim-plug#neovim)), then install `nvim` plugins with
-
-```bash
-nvim -c "PlugInstall|qa" ; nvim
-```
+- NeoVim: run for the first time and install all vim.pack dependencies.
 
 ## KDE Wallet (required by Brave browser)
 
