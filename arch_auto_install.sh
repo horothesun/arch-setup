@@ -526,7 +526,7 @@ echo
 # NOTE: ~/.config/hypr/hypridle.conf must be present for the service to start properly
 HYPRIDLE_PACKAGE=hypridle
 if [[ " ${DESKTOP_PACKAGES[*]} " =~ [[:space:]]${HYPRIDLE_PACKAGE}[[:space:]] ]]; then
-    arch-chroot "${ROOT_MNT}" su - "${USER_NAME}" --command "sudo systemctl --user enable hypridle.service"
+    arch-chroot "${ROOT_MNT}" su - "${USER_NAME}" -c "sudo systemctl --user enable hypridle.service"
     echo
 fi
 
@@ -597,13 +597,13 @@ echo
 sed -i -e '/^#AutoEnable=.*/c\AutoEnable=false' "${ROOT_MNT}/etc/bluetooth/main.conf"
 
 # YAY install...
-arch-chroot "${ROOT_MNT}" su - "${USER_NAME}" --command "git clone https://aur.archlinux.org/yay.git ; cd yay ; makepkg --syncdeps --install --noconfirm ; cd .. ; rm -rf yay"
+arch-chroot "${ROOT_MNT}" su - "${USER_NAME}" -c "git clone https://aur.archlinux.org/yay.git ; cd yay ; makepkg --syncdeps --install --noconfirm ; cd .. ; rm -rf yay"
 echo
 
 # YAY update and setup packages...
-arch-chroot "${ROOT_MNT}" su - "${USER_NAME}" --command "yay -Syu --noconfirm --norebuild --answerdiff=None --answeredit=None"
+arch-chroot "${ROOT_MNT}" su - "${USER_NAME}" -c "yay -Syu --noconfirm --norebuild --answerdiff=None --answeredit=None"
 export AUR_PACKAGES_SAME_LINE="${AUR_PACKAGES[*]}"
-arch-chroot "${ROOT_MNT}" su - "${USER_NAME}" --command "yay -S --noconfirm --norebuild --answerdiff=None --answeredit=None ${AUR_PACKAGES_SAME_LINE}"
+arch-chroot "${ROOT_MNT}" su - "${USER_NAME}" -c "yay -S --noconfirm --norebuild --answerdiff=None --answeredit=None ${AUR_PACKAGES_SAME_LINE}"
 echo
 
 
@@ -695,6 +695,22 @@ sed -i \
     "s/^ConfigFile=.*/ConfigFile=Themes\/""${SDDM_THEME_CONF_FILE}""/g" \
     "${ROOT_MNT}/usr/share/sddm/themes/sddm-astronaut-theme/metadata.desktop"
 echo
+
+
+# Waybar setup: read access to CPU power info
+WAYBAR_PACKAGE=waybar
+if [[ " ${DESKTOP_PACKAGES[*]} " =~ [[:space:]]${WAYBAR_PACKAGE}[[:space:]] ]]; then
+
+arch-chroot "${ROOT_MNT}" groupadd powerreading
+arch-chroot "${ROOT_MNT}" usermod -aG powerreading "${USER_NAME}"
+# udev rule to make /sys/class/powercap/intel-rapl/intel-rapl:0/energy_uj readable by powerreading group and read-writable by root
+mkdir -p "${ROOT_MNT}/etc/udev/rules.d"
+cat <<EOF > "${ROOT_MNT}/etc/udev/rules.d/99-powercap.rules"
+SUBSYSTEM=="powercap", ACTION=="add", RUN+="/usr/bin/chgrp powerreading /sys/class/powercap/intel-rapl/intel-rapl:0/energy_uj", RUN+="/usr/bin/chmod 640 /sys/class/powercap/intel-rapl/intel-rapl:0/energy_uj"
+EOF
+echo
+
+fi
 
 
 # XMonad basic setup
