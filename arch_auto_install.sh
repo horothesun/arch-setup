@@ -112,6 +112,7 @@ PACMAN_PACKAGES=(
     ttf-firacode-nerd
     ttf-iosevkaterm-nerd
     ttf-jetbrains-mono-nerd
+    typescript-language-server # Language Server Protocol (LSP) implementation for TypeScript using tsserver
     ufw # Uncomplicated and easy to use CLI tool for managing a netfilter firewall
     v4l2loopback-dkms # v4l2-loopback device – module sources
     v4l2loopback-utils # v4l2-loopback device – utilities only
