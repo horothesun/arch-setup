@@ -520,6 +520,10 @@ echo
 # Enable services...
 systemctl --root "${ROOT_MNT}" enable bluetooth keyd NetworkManager sddm systemd-resolved systemd-timesyncd
 echo
+# disable and mask the NetworkManager-wait-online service (~15s startup time)
+systemctl --root "${ROOT_MNT}" disable NetworkManager-wait-online.service
+systemctl --root "${ROOT_MNT}" mask NetworkManager-wait-online.service
+echo
 # mask systemd-networkd as we will use NetworkManager instead
 systemctl --root "${ROOT_MNT}" mask systemd-networkd
 echo
