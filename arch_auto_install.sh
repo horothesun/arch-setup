@@ -12,8 +12,7 @@ LOCALE="en_GB.UTF-8"
 KEYMAP="uk"
 TIMEZONE="Europe/London"
 EFI_PARTITION_SIZE="800M"
-IS_SWAPFILE_ENABLED=true
-SWAPFILE_SIZE="8G"
+IS_SWAPFILE_ENABLED=false
 MAKE_PARALLEL_JOBS_LOGICAL_CORES_PERCENTAGE="0.95"
 LINUX_PARTITION_LABEL="LINUX"
 ROOT_MNT="/mnt"
@@ -375,7 +374,11 @@ echo
 # Swap/swapfile setup
 # Note: used during hibernation (suspend-to-disk)
 if [[ ${IS_SWAPFILE_ENABLED} == true ]]; then
-    btrfs filesystem mkswapfile --size "${SWAPFILE_SIZE}" --uuid clear "${ROOT_MNT}/swap/swapfile"
+    SWAPFILE_SIZE_GB=$(
+        free -m | grep "Mem:" |\
+            jq --raw-input --raw-output 'split(" ") | map(select(. != ""))[1] | tonumber | . / 1000 | ceil'
+    )
+    btrfs filesystem mkswapfile --size "${SWAPFILE_SIZE_GB}g" --uuid clear "${ROOT_MNT}/swap/swapfile"
     swapon "${ROOT_MNT}/swap/swapfile"
 fi
 
