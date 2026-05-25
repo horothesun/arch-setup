@@ -12,6 +12,8 @@ LOCALE="en_GB.UTF-8"
 KEYMAP="uk"
 TIMEZONE="Europe/London"
 EFI_PARTITION_SIZE="800M"
+IS_SWAPFILE_ENABLED=true
+SWAPFILE_SIZE="8G"
 MAKE_PARALLEL_JOBS_LOGICAL_CORES_PERCENTAGE="0.95"
 LINUX_PARTITION_LABEL="LINUX"
 ROOT_MNT="/mnt"
@@ -338,6 +340,7 @@ btrfs subvolume create "${ROOT_MNT}/@docker"
 btrfs subvolume create "${ROOT_MNT}/@log"
 btrfs subvolume create "${ROOT_MNT}/@spool"
 btrfs subvolume create "${ROOT_MNT}/@tmp"
+if [[ ${IS_SWAPFILE_ENABLED} == true ]]; then btrfs subvolume create "${ROOT_MNT}/@swap"; fi
 umount "${ROOT_MNT}"
 echo
 # Mounting BTRFS subvolumes...
@@ -362,11 +365,19 @@ mountBtrfsSubvolumeByName "@docker"    "${ROOT_MNT}/var/lib/docker"
 mountBtrfsSubvolumeByName "@log"       "${ROOT_MNT}/var/log"
 mountBtrfsSubvolumeByName "@spool"     "${ROOT_MNT}/var/spool"
 mountBtrfsSubvolumeByName "@tmp"       "${ROOT_MNT}/var/tmp"
+if [[ ${IS_SWAPFILE_ENABLED} == true ]]; then mountBtrfsSubvolumeByName "@swap" "${ROOT_MNT}/swap"; fi
 echo
 # Mounting EFI partition...
 mkdir -p "${ROOT_MNT}/efi"
 mount -t vfat "/dev/disk/by-partlabel/EFI" "${ROOT_MNT}/efi"
 echo
+
+# Swap/swapfile setup
+# Note: used during hibernation (suspend-to-disk)
+if [[ ${IS_SWAPFILE_ENABLED} == true ]]; then
+    btrfs filesystem mkswapfile --size "${SWAPFILE_SIZE}" --uuid clear "${ROOT_MNT}/swap/swapfile"
+    swapon "${ROOT_MNT}/swap/swapfile"
+fi
 
 # inspect filesystem changes
 lsblk
@@ -390,6 +401,9 @@ echo
 
 # Generate filesystem table...
 genfstab -U -p "${ROOT_MNT}" >> "${ROOT_MNT}/etc/fstab"
+if [[ ${IS_SWAPFILE_ENABLED} == true ]]; then
+    echo "/swap/swapfile none swap defaults 0 0" >> "${ROOT_MNT}/etc/fstab"
+fi
 cat "${ROOT_MNT}/etc/fstab"
 echo
 
@@ -755,9 +769,6 @@ Categories=AudioVideo;Recorder;
 EOF
 arch-chroot "${ROOT_MNT}" chown --recursive "${USER_NAME}:${USER_NAME}" "/home/${USER_NAME}/.local"
 echo
-
-# Swap/swapfile setup...
-# TODO: consider for hibernation (suspend-to-disk)... 🔥🔥🔥
 
 # require password for users in the wheel group
 sed -i \
