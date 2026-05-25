@@ -252,6 +252,7 @@ XMONAD_PACKAGES=(
     xmonad-contrib # Community-maintained extensions for xmonad
     xmonad-extras # Third party extensions for xmonad with wacky dependencies
     xmonad-utils # Small collection of X utilities
+    xorg-xmessage # Display a message or query in a window
     xorg-xrandr # Primitive command line interface to RandR extension
     xsel # Command-line program for getting and setting the contents of the X selection
     xterm # X Terminal Emulator
