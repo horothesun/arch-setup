@@ -13,8 +13,8 @@ nmcli device wifi connect <SSID> --ask
 ```bash
 mkdir ~/src
 cd ~/src
-git clone https://github.com/horothesun/archinstall-config.git
-cd archinstall-config
+git clone https://github.com/horothesun/arch-setup.git
+cd arch-setup
 ```
 
 - GitHub SSH key
