@@ -238,7 +238,7 @@ XMONAD_PACKAGES=(
     dmenu # Generic menu for X
     maim # Utility to take a screenshot using imlib2
     network-manager-applet # Applet for managing network connections
-    pasystray # PulseAudio system tray (a replacement for padevchooser)
+    volumeicon # Volume control for the system tray
     rofi # A window switcher, application launcher and dmenu replacement
     rofi-emoji # A Rofi plugin for selecting emojis
     sddm # QML based X11 and Wayland display manager
