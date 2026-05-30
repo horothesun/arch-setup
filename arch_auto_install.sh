@@ -255,6 +255,7 @@ XMONAD_PACKAGES=(
     xmonad-utils # Small collection of X utilities
     xorg-xmessage # Display a message or query in a window
     xorg-xrandr # Primitive command line interface to RandR extension
+    xorg-xsetroot # Classic X utility to set your root window background to a given pattern or color
     xsel # Command-line program for getting and setting the contents of the X selection
     xterm # X Terminal Emulator
 )
