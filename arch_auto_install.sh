@@ -99,6 +99,7 @@ PACMAN_PACKAGES=(
     python-lsp-server # Fork of the python-language-server project, maintained by the Spyder IDE team and the community
     qt6-virtualkeyboard # Virtual keyboard framework (used on sddm)
     reflector # A Python 3 module and script to retrieve and filter the latest Pacman mirror list
+    ripgrep # A search tool that combines the usability of ag with the raw speed of grep
     ruff # An extremely fast Python linter, written in Rust
     sbt # The interactive build tool
     snapper # A tool for managing BTRFS and LVM snapshots
