@@ -43,48 +43,48 @@ PACSTRAP_PACKAGES=(
     util-linux
 )
 
-PACMAN_PACKAGES=(
+BASE_PACKAGES=(
     alacritty # A cross-platform, GPU-accelerated terminal emulator
     alsa-utils # Advanced Linux Sound Architecture - Utilities
-    asciiquarium # An aquarium/sea animation in ASCII art
-    astroterm # A planetarium for your terminal
-    aws-cli-v2 # Universal Command Line Interface for Amazon Web Services (version 2)
+    # asciiquarium # An aquarium/sea animation in ASCII art
+    # astroterm # A planetarium for your terminal
+    # aws-cli-v2 # Universal Command Line Interface for Amazon Web Services (version 2)
     bash-completion # Programmable completion for the bash shell
     bash-language-server
     bat # Cat clone with syntax highlighting and git integration
     bc # An arbitrary precision calculator language
     bluetui # TUI for managing bluetooth devices
-    bluez # Daemons for the bluetooth protocol stack
-    bluez-utils # Development and debugging utilities for the bluetooth protocol stack
-    bluez-deprecated-tools # Deprecated tools that are no longer maintained
-    browserpass # Native host app for Browserpass, browser extension for zx2c4's pass (password manager)
-    browserpass-chromium # Chromium extension for Browserpass, browser extension for zx2c4's pass (password manager)
+    # bluez # Daemons for the bluetooth protocol stack
+    # bluez-utils # Development and debugging utilities for the bluetooth protocol stack
+    # bluez-deprecated-tools # Deprecated tools that are no longer maintained
+    # browserpass # Native host app for Browserpass, browser extension for zx2c4's pass (password manager)
+    # browserpass-chromium # Chromium extension for Browserpass, browser extension for zx2c4's pass (password manager)
     btop # A monitor of system resources, bpytop ported to C++
     cmatrix # A curses-based scrolling 'Matrix'-like screen
     ddcutil # Query and change Linux monitor settings using DDC/CI and USB
-    dive # A tool for exploring layers in a docker image
+    # dive # A tool for exploring layers in a docker image
     fastfetch # A feature-rich and performance oriented neofetch like system information tool
     fd # Simple, fast and user-friendly alternative to find
     fzf # Command-line fuzzy finder
     git # the fast distributed version control system
     github-cli # The GitHub CLI
     gitu # A TUI Git client inspired by Magit
-    git-filter-repo # Quickly rewrite git repository history (filter-branch replacement)
-    guvcview # Simple GTK+ interface for capturing and viewing video from v4l2 devices
+    # git-filter-repo # Quickly rewrite git repository history (filter-branch replacement)
+    # guvcview # Simple GTK+ interface for capturing and viewing video from v4l2 devices
     htop # Interactive process viewer
     i2c-tools # Heterogeneous set of I2C tools for Linux that used to be part of lm-sensors
-    jami-qt # Free and universal communication platform which preserves the users’ privacy and freedoms
+    # jami-qt # Free and universal communication platform which preserves the users’ privacy and freedoms
     jq # Command-line JSON processor
-    kdeconnect # Adds communication between KDE and your smartphone
+    # kdeconnect # Adds communication between KDE and your smartphone
     keyd # A key remapping daemon for linux
-    lua-language-server
+    # lua-language-server
     man-db # A utility for reading man pages
     man-pages # Linux man pages
     ncdu # Disk usage analyzer with an ncurses interface
     neovim # Fork of Vim aiming to improve user experience, plugins, and GUIs
     noto-fonts-emoji # Google Noto Color Emoji font
-    obs-studio # Free, open source software for live streaming and recording
-    onnxruntime-opt-rocm # Cross-platform, high performance scoring engine for ML models (with ROCm and AVX2 CPU optimizations)
+    # obs-studio # Free, open source software for live streaming and recording
+    # onnxruntime-opt-rocm # Cross-platform, high performance scoring engine for ML models (with ROCm and AVX2 CPU optimizations)
     openssh # SSH protocol implementation for remote login, command execution and file transfer
     pass # Stores, retrieves, generates, and synchronizes passwords securely
     pavucontrol # PulseAudio Volume Control
@@ -94,27 +94,27 @@ PACMAN_PACKAGES=(
     pipewire-audio # Low-latency audio/video router and processor - Audio support
     pipewire-jack # Low-latency audio/video router and processor - JACK replacement
     pipewire-pulse # Low-latency audio/video router and processor - PulseAudio replacement
-    pyright # Type checker for the Python language
-    python-cookiecutter # A command-line utility that creates projects from project templates
-    python-lsp-server # Fork of the python-language-server project, maintained by the Spyder IDE team and the community
+    # pyright # Type checker for the Python language
+    # python-cookiecutter # A command-line utility that creates projects from project templates
+    # python-lsp-server # Fork of the python-language-server project, maintained by the Spyder IDE team and the community
     qt6-virtualkeyboard # Virtual keyboard framework (used on sddm)
     reflector # A Python 3 module and script to retrieve and filter the latest Pacman mirror list
     ripgrep # A search tool that combines the usability of ag with the raw speed of grep
-    ruff # An extremely fast Python linter, written in Rust
-    sbt # The interactive build tool
+    # ruff # An extremely fast Python linter, written in Rust
+    # sbt # The interactive build tool
     snapper # A tool for managing BTRFS and LVM snapshots
     snap-pac # Pacman hooks that use snapper to create pre/post btrfs snapshots like openSUSE's YaST
     speedtest-cli # Command line interface for testing internet bandwidth using speedtest.net
     starship # The cross-shell prompt for astronauts
     stow # Manage installation of multiple softwares in the same directory tree
-    telegram-desktop # Official Telegram Desktop client
+    # telegram-desktop # Official Telegram Desktop client
     tldr # Command line client for tldr, a collection of simplified man pages
     translate-shell # A command-line interface and interactive shell for Google Translate
     tree # A directory listing program displaying a depth indented list of files
     ttf-firacode-nerd
     ttf-iosevkaterm-nerd
     ttf-jetbrains-mono-nerd
-    typescript-language-server # Language Server Protocol (LSP) implementation for TypeScript using tsserver
+    # typescript-language-server # Language Server Protocol (LSP) implementation for TypeScript using tsserver
     ufw # Uncomplicated and easy to use CLI tool for managing a netfilter firewall
     v4l2loopback-dkms # v4l2-loopback device – module sources
     v4l2loopback-utils # v4l2-loopback device – utilities only
@@ -128,20 +128,20 @@ PACMAN_PACKAGES=(
     zsh # A very advanced and programmable command interpreter (shell) for UNIX
 )
 
-AUR_PACKAGES=(
-    basedpyright # pyright fork with various improvements and pylance features
+BASE_AUR_PACKAGES=(
+    # basedpyright # pyright fork with various improvements and pylance features
     brave-bin # Web browser that blocks ads and trackers by default (binary release)
     btrfs-assistant # An application for managing BTRFS subvolumes and Snapper snapshots
     coursier # Pure Scala Artifact Fetching
     ghcup-hs-bin # an installer for the general purpose language Haskell
-    informant # An Arch Linux News reader and pacman hook
-    jetbrains-toolbox # Manage all your JetBrains Projects and Tools
-    obs-backgroundremoval # Background removal plugin for OBS studio
+    # informant # An Arch Linux News reader and pacman hook
+    # jetbrains-toolbox # Manage all your JetBrains Projects and Tools
+    # obs-backgroundremoval # Background removal plugin for OBS studio
     oh-my-zsh-git # A community-driven framework for managing your zsh configuration
-    scala-cli # A command-line tool to interact with the Scala language
+    # scala-cli # A command-line tool to interact with the Scala language
     sddm-astronaut-theme # Modern looking sddm qt6 theme
     snapper-rollback # Script to rollback snapper snapshots as described here https://wiki.archlinux.org/index.php/Snapper#Suggested_filesystem_layout
-    terraform-ls # Terraform Language Server
+    # terraform-ls # Terraform Language Server
 )
 
 # GPU packages
@@ -177,13 +177,10 @@ esac
 
 # Desktop packages
 
-# enable cosmic-greeter.service
 COSMIC_PACKAGES=(
     cosmic
-    sddm # QML based X11 and Wayland display manager
 )
 
-# enable gdm.service
 GNOME_PACKAGES=(
     gnome
     gnome-circle
@@ -260,13 +257,14 @@ XMONAD_PACKAGES=(
     xterm # X Terminal Emulator
 )
 
-# TODO: currently unused - extend AUR_PACKAGES with this 🔥🔥🔥
 XMONAD_LAPTOP_AUR_PACKAGES=(
     auto-cpufreq # Automatic CPU speed & power optimizer 💻
     mbpfan-git # A simple daemon to control fan speed on all MacBook/MacBook Pros 💻
 )
 
-DESKTOP_PACKAGES=( "${HYPRLAND_PACKAGES[@]}" )
+# All packages
+PACMAN_PACKAGES=( "${BASE_PACKAGES[@]}" "${GPU_PACKAGES[@]}" "${HYPRLAND_PACKAGES[@]}" )
+AUR_PACKAGES=( "${BASE_AUR_PACKAGES[@]}" )
 
 ### Start!
 
@@ -534,7 +532,7 @@ sed -i \
 echo
 
 # Installing base and GUI packages...
-arch-chroot "${ROOT_MNT}" pacman -Sy "${PACMAN_PACKAGES[@]}" "${GPU_PACKAGES[@]}" "${DESKTOP_PACKAGES[@]}" --noconfirm --quiet
+arch-chroot "${ROOT_MNT}" pacman -Sy "${PACMAN_PACKAGES[@]}" --noconfirm --quiet
 echo
 
 # Enable services...
@@ -550,8 +548,18 @@ echo
 # since we're going to use hyprland+uwsm, hypridle will run as a systemd user service
 # NOTE: ~/.config/hypr/hypridle.conf must be present for the service to start properly
 HYPRIDLE_PACKAGE=hypridle
-if [[ " ${DESKTOP_PACKAGES[*]} " =~ [[:space:]]${HYPRIDLE_PACKAGE}[[:space:]] ]]; then
+if [[ " ${PACMAN_PACKAGES[*]} " =~ [[:space:]]${HYPRIDLE_PACKAGE}[[:space:]] ]]; then
     arch-chroot "${ROOT_MNT}" su - "${USER_NAME}" -c "sudo systemctl --user enable hypridle.service"
+    echo
+fi
+COSMIC_PACKAGE=cosmic
+if [[ " ${PACMAN_PACKAGES[*]} " =~ [[:space:]]${COSMIC_PACKAGE}[[:space:]] ]]; then
+    arch-chroot "${ROOT_MNT}" su - "${USER_NAME}" -c "sudo systemctl enable cosmic-greeter.service"
+    echo
+fi
+GNOME_PACKAGE=gnome
+if [[ " ${PACMAN_PACKAGES[*]} " =~ [[:space:]]${GNOME_PACKAGE}[[:space:]] ]]; then
+    arch-chroot "${ROOT_MNT}" su - "${USER_NAME}" -c "sudo systemctl enable gdm.service"
     echo
 fi
 
@@ -724,7 +732,7 @@ echo
 
 # Waybar setup: read access to CPU power info
 WAYBAR_PACKAGE=waybar
-if [[ " ${DESKTOP_PACKAGES[*]} " =~ [[:space:]]${WAYBAR_PACKAGE}[[:space:]] ]]; then
+if [[ " ${PACMAN_PACKAGES[*]} " =~ [[:space:]]${WAYBAR_PACKAGE}[[:space:]] ]]; then
 
 arch-chroot "${ROOT_MNT}" groupadd powerreading
 arch-chroot "${ROOT_MNT}" usermod -aG powerreading "${USER_NAME}"
@@ -740,7 +748,7 @@ fi
 
 # XMonad basic setup
 XMONAD_PACKAGE=xmonad
-if [[ " ${DESKTOP_PACKAGES[*]} " =~ [[:space:]]${XMONAD_PACKAGE}[[:space:]] ]]; then
+if [[ " ${PACMAN_PACKAGES[*]} " =~ [[:space:]]${XMONAD_PACKAGE}[[:space:]] ]]; then
 
 mkdir -p "${ROOT_MNT}/home/${USER_NAME}/.xmonad"
 cat <<EOF > "${ROOT_MNT}/home/${USER_NAME}/.xmonad/xmonad.hs"
