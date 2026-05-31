@@ -540,6 +540,26 @@ sed -i \
     "${ROOT_MNT}/etc/pacman.conf"
 echo
 
+# pacman hook to cleanup uncompleted "download-*" files from cache
+arch-chroot "${ROOT_MNT}" mkdir -p "/etc/pacman.d/hooks"
+cat <<EOF > "${ROOT_MNT}/etc/pacman.d/hooks/clean-leftovers.hook"
+[Trigger]
+Operation = Remove
+Type = Package
+Target = *
+
+[Trigger]
+Operation = Upgrade
+Type = Package
+Target = *
+
+[Action]
+Description = Cleaning up interrupted pacman download leftovers...
+When = PostTransaction
+Exec = /usr/bin/find /var/cache/pacman/pkg/ -type f -name "download-*" -delete
+EOF
+echo
+
 # Installing base and GUI packages...
 arch-chroot "${ROOT_MNT}" pacman -Sy "${PACMAN_PACKAGES[@]}" --noconfirm --quiet
 echo
@@ -654,6 +674,9 @@ export AUR_PACKAGES_SAME_LINE="${AUR_PACKAGES[*]}"
 arch-chroot "${ROOT_MNT}" su - "${USER_NAME}" -c "yay -S --noconfirm --norebuild --answerdiff=None --answeredit=None ${AUR_PACKAGES_SAME_LINE}"
 echo
 
+# pacman and YAY cleanup
+arch-chroot "${ROOT_MNT}" pacman -Sc --noconfirm
+arch-chroot "${ROOT_MNT}" su - "${USER_NAME}" -c "yay -Sc --noconfirm"
 
 # ZSH set as default...
 arch-chroot "${ROOT_MNT}" chsh --list-shells
