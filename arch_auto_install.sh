@@ -55,11 +55,11 @@ BASE_PACKAGES=(
     bat # Cat clone with syntax highlighting and git integration
     bc # An arbitrary precision calculator language
     bluetui # TUI for managing bluetooth devices
-    # bluez # Daemons for the bluetooth protocol stack
-    # bluez-utils # Development and debugging utilities for the bluetooth protocol stack
-    # bluez-deprecated-tools # Deprecated tools that are no longer maintained
-    # browserpass # Native host app for Browserpass, browser extension for zx2c4's pass (password manager)
-    # browserpass-chromium # Chromium extension for Browserpass, browser extension for zx2c4's pass (password manager)
+    bluez # Daemons for the bluetooth protocol stack
+    bluez-utils # Development and debugging utilities for the bluetooth protocol stack
+    bluez-deprecated-tools # Deprecated tools that are no longer maintained
+    browserpass # Native host app for Browserpass, browser extension for zx2c4's pass (password manager)
+    browserpass-chromium # Chromium extension for Browserpass, browser extension for zx2c4's pass (password manager)
     btop # A monitor of system resources, bpytop ported to C++
     cmatrix # A curses-based scrolling 'Matrix'-like screen
     ddcutil # Query and change Linux monitor settings using DDC/CI and USB
@@ -70,15 +70,15 @@ BASE_PACKAGES=(
     git # the fast distributed version control system
     github-cli # The GitHub CLI
     gitu # A TUI Git client inspired by Magit
-    # git-filter-repo # Quickly rewrite git repository history (filter-branch replacement)
-    # guvcview # Simple GTK+ interface for capturing and viewing video from v4l2 devices
+    git-filter-repo # Quickly rewrite git repository history (filter-branch replacement)
+    guvcview # Simple GTK+ interface for capturing and viewing video from v4l2 devices
     htop # Interactive process viewer
     i2c-tools # Heterogeneous set of I2C tools for Linux that used to be part of lm-sensors
     # jami-qt # Free and universal communication platform which preserves the users’ privacy and freedoms
     jq # Command-line JSON processor
     # kdeconnect # Adds communication between KDE and your smartphone
     "${KEYD_PACKAGE}"
-    # lua-language-server
+    lua-language-server
     man-db # A utility for reading man pages
     man-pages # Linux man pages
     ncdu # Disk usage analyzer with an ncurses interface
@@ -102,13 +102,13 @@ BASE_PACKAGES=(
     reflector # A Python 3 module and script to retrieve and filter the latest Pacman mirror list
     ripgrep # A search tool that combines the usability of ag with the raw speed of grep
     # ruff # An extremely fast Python linter, written in Rust
-    # sbt # The interactive build tool
+    sbt # The interactive build tool
     snapper # A tool for managing BTRFS and LVM snapshots
     snap-pac # Pacman hooks that use snapper to create pre/post btrfs snapshots like openSUSE's YaST
     speedtest-cli # Command line interface for testing internet bandwidth using speedtest.net
     starship # The cross-shell prompt for astronauts
     stow # Manage installation of multiple softwares in the same directory tree
-    # telegram-desktop # Official Telegram Desktop client
+    telegram-desktop # Official Telegram Desktop client
     tldr # Command line client for tldr, a collection of simplified man pages
     translate-shell # A command-line interface and interactive shell for Google Translate
     tree # A directory listing program displaying a depth indented list of files
@@ -135,11 +135,11 @@ BASE_AUR_PACKAGES=(
     btrfs-assistant # An application for managing BTRFS subvolumes and Snapper snapshots
     coursier # Pure Scala Artifact Fetching
     ghcup-hs-bin # an installer for the general purpose language Haskell
-    # informant # An Arch Linux News reader and pacman hook
+    informant # An Arch Linux News reader and pacman hook
     # jetbrains-toolbox # Manage all your JetBrains Projects and Tools
     # obs-backgroundremoval # Background removal plugin for OBS studio
     oh-my-zsh-git # A community-driven framework for managing your zsh configuration
-    # scala-cli # A command-line tool to interact with the Scala language
+    scala-cli # A command-line tool to interact with the Scala language
     sddm-astronaut-theme # Modern looking sddm qt6 theme
     snapper-rollback # Script to rollback snapper snapshots as described here https://wiki.archlinux.org/index.php/Snapper#Suggested_filesystem_layout
     # terraform-ls # Terraform Language Server
