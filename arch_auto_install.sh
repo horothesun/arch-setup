@@ -43,6 +43,7 @@ PACSTRAP_PACKAGES=(
     util-linux
 )
 
+KEYD_PACKAGE=keyd # A key remapping daemon for linux
 BASE_PACKAGES=(
     alacritty # A cross-platform, GPU-accelerated terminal emulator
     alsa-utils # Advanced Linux Sound Architecture - Utilities
@@ -76,7 +77,7 @@ BASE_PACKAGES=(
     # jami-qt # Free and universal communication platform which preserves the users’ privacy and freedoms
     jq # Command-line JSON processor
     # kdeconnect # Adds communication between KDE and your smartphone
-    keyd # A key remapping daemon for linux
+    "${KEYD_PACKAGE}"
     # lua-language-server
     man-db # A utility for reading man pages
     man-pages # Linux man pages
@@ -544,8 +545,12 @@ arch-chroot "${ROOT_MNT}" pacman -Sy "${PACMAN_PACKAGES[@]}" --noconfirm --quiet
 echo
 
 # Enable services...
-systemctl --root "${ROOT_MNT}" enable bluetooth keyd NetworkManager systemd-resolved systemd-timesyncd
+systemctl --root "${ROOT_MNT}" enable bluetooth NetworkManager systemd-resolved systemd-timesyncd
 echo
+if [[ " ${PACMAN_PACKAGES[*]} " =~ [[:space:]]${KEYD_PACKAGE}[[:space:]] ]]; then
+  systemctl --root "${ROOT_MNT}" enable keyd
+  echo
+fi
 # disable and mask the NetworkManager-wait-online service (~15s startup time)
 systemctl --root "${ROOT_MNT}" disable NetworkManager-wait-online.service
 systemctl --root "${ROOT_MNT}" mask NetworkManager-wait-online.service
