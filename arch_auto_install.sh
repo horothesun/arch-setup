@@ -556,7 +556,7 @@ Target = *
 [Action]
 Description = Cleaning up interrupted pacman download leftovers...
 When = PostTransaction
-Exec = /usr/bin/find /var/cache/pacman/pkg/ -type f -name "download-*" -delete
+Exec = /usr/bin/find /var/cache/pacman/pkg/ -name "download-*" -delete
 EOF
 echo
 
@@ -675,6 +675,7 @@ arch-chroot "${ROOT_MNT}" su - "${USER_NAME}" -c "yay -S --noconfirm --norebuild
 echo
 
 # pacman and YAY cleanup
+arch-chroot "${ROOT_MNT}" find "/var/cache/pacman/pkg/" -name "download-*" -delete
 arch-chroot "${ROOT_MNT}" pacman -Sc --noconfirm
 arch-chroot "${ROOT_MNT}" su - "${USER_NAME}" -c "yay -Sc --noconfirm"
 
