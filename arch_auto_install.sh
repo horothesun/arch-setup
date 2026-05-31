@@ -799,4 +799,5 @@ echo
 sleep 3
 sync
 echo "Install complete. Please reboot"
+echo "Use either 'systemctl reboot' or 'systemctl reboot --firmware-setup'"
 echo
