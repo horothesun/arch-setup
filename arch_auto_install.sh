@@ -177,6 +177,8 @@ esac
 
 # Desktop packages
 
+SDDM_PACKAGE=sddm # QML based X11 and Wayland display manager
+
 COSMIC_PACKAGE=cosmic
 COSMIC_PACKAGES=(
     "${COSMIC_PACKAGE}"
@@ -206,7 +208,7 @@ HYPRLAND_PACKAGES=(
     qt6-wayland # Provides APIs for Wayland
     rofi # A window switcher, application launcher and dmenu replacement
     rofi-emoji # A Rofi plugin for selecting emojis
-    sddm # QML based X11 and Wayland display manager
+    "${SDDM_PACKAGE}"
     swaync # A simple GTK based notification daemon for Sway
     thunar # Xfce File Manager
     uwsm # A standalone Wayland session manager
@@ -220,13 +222,13 @@ PLASMA_PACKAGES=(
     kitty # Default hyprland's terminal emulator
     nm-connection-editor # NetworkManager GUI connection editor and widgets
     plasma
-    sddm # QML based X11 and Wayland display manager
+    "${SDDM_PACKAGE}"
 )
 
 XFCE_PACKAGES=(
     mousepad # Simple text editor for Xfce
     nm-connection-editor # NetworkManager GUI connection editor and widgets
-    sddm # QML based X11 and Wayland display manager
+    "${SDDM_PACKAGE}"
     xfce4
     xfce4-terminal
     xfce4-goodies
@@ -244,7 +246,7 @@ XMONAD_PACKAGES=(
     volumeicon # Volume control for the system tray
     rofi # A window switcher, application launcher and dmenu replacement
     rofi-emoji # A Rofi plugin for selecting emojis
-    sddm # QML based X11 and Wayland display manager
+    "${SDDM_PACKAGE}"
     stalonetray # STAnd-aLONE sysTRAY. It has minimal build and run-time dependencies: the Xlib only
     sxhkd # Simple X hotkey daemon
     thunar # Xfce File Manager
@@ -542,7 +544,7 @@ arch-chroot "${ROOT_MNT}" pacman -Sy "${PACMAN_PACKAGES[@]}" --noconfirm --quiet
 echo
 
 # Enable services...
-systemctl --root "${ROOT_MNT}" enable bluetooth keyd NetworkManager sddm systemd-resolved systemd-timesyncd
+systemctl --root "${ROOT_MNT}" enable bluetooth keyd NetworkManager systemd-resolved systemd-timesyncd
 echo
 # disable and mask the NetworkManager-wait-online service (~15s startup time)
 systemctl --root "${ROOT_MNT}" disable NetworkManager-wait-online.service
@@ -551,11 +553,16 @@ echo
 # mask systemd-networkd as we will use NetworkManager instead
 systemctl --root "${ROOT_MNT}" mask systemd-networkd
 echo
-# since we're going to use hyprland+uwsm, hypridle will run as a systemd user service
-# NOTE: ~/.config/hypr/hypridle.conf must be present for the service to start properly
 if [[ " ${PACMAN_PACKAGES[*]} " =~ [[:space:]]${HYPRIDLE_PACKAGE}[[:space:]] ]]; then
+    # since we're going to use hyprland+uwsm, hypridle will run as a systemd user service
+    # NOTE: ~/.config/hypr/hypridle.conf must be present for the service to start properly
     arch-chroot "${ROOT_MNT}" su - "${USER_NAME}" -c "sudo systemctl --user enable hypridle.service"
     echo
+fi
+# TODO: coordinate multiple display managers (sddm, cosmic-greeter, gdm) 🔥🔥🔥
+if [[ " ${PACMAN_PACKAGES[*]} " =~ [[:space:]]${SDDM_PACKAGE}[[:space:]] ]]; then
+  systemctl --root "${ROOT_MNT}" enable sddm
+  echo
 fi
 if [[ " ${PACMAN_PACKAGES[*]} " =~ [[:space:]]${COSMIC_PACKAGE}[[:space:]] ]]; then
     arch-chroot "${ROOT_MNT}" su - "${USER_NAME}" -c "sudo systemctl --user enable cosmic-greeter.service"
