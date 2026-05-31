@@ -177,19 +177,23 @@ esac
 
 # Desktop packages
 
+COSMIC_PACKAGE=cosmic
 COSMIC_PACKAGES=(
-    cosmic
+    "${COSMIC_PACKAGE}"
 )
 
+GNOME_PACKAGE=gnome
 GNOME_PACKAGES=(
-    gnome
+    "${GNOME_PACKAGE}"
     gnome-circle
     gnome-extra
 )
 
+HYPRIDLE_PACKAGE=hypridle # hyprland’s idle daemon
+WAYBAR_PACKAGE=waybar # Highly customizable Wayland bar for Sway and Wlroots based compositors
 HYPRLAND_PACKAGES=(
     cliphist # wayland clipboard manager
-    hypridle # hyprland’s idle daemon
+    "${HYPRIDLE_PACKAGE}"
     hyprland
     hyprlock # hyprland’s GPU-accelerated screen locking utility
     hyprpolkitagent # Simple polkit authentication agent for Hyprland, written in QT/QML
@@ -206,7 +210,7 @@ HYPRLAND_PACKAGES=(
     swaync # A simple GTK based notification daemon for Sway
     thunar # Xfce File Manager
     uwsm # A standalone Wayland session manager
-    waybar # Highly customizable Wayland bar for Sway and Wlroots based compositors
+    "${WAYBAR_PACKAGE}"
     wl-clipboard # Command-line copy/paste utilities for Wayland
     wtype # xdotool type for wayland
     xdg-desktop-portal-hyprland # xdg-desktop-portal backend for hyprland
@@ -228,6 +232,8 @@ XFCE_PACKAGES=(
     xfce4-goodies
 )
 
+
+XMONAD_PACKAGE=xmonad
 XMONAD_PACKAGES=(
     arandr # Provide a simple visual front end for XRandR 1.2
     brightnessctl # Lightweight brightness control tool
@@ -246,7 +252,7 @@ XMONAD_PACKAGES=(
     xdotool # Command-line X11 automation tool
     xf86-input-synaptics # Synaptics driver for notebook touchpads 💻
     xmobar # Minimalistic Text Based Status Bar
-    xmonad
+    "${XMONAD_PACKAGE}"
     xmonad-contrib # Community-maintained extensions for xmonad
     xmonad-extras # Third party extensions for xmonad with wacky dependencies
     xmonad-utils # Small collection of X utilities
@@ -263,7 +269,7 @@ XMONAD_LAPTOP_AUR_PACKAGES=(
 )
 
 # All packages
-PACMAN_PACKAGES=( "${BASE_PACKAGES[@]}" "${GPU_PACKAGES[@]}" "${HYPRLAND_PACKAGES[@]}" )
+PACMAN_PACKAGES=( "${BASE_PACKAGES[@]}" "${GPU_PACKAGES[@]}" "${HYPRLAND_PACKAGES[@]}" "${XMONAD_PACKAGES[@]}" )
 AUR_PACKAGES=( "${BASE_AUR_PACKAGES[@]}" )
 
 ### Start!
@@ -547,19 +553,16 @@ systemctl --root "${ROOT_MNT}" mask systemd-networkd
 echo
 # since we're going to use hyprland+uwsm, hypridle will run as a systemd user service
 # NOTE: ~/.config/hypr/hypridle.conf must be present for the service to start properly
-HYPRIDLE_PACKAGE=hypridle
 if [[ " ${PACMAN_PACKAGES[*]} " =~ [[:space:]]${HYPRIDLE_PACKAGE}[[:space:]] ]]; then
     arch-chroot "${ROOT_MNT}" su - "${USER_NAME}" -c "sudo systemctl --user enable hypridle.service"
     echo
 fi
-COSMIC_PACKAGE=cosmic
 if [[ " ${PACMAN_PACKAGES[*]} " =~ [[:space:]]${COSMIC_PACKAGE}[[:space:]] ]]; then
-    arch-chroot "${ROOT_MNT}" su - "${USER_NAME}" -c "sudo systemctl enable cosmic-greeter.service"
+    arch-chroot "${ROOT_MNT}" su - "${USER_NAME}" -c "sudo systemctl --user enable cosmic-greeter.service"
     echo
 fi
-GNOME_PACKAGE=gnome
 if [[ " ${PACMAN_PACKAGES[*]} " =~ [[:space:]]${GNOME_PACKAGE}[[:space:]] ]]; then
-    arch-chroot "${ROOT_MNT}" su - "${USER_NAME}" -c "sudo systemctl enable gdm.service"
+    arch-chroot "${ROOT_MNT}" su - "${USER_NAME}" -c "sudo systemctl --user enable gdm.service"
     echo
 fi
 
@@ -731,7 +734,6 @@ echo
 
 
 # Waybar setup: read access to CPU power info
-WAYBAR_PACKAGE=waybar
 if [[ " ${PACMAN_PACKAGES[*]} " =~ [[:space:]]${WAYBAR_PACKAGE}[[:space:]] ]]; then
 
 arch-chroot "${ROOT_MNT}" groupadd powerreading
@@ -747,7 +749,6 @@ fi
 
 
 # XMonad basic setup
-XMONAD_PACKAGE=xmonad
 if [[ " ${PACMAN_PACKAGES[*]} " =~ [[:space:]]${XMONAD_PACKAGE}[[:space:]] ]]; then
 
 mkdir -p "${ROOT_MNT}/home/${USER_NAME}/.xmonad"
