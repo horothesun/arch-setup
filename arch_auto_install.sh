@@ -78,6 +78,7 @@ BASE_PACKAGES=(
     jq # Command-line JSON processor
     # kdeconnect # Adds communication between KDE and your smartphone
     "${KEYD_PACKAGE}"
+    # libreoffice-still # LibreOffice maintenance branch
     lua-language-server
     man-db # A utility for reading man pages
     man-pages # Linux man pages
@@ -107,6 +108,7 @@ BASE_PACKAGES=(
     snap-pac # Pacman hooks that use snapper to create pre/post btrfs snapshots like openSUSE's YaST
     speedtest-cli # Command line interface for testing internet bandwidth using speedtest.net
     starship # The cross-shell prompt for astronauts
+    # steam # Valve's digital software delivery system
     stow # Manage installation of multiple softwares in the same directory tree
     telegram-desktop # Official Telegram Desktop client
     tldr # Command line client for tldr, a collection of simplified man pages
