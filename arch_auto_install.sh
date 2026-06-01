@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# enable debug info
 set -xeuo pipefail
 
 # config options
@@ -291,6 +292,7 @@ loadkeys "${KEYMAP}"
 timedatectl set-timezone "${TIMEZONE}"
 timedatectl set-ntp true
 
+# disable debug info
 set +xeuo pipefail
 echo
 
@@ -318,6 +320,7 @@ else
     exit 124
 fi
 
+# enable debug info
 set -xeuo pipefail
 
 # Creating partitions...
