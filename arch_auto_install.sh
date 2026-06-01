@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# uncomment to view debugging information
 set -xeuo pipefail
 
 # config options
@@ -272,8 +271,15 @@ XMONAD_LAPTOP_AUR_PACKAGES=(
 )
 
 # All packages
-PACMAN_PACKAGES=( "${BASE_PACKAGES[@]}" "${GPU_PACKAGES[@]}" "${HYPRLAND_PACKAGES[@]}" "${XMONAD_PACKAGES[@]}" )
+
+PACMAN_PACKAGES=(
+    "${BASE_PACKAGES[@]}"
+    "${GPU_PACKAGES[@]}"
+    "${HYPRLAND_PACKAGES[@]}"
+    "${XMONAD_PACKAGES[@]}"
+)
 AUR_PACKAGES=( "${BASE_AUR_PACKAGES[@]}" )
+
 
 ### Start!
 
@@ -284,6 +290,8 @@ echo
 loadkeys "${KEYMAP}"
 timedatectl set-timezone "${TIMEZONE}"
 timedatectl set-ntp true
+
+set +xeuo pipefail
 
 # read disk encryption password
 read -s -r -p "Provide the disk encryption password: " CRYPT_PASSWORD
@@ -308,6 +316,8 @@ else
     echo "Mismatching user's password!"
     exit 124
 fi
+
+set -xeuo pipefail
 
 # Creating partitions...
 sgdisk -Z "${TARGET}"
