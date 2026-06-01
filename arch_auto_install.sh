@@ -292,6 +292,7 @@ timedatectl set-timezone "${TIMEZONE}"
 timedatectl set-ntp true
 
 set +xeuo pipefail
+echo
 
 # read disk encryption password
 read -s -r -p "Provide the disk encryption password: " CRYPT_PASSWORD
