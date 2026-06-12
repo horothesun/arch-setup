@@ -133,7 +133,7 @@ BASE_PACKAGES=(
 
 BASE_AUR_PACKAGES=(
     # basedpyright # pyright fork with various improvements and pylance features
-    brave-bin # Web browser that blocks ads and trackers by default (binary release)
+    brave-origin-bin # The minimalist browser from the makers of Brave (binary release)
     btrfs-assistant # An application for managing BTRFS subvolumes and Snapper snapshots
     coursier # Pure Scala Artifact Fetching
     ghcup-hs-bin # an installer for the general purpose language Haskell
