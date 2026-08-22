@@ -137,7 +137,7 @@ BASE_AUR_PACKAGES=(
     # btrfs-assistant # An application for managing BTRFS subvolumes and Snapper snapshots
     coursier # Pure Scala Artifact Fetching
     ghcup-hs-bin # an installer for the general purpose language Haskell
-    idescriptor-git # The iDevice management tool — free, open-source, and cross-platform.
+    # idescriptor-git # The iDevice management tool — free, open-source, and cross-platform.
     informant # An Arch Linux News reader and pacman hook
     # jetbrains-toolbox # Manage all your JetBrains Projects and Tools
     # obs-backgroundremoval # Background removal plugin for OBS studio
