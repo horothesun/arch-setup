@@ -192,6 +192,7 @@ GNOME_PACKAGE=gnome
 GNOME_PACKAGES=(
     "${GNOME_PACKAGE}"
     gnome-circle
+    gnome-control-center
     gnome-extra
 )
 
