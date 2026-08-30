@@ -471,9 +471,9 @@ if [[ " ${BASE_PACKAGES[*]} " =~ [[:space:]]${STEAM_PACKAGE}[[:space:]] ]]; then
   SHARE_DIR="${DOT_LOCAL_DIR}/share"
   STEAM_DIR="${SHARE_DIR}/Steam"
   mountBtrfsSubvolumeByName "@steam" "${STEAM_DIR}"
-  chown "${USER_NAME}:${USER_NAME}" "${DOT_LOCAL_DIR}" "${SHARE_DIR}" "${STEAM_DIR}"
-  chmod 700 "${DOT_LOCAL_DIR}" "${STEAM_DIR}"
-  chmod 755 "${SHARE_DIR}"
+  arch-chroot "${ROOT_MNT}" chown "${USER_NAME}:${USER_NAME}" "${DOT_LOCAL_DIR}" "${SHARE_DIR}" "${STEAM_DIR}"
+  arch-chroot "${ROOT_MNT}" chmod 700 "${DOT_LOCAL_DIR}" "${STEAM_DIR}"
+  arch-chroot "${ROOT_MNT}" chmod 755 "${SHARE_DIR}"
 fi
 echo
 
