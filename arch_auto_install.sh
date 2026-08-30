@@ -467,10 +467,10 @@ echo
 
 # mount Steam subvolume
 if [[ " ${BASE_PACKAGES[*]} " =~ [[:space:]]${STEAM_PACKAGE}[[:space:]] ]]; then
-  DOT_LOCAL_DIR="${ROOT_MNT}/home/${USER_NAME}/.local"
+  DOT_LOCAL_DIR="/home/${USER_NAME}/.local"
   SHARE_DIR="${DOT_LOCAL_DIR}/share"
   STEAM_DIR="${SHARE_DIR}/Steam"
-  mountBtrfsSubvolumeByName "@steam" "${STEAM_DIR}"
+  mountBtrfsSubvolumeByName "@steam" "${ROOT_MNT}${STEAM_DIR}"
   arch-chroot "${ROOT_MNT}" chown "${USER_NAME}:${USER_NAME}" "${DOT_LOCAL_DIR}" "${SHARE_DIR}" "${STEAM_DIR}"
   arch-chroot "${ROOT_MNT}" chmod 700 "${DOT_LOCAL_DIR}" "${STEAM_DIR}"
   arch-chroot "${ROOT_MNT}" chmod 755 "${SHARE_DIR}"
