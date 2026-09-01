@@ -90,6 +90,7 @@ BASE_PACKAGES=(
     openssh # SSH protocol implementation for remote login, command execution and file transfer
     pass # Stores, retrieves, generates, and synchronizes passwords securely
     pavucontrol # PulseAudio Volume Control
+    pinta # Drawing/editing program modeled after Paint.NET. It's goal is to provide a simplified alternative to GIMP for casual users
     plocate # Alternative to locate, faster and compatible with mlocate's database
     pipewire # Low-latency audio/video router and processor
     pipewire-alsa # Low-latency audio/video router and processor - ALSA configuration
@@ -125,6 +126,7 @@ BASE_PACKAGES=(
     vlc # Free and open source cross-platform multimedia player and framework
     vlc-plugins-all # Free and open source cross-platform multimedia player and framework - all plugins
     xorg-xrandr # Primitive command line interface to RandR extension
+    xournalpp # Handwriting notetaking software with PDF annotation support
     yq # Command-line YAML, XML, TOML processor - jq wrapper for YAML/XML/TOML documents
     wget # Network utility to retrieve files from the web
     wireplumber # Session / policy manager implementation for PipeWire
@@ -140,6 +142,7 @@ BASE_AUR_PACKAGES=(
     # idescriptor-git # The iDevice management tool — free, open-source, and cross-platform.
     informant # An Arch Linux News reader and pacman hook
     # jetbrains-toolbox # Manage all your JetBrains Projects and Tools
+    localsend # An open source cross-platform alternative to AirDrop
     # obs-backgroundremoval # Background removal plugin for OBS studio
     oh-my-zsh-git # A community-driven framework for managing your zsh configuration
     scala-cli # A command-line tool to interact with the Scala language
