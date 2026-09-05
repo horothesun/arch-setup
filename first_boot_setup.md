@@ -178,7 +178,7 @@ ufw default deny incoming
 ufw default allow outgoing
 ufw limit SSH
 ufw allow Transmission
-sudo systemctl enable ufw
+sudo systemctl enable --now ufw
 
 reboot
 ```
