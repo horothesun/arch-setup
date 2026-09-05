@@ -178,6 +178,11 @@ ufw default deny incoming
 ufw default allow outgoing
 ufw limit SSH
 ufw allow Transmission
+
+# LocalSend
+ufw allow 53317
+ufw allow 53317/udp
+
 sudo systemctl enable --now ufw
 
 reboot
