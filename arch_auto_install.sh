@@ -44,6 +44,7 @@ PACSTRAP_PACKAGES=(
 )
 
 KEYD_PACKAGE=keyd # A key remapping daemon for linux
+STEAM_PACKAGE=steam # Valve's digital software delivery system
 BASE_PACKAGES=(
     alacritty # A cross-platform, GPU-accelerated terminal emulator
     alsa-utils # Advanced Linux Sound Architecture - Utilities
@@ -109,7 +110,7 @@ BASE_PACKAGES=(
     snap-pac # Pacman hooks that use snapper to create pre/post btrfs snapshots like openSUSE's YaST
     speedtest-cli # Command line interface for testing internet bandwidth using speedtest.net
     starship # The cross-shell prompt for astronauts
-    # steam # Valve's digital software delivery system
+    "${STEAM_PACKAGE}"
     stow # Manage installation of multiple softwares in the same directory tree
     telegram-desktop # Official Telegram Desktop client
     tldr # Command line client for tldr, a collection of simplified man pages
@@ -371,6 +372,9 @@ btrfs subvolume create "${ROOT_MNT}/@log"
 btrfs subvolume create "${ROOT_MNT}/@spool"
 btrfs subvolume create "${ROOT_MNT}/@tmp"
 if [[ ${IS_SWAPFILE_ENABLED} == true ]]; then btrfs subvolume create "${ROOT_MNT}/@swap"; fi
+if [[ " ${BASE_PACKAGES[*]} " =~ [[:space:]]${STEAM_PACKAGE}[[:space:]] ]]; then
+  btrfs subvolume create "${ROOT_MNT}/@steam"
+fi
 umount "${ROOT_MNT}"
 echo
 # Mounting BTRFS subvolumes...
@@ -433,14 +437,6 @@ reflector --country GB --age 24 --protocol http,https --sort rate --save "/etc/p
 pacstrap -K "${ROOT_MNT}" "${PACSTRAP_PACKAGES[@]}"
 echo
 
-# Generate filesystem table...
-genfstab -U -p "${ROOT_MNT}" >> "${ROOT_MNT}/etc/fstab"
-if [[ ${IS_SWAPFILE_ENABLED} == true ]]; then
-    echo "/swap/swapfile none swap defaults 0 0" >> "${ROOT_MNT}/etc/fstab"
-fi
-cat "${ROOT_MNT}/etc/fstab"
-echo
-
 # Setting up environment...
 # set up locale/env: add our locale to locale.gen
 sed -i -e "/^#""${LOCALE}""/s/^#//" "${ROOT_MNT}/etc/locale.gen"
@@ -470,6 +466,27 @@ USER_PASSWORD_HASH=$( mkpasswd --method=sha-512 "${USER_PASSWORD}" )
 arch-chroot "${ROOT_MNT}" useradd -G wheel -m -p "${USER_PASSWORD_HASH}" "${USER_NAME}"
 # uncomment the wheel group in the sudoers file
 sed -i -e '/^# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/s/^# //' "${ROOT_MNT}/etc/sudoers"
+echo
+
+# mount Steam subvolume
+if [[ " ${BASE_PACKAGES[*]} " =~ [[:space:]]${STEAM_PACKAGE}[[:space:]] ]]; then
+  DOT_LOCAL_DIR="/home/${USER_NAME}/.local"
+  SHARE_DIR="${DOT_LOCAL_DIR}/share"
+  STEAM_DIR="${SHARE_DIR}/Steam"
+  mountBtrfsSubvolumeByName "@steam" "${ROOT_MNT}${STEAM_DIR}"
+  arch-chroot "${ROOT_MNT}" chown "${USER_NAME}:${USER_NAME}" "${DOT_LOCAL_DIR}" "${SHARE_DIR}" "${STEAM_DIR}"
+  arch-chroot "${ROOT_MNT}" chmod 700 "${DOT_LOCAL_DIR}" "${STEAM_DIR}"
+  arch-chroot "${ROOT_MNT}" chmod 755 "${SHARE_DIR}"
+fi
+echo
+
+# Generate filesystem table...
+genfstab -U -p "${ROOT_MNT}" >> "${ROOT_MNT}/etc/fstab"
+if [[ ${IS_SWAPFILE_ENABLED} == true ]]; then
+    echo "/swap/swapfile none swap defaults 0 0" >> "${ROOT_MNT}/etc/fstab"
+fi
+cat "${ROOT_MNT}/etc/fstab"
+echo
 
 # create /etc/kernel/cmdline (if the file doesn't exist, mkinitcpio will complain)
 export LINUX_LUKS_UUID=$( blkid --match-tag UUID --output value "/dev/disk/by-partlabel/${LINUX_PARTITION_LABEL}" )
