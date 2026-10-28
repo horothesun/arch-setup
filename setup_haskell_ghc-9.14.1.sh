@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# - Nightly Stack resolver (from www.stackage.org): nightly 2026-10-26
+# - Nightly Stack resolver (from www.stackage.org): nightly 2026-10-27
 # - hls-powered check from `ghcup tui`
 GHC_NIGHTLY_AND_HLS_POWERED_VERSION="9.14.1"
 
