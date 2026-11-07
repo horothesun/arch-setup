@@ -130,6 +130,7 @@ BASE_PACKAGES=(
     yq # Command-line YAML, XML, TOML processor - jq wrapper for YAML/XML/TOML documents
     wget # Network utility to retrieve files from the web
     wireplumber # Session / policy manager implementation for PipeWire
+    zip # Compressor/archiver for creating and modifying zipfiles
     zsh # A very advanced and programmable command interpreter (shell) for UNIX
 )
 
